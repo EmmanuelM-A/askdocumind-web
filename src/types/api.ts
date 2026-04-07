@@ -18,3 +18,8 @@ export interface APIResponse {
 export interface HealthDataFormat {
     status: string;
 }
+
+/**
+ * UUID as defined from node:crypto, but represented as a string for easier use across the codebase.
+ */
+export type UUID = `${string}-${string}-${string}-${string}-${string}`;

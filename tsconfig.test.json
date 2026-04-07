@@ -1,0 +1,10 @@
+{
+	"extends": "./tsconfig.app.json",
+	"compilerOptions": {
+		"types": ["vitest/globals", "vite/client", "node"],
+		"lib": ["ES2020", "DOM", "DOM.Iterable"]
+	},
+	"include": ["tests/**/*.ts", "tests/**/*.tsx", "src/**/*.ts", "src/**/*.tsx"]
+}
+
+
