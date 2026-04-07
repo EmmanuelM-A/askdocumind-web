@@ -5,7 +5,7 @@ import {sendRequest} from "@/api/api-client.ts";
 const describeIfDevelopment = process.env.NODE_ENV === "development" ? describe : describe.skip;
 
 describeIfDevelopment("sendRequest Integration Tests with httpbin.org", () => {
-    const HTTPBIN_BASE = "https://httpbin.org";
+    const HTTP_BIN_BASE = "https://httpbin.org";
 
     beforeEach(() => {
         // Clear any existing requests between tests
@@ -16,7 +16,7 @@ describeIfDevelopment("sendRequest Integration Tests with httpbin.org", () => {
 
     test("1. Basic GET request", async () => {
         const response = await sendRequest({
-            route: HTTPBIN_BASE,
+            route: HTTP_BIN_BASE,
             endpoint: "get",
             method: "GET",
         });
@@ -28,7 +28,7 @@ describeIfDevelopment("sendRequest Integration Tests with httpbin.org", () => {
 
     test("2. GET with query parameters", async () => {
         const response = await sendRequest({
-            route: HTTPBIN_BASE,
+            route: HTTP_BIN_BASE,
             endpoint: "get",
             method: "GET",
             query: { key1: "value1", key2: "value2" },
@@ -44,7 +44,7 @@ describeIfDevelopment("sendRequest Integration Tests with httpbin.org", () => {
         const body = { name: "test", value: 123 };
 
         const response = await sendRequest({
-            route: HTTPBIN_BASE,
+            route: HTTP_BIN_BASE,
             endpoint: "post",
             method: "POST",
             body,
@@ -56,7 +56,7 @@ describeIfDevelopment("sendRequest Integration Tests with httpbin.org", () => {
 
     test("4. Duplicate request prevention", async () => {
         const requestParams = {
-            route: HTTPBIN_BASE,
+            route: HTTP_BIN_BASE,
             endpoint: "get",
             method: "GET" as const,
         };
@@ -75,7 +75,7 @@ describeIfDevelopment("sendRequest Integration Tests with httpbin.org", () => {
 
     test("5. Request with custom headers", async () => {
         const response = await sendRequest({
-            route: HTTPBIN_BASE,
+            route: HTTP_BIN_BASE,
             endpoint: "get",
             method: "GET",
             headers: {
@@ -91,8 +91,8 @@ describeIfDevelopment("sendRequest Integration Tests with httpbin.org", () => {
     test("6. Request timeout handling", async () => {
         try {
             await sendRequest({
-                route: HTTPBIN_BASE,
-                endpoint: "delay/10", // 10 second delay
+                route: HTTP_BIN_BASE,
+                endpoint: "delay/10", // 10-second delay
                 method: "GET",
                 options: {
                     timeoutMs: 100, // 100ms timeout - should fail
@@ -101,8 +101,7 @@ describeIfDevelopment("sendRequest Integration Tests with httpbin.org", () => {
             expect.fail("Should have timed out");
         } catch (error) {
             expect(error).toBeDefined();
-            // sendRequest wraps AbortError into a ServiceUnavailableError
-            expect((error as any).code).toBe("REQUEST_CANCELLED");
+            expect((error as Error).name).toBe("AbortError");
         }
     }, 15000);
 
@@ -114,8 +113,8 @@ describeIfDevelopment("sendRequest Integration Tests with httpbin.org", () => {
 
         try {
             await sendRequest({
-                route: HTTPBIN_BASE,
-                endpoint: "delay/5", // 5 second delay
+                route: HTTP_BIN_BASE,
+                endpoint: "delay/5", // 5-second delay
                 method: "GET",
                 options: {
                     signal: controller.signal,
@@ -124,15 +123,14 @@ describeIfDevelopment("sendRequest Integration Tests with httpbin.org", () => {
             expect.fail("Should have been aborted");
         } catch (error) {
             expect(error).toBeDefined();
-            // sendRequest wraps AbortError into a ServiceUnavailableError
-            expect((error as any).code).toBe("REQUEST_CANCELLED");
+            expect((error as Error).name).toBe("AbortError");
         }
     }, 10000);
 
     test("8. Error handling for non-existent endpoint", async () => {
         try {
             await sendRequest({
-                route: HTTPBIN_BASE,
+                route: HTTP_BIN_BASE,
                 endpoint: "status/404",
                 method: "GET",
             });
@@ -147,7 +145,7 @@ describeIfDevelopment("sendRequest Integration Tests with httpbin.org", () => {
         const customKey = "my-custom-request-key";
 
         const response = await sendRequest({
-            route: HTTPBIN_BASE,
+            route: HTTP_BIN_BASE,
             endpoint: "get",
             method: "GET",
             options: {
@@ -164,7 +162,7 @@ describeIfDevelopment("sendRequest Integration Tests with httpbin.org", () => {
         const body = { updated: true, id: 1 };
 
         const response = await sendRequest({
-            route: HTTPBIN_BASE,
+            route: HTTP_BIN_BASE,
             endpoint: "put",
             method: "PUT",
             body,
@@ -176,7 +174,7 @@ describeIfDevelopment("sendRequest Integration Tests with httpbin.org", () => {
 
     test("11. DELETE request", async () => {
         const response = await sendRequest({
-            route: HTTPBIN_BASE,
+            route: HTTP_BIN_BASE,
             endpoint: "delete",
             method: "DELETE",
         });
@@ -189,7 +187,7 @@ describeIfDevelopment("sendRequest Integration Tests with httpbin.org", () => {
         const body = { patched: true };
 
         const response = await sendRequest({
-            route: HTTPBIN_BASE,
+            route: HTTP_BIN_BASE,
             endpoint: "patch",
             method: "PATCH",
             body,
@@ -202,7 +200,7 @@ describeIfDevelopment("sendRequest Integration Tests with httpbin.org", () => {
     test("13. HTTP status code error - server error", async () => {
         try {
             await sendRequest({
-                route: HTTPBIN_BASE,
+                route: HTTP_BIN_BASE,
                 endpoint: "status/500",
                 method: "GET",
             });
@@ -226,7 +224,7 @@ describeIfDevelopment("sendRequest Integration Tests with httpbin.org", () => {
 
         try {
             await sendRequest({
-                route: HTTPBIN_BASE,
+                route: HTTP_BIN_BASE,
                 endpoint: "get",
                 method: "GET",
                 headers: {

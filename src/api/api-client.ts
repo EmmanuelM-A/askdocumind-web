@@ -25,6 +25,17 @@ interface HeadersRecord {
  */
 const BASE_URL = settings.api.BASE_URL;
 
+function getSafeBaseUrl(rawBaseUrl: string): string {
+    if (!rawBaseUrl) return "";
+    const normalized = rawBaseUrl.trim();
+    if (!normalized || normalized === "undefined" || normalized === "null") return "";
+    return normalized;
+}
+
+function isAbsoluteUrl(value: string): boolean {
+    return /^https?:\/\//i.test(value);
+}
+
 /**
  * Default headers applied to every request.
  */
@@ -111,12 +122,23 @@ function buildUrl(
     endpoint: string = "",
     query: Record<string, unknown> = {},
 ): string {
-    const parts = [BASE_URL, route, endpoint].map(trimSlashes).filter(Boolean);
+    const safeBaseUrl = getSafeBaseUrl(BASE_URL);
+
+    // If route is already a full URL, don't prepend API base URL.
+    if (isAbsoluteUrl(route)) {
+        const routeBase = route.replace(/\/+$/g, "");
+        const endpointPart = trimSlashes(endpoint);
+        const absoluteUrl = endpointPart ? `${routeBase}/${endpointPart}` : routeBase;
+        const absoluteQs = buildQueryString(query);
+        return absoluteQs ? `${absoluteUrl}?${absoluteQs}` : absoluteUrl;
+    }
+
+    const parts = [safeBaseUrl, route, endpoint].map(trimSlashes).filter(Boolean);
 
     let base = parts.join("/");
 
     // If BASE_URL is empty, ensure we start with / for relative URLs
-    if (!BASE_URL && base && !base.startsWith("/")) {
+    if (!safeBaseUrl && base && !base.startsWith("/")) {
         base = `/${base}`;
     }
 
