@@ -1,21 +1,84 @@
+import { useEffect, useState } from "react";
+import { ChatArea } from "@/components/ChatArea.tsx";
+import { DocumentsArea } from "@/components/DocumentsArea.tsx";
+import { FooterBar } from "@/components/FooterBar.tsx";
+import { HeaderBar } from "@/components/HeaderBar.tsx";
+import type { Document as UploadedDocument } from "@/types/documents.ts";
+
+type Theme = "light" | "dark";
+type DocumentTab = "upload" | "documents";
+
+const DEMO_CHAT_SESSION_ID = "bfac02c2-3e32-41ce-99ce-7e6ea545d583";
+
+const demoDocuments: UploadedDocument[] = [
+	{
+		id: "18f73de3-ab95-4e92-afbf-5859257616e3",
+		chatSessionId: DEMO_CHAT_SESSION_ID,
+		filename: "architecture-notes.pdf",
+		fileSize: 452010,
+		vectorId: "bbff6161-d99a-4e5f-b4b7-bac2f38be2d7",
+		processingStatus: "COMPLETED",
+		createdAt: "2026-04-08T07:00:00.000Z",
+		updatedAt: "2026-04-08T07:05:00.000Z",
+	},
+	{
+		id: "00e7f972-1f84-4991-9960-2dcfcd56fca5",
+		chatSessionId: DEMO_CHAT_SESSION_ID,
+		filename: "release-plan-v2.docx",
+		fileSize: 289200,
+		vectorId: "2f68f9ad-913c-49f8-9f4a-300c86ce7e77",
+		processingStatus: "PROCESSING",
+		createdAt: "2026-04-08T07:10:00.000Z",
+		updatedAt: "2026-04-08T07:11:00.000Z",
+	},
+];
+
 export default function App() {
+	const [theme, setTheme] = useState<Theme>("light");
+	const [activeTab, setActiveTab] = useState<DocumentTab>("upload");
+
+	useEffect(() => {
+		document.documentElement.setAttribute("data-theme", theme);
+	}, [theme]);
+
+	useEffect(() => {
+		// Placeholder for your backend flow: create/retrieve user, then attach session(s).
+		console.log("Bootstrap user/session on site visit (no auth):", {
+			userCreated: true,
+			chatSessionId: DEMO_CHAT_SESSION_ID,
+		});
+	}, []);
+
 	return (
-		<main className="min-h-screen bg-slate-950 text-slate-100">
-			<section className="mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center gap-6 px-6 py-16 text-center">
-				<p className="text-sm font-medium uppercase tracking-[0.35em] text-cyan-400">
-					DocuChat
-				</p>
-				<h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-6xl">
-					React + TypeScript + Tailwind single-page app starter
-				</h1>
-				<p className="max-w-xl text-base leading-7 text-slate-300 sm:text-lg">
-					This scaffold is intentionally minimal: no routing, no API client, just the
-					foundation for your SPA.
-				</p>
-				<div className="rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-sm text-slate-300 shadow-2xl shadow-cyan-950/20 backdrop-blur">
-					Start building your chat UI here.
+		<main className="flex min-h-screen flex-col bg-[var(--color-primary)] text-[var(--color-text)]">
+			<HeaderBar
+				theme={theme}
+				onThemeToggle={() => {
+					const nextTheme = theme === "dark" ? "light" : "dark";
+					setTheme(nextTheme);
+					console.log(`Theme toggled: ${nextTheme}`);
+				}}
+				onHomeClick={() => console.log("HOME clicked (informational)")}
+				onGithubClick={() => console.log("GITHUB clicked (informational)")}
+				onHelpClick={() => console.log("HELP clicked (informational)")}
+			/>
+
+			<section className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 gap-4 px-4 py-5 sm:gap-5 sm:px-6 sm:py-6 lg:grid-cols-2 lg:gap-6 lg:py-7">
+				<div className="order-1 lg:order-2">
+					<DocumentsArea
+						chatSessionId={DEMO_CHAT_SESSION_ID}
+						activeTab={activeTab}
+						onTabChange={setActiveTab}
+						documents={demoDocuments}
+					/>
+				</div>
+
+				<div className="order-2 lg:order-1">
+					<ChatArea chatSessionId={DEMO_CHAT_SESSION_ID} />
 				</div>
 			</section>
+
+			<FooterBar />
 		</main>
 	);
 }
