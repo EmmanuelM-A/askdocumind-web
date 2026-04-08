@@ -1,7 +1,9 @@
 {
 	"logo": {
-		"src": "https://www.svgrepo.com/show/303128/ai.svg",
-		"alt": "DocuChat"
+		"src": "/src/assets/icons/logo.svg",
+		"alt": "DocuChat",
+		"link": "/",
+		"minWidth": "72px"
 	},
 	"appName": "DocuChat",
 	"navItems": [

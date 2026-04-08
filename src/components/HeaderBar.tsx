@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import headerData from "@/data/header.json";
+import logoIcon from "@/assets/icons/logo.svg";
 
 interface HeaderBarProps {
     theme: "light" | "dark";
@@ -90,9 +91,14 @@ export function HeaderBar({
                 <button
                     type="button"
                     onClick={() => console.log("Logo clicked")}
-                    className="flex items-center gap-2 text-base font-semibold tracking-[0.15em] text-[var(--color-text)] sm:text-sm"
+                    className="flex items-center gap-4 text-base font-semibold tracking-[0.08em] text-[var(--color-text)] sm:text-sm"
                 >
-                    <img src={headerData.logo.src} alt={headerData.logo.alt} className="h-6 w-6 sm:h-5 sm:w-5" />
+                    <img
+                        src={logoIcon}
+                        alt={headerData.logo.alt}
+                        className="h-[84px] w-[84px] shrink-0 sm:h-[72px] sm:w-[72px]"
+                        style={{ minWidth: headerData.logo.minWidth }}
+                    />
                     <span className="hidden sm:inline">{headerData.appName || "LOGO"}</span>
                 </button>
 

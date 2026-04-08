@@ -1,0 +1,36 @@
+<svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Chat bubble outline -->
+  <path d="M60 53
+           C74 38 93 29 115 29
+           C160 29 192 61 192 106
+           C192 151 160 183 115 183
+           C98 183 83 178 70 170
+           L40 194
+           L53 160
+           C41 146 34 128 34 106
+           C34 85 43 67 60 53Z"
+        stroke="#5F5CE6" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Upload badge -->
+  <circle cx="60" cy="54" r="18" fill="#5F5CE6"/>
+  <path d="M60 64V48" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M53.5 54.5L60 48L66.5 54.5" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Document -->
+  <rect x="70" y="62" width="74" height="94" rx="11" fill="#DADAF1"/>
+  <path d="M117 62H144V89L117 62Z" fill="#BBB7E8"/>
+
+  <!-- Document lines -->
+  <rect x="84" y="90" width="42" height="6" rx="3" fill="#6F6BEA"/>
+  <rect x="84" y="106" width="34" height="6" rx="3" fill="#8D89EE"/>
+  <rect x="84" y="122" width="26" height="6" rx="3" fill="#8D89EE"/>
+
+  <!-- Bot bubble -->
+  <rect x="122" y="118" width="64" height="42" rx="21" fill="#20225C"/>
+  <circle cx="144" cy="139" r="5.5" fill="#FFFFFF"/>
+  <circle cx="166" cy="139" r="5.5" fill="#FFFFFF"/>
+
+  <!-- Bot antenna -->
+  <path d="M166 118V105" stroke="#20225C" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="166" cy="102" r="5" fill="#5F5CE6"/>
+</svg>
