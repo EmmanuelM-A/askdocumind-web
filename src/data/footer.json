@@ -1,7 +1,7 @@
 {
 	"appName": "DocuChat",
 	"version": "v0.1.0",
-	"description": "Document-aware chatbot built with React and Node.js.",
+	"description": "Document-aware chatbot built with React, Python and LangChain.",
 	"links": [
 		{
 			"name": "Privacy",
