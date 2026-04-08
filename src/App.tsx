@@ -3,7 +3,9 @@ import { ChatArea } from "@/components/ChatArea.tsx";
 import { DocumentsArea } from "@/components/DocumentsArea.tsx";
 import { FooterBar } from "@/components/FooterBar.tsx";
 import { HeaderBar } from "@/components/HeaderBar.tsx";
+import { createChatSession } from "@/api/chat-session-endpoints.ts";
 import { settings } from "@/config/configs.ts";
+import type { UUID } from "@/types/api.ts";
 import type { Document as UploadedDocument } from "@/types/documents.ts";
 
 type Theme = "light" | "dark";
@@ -46,6 +48,8 @@ const demoDocuments: UploadedDocument[] = [
 export default function App() {
 	const [theme, setTheme] = useState<Theme>("light");
 	const [activeTab, setActiveTab] = useState<DocumentTab>("upload");
+	const [chatSessionId, setChatSessionId] = useState<UUID | null>(null);
+	const [isChatSessionLoading, setIsChatSessionLoading] = useState(true);
 	const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 	const [notice, setNotice] = useState<UploadNotice | null>(null);
 
@@ -119,7 +123,7 @@ export default function App() {
 			name: file.name,
 			size: file.size,
 			lastModified: file.lastModified,
-		})));
+		})), chatSessionId);
 		showNotice("success", `Upload triggered for ${selectedFiles.length} file(s) (local-only mode).`);
 	};
 
@@ -137,11 +141,35 @@ export default function App() {
 	}, [theme]);
 
 	useEffect(() => {
-		// Placeholder for your backend flow: create/retrieve user, then attach session(s).
-		console.log("Bootstrap user/session on site visit (no auth):", {
-			userCreated: true,
-			chatSessionId: DEMO_CHAT_SESSION_ID,
-		});
+		console.log("Bootstrapping anonymous chat session on app load...");
+	}, []);
+
+	useEffect(() => {
+		let isMounted = true;
+
+		const bootstrapChatSession = async () => {
+			setIsChatSessionLoading(true);
+			try {
+				const response = await createChatSession({ title: "Anonymous DocuChat Chat" });
+				if (!isMounted) return;
+
+				setChatSessionId(response.chat_id);
+				console.log("Chat session created:", response.chat_id);
+				showNotice("success", "Chat session ready.");
+			} catch (error) {
+				if (!isMounted) return;
+				console.error("Failed to create chat session:", error);
+				showNotice("error", "Failed to create chat session.");
+			} finally {
+				if (isMounted) setIsChatSessionLoading(false);
+			}
+		};
+
+		void bootstrapChatSession();
+
+		return () => {
+			isMounted = false;
+		};
 	}, []);
 
 	useEffect(() => {
@@ -184,6 +212,8 @@ export default function App() {
 				<div className="order-1 lg:order-2">
 					<DocumentsArea
 						theme={theme}
+						chatSessionId={chatSessionId}
+						isChatSessionLoading={isChatSessionLoading}
 						activeTab={activeTab}
 						onTabChange={setActiveTab}
 						documents={demoDocuments}
@@ -196,7 +226,7 @@ export default function App() {
 				</div>
 
 				<div className="order-2 lg:order-1">
-					<ChatArea />
+					<ChatArea chatSessionId={chatSessionId} isChatSessionLoading={isChatSessionLoading} />
 				</div>
 			</section>
 
