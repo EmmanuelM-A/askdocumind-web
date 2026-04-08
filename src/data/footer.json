@@ -1,7 +1,7 @@
 {
 	"appName": "DocuChat",
 	"version": "v0.1.0",
-	"description": "Prototype UI | No auth mode",
+	"description": "Document-aware chatbot built with React and Node.js.",
 	"links": [
 		{
 			"name": "Privacy",

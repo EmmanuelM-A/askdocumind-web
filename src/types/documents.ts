@@ -11,3 +11,17 @@ export interface Document {
     createdAt: string;
     updatedAt: string;
 }
+
+export type ProcessingStatus = Document["processingStatus"];
+
+export interface StatusColours {
+    textColour: string;
+    backgroundColour: string;
+}
+
+export interface StatusThemeColours {
+    light: StatusColours;
+    dark: StatusColours;
+}
+
+export type ProcessingStatusColoursMap = Record<ProcessingStatus, StatusThemeColours>;

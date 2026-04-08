@@ -1,0 +1,44 @@
+{
+	"processingStatuses": {
+		"PENDING": {
+			"light": {
+				"textColour": "#075985",
+				"backgroundColour": "#e0f2fe"
+			},
+			"dark": {
+				"textColour": "#7dd3fc",
+				"backgroundColour": "rgba(14, 165, 233, 0.20)"
+			}
+		},
+		"PROCESSING": {
+			"light": {
+				"textColour": "#92400e",
+				"backgroundColour": "#fef3c7"
+			},
+			"dark": {
+				"textColour": "#fcd34d",
+				"backgroundColour": "rgba(245, 158, 11, 0.20)"
+			}
+		},
+		"COMPLETED": {
+			"light": {
+				"textColour": "#065f46",
+				"backgroundColour": "#d1fae5"
+			},
+			"dark": {
+				"textColour": "#6ee7b7",
+				"backgroundColour": "rgba(16, 185, 129, 0.20)"
+			}
+		},
+		"FAILED": {
+			"light": {
+				"textColour": "#991b1b",
+				"backgroundColour": "#fee2e2"
+			},
+			"dark": {
+				"textColour": "#fca5a5",
+				"backgroundColour": "rgba(239, 68, 68, 0.20)"
+			}
+		}
+	}
+}
