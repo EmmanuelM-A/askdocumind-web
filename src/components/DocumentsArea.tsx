@@ -1,3 +1,4 @@
+import { type ChangeEvent, type DragEvent, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotate, faTrash } from "@fortawesome/free-solid-svg-icons";
 import documentsData from "@/data/documents.json";
@@ -14,30 +15,16 @@ interface DocumentsAreaProps {
     activeTab: DocumentTab;
     onTabChange: (tab: DocumentTab) => void;
     documents: UploadedDocument[];
+    selectedFiles: File[];
+    maxUploadBytes: number;
+    onFilesAdded: (files: File[]) => void;
+    onRemoveSelectedFile: (file: File) => void;
+    onUploadSelected: () => void;
 }
 
-const fallbackStatusColours: ProcessingStatusColoursMap = {
-    PENDING: {
-        light: { textColour: "#ffffff", backgroundColour: "#1d4ed8" },
-        dark: { textColour: "#ffffff", backgroundColour: "#1e40af" },
-    },
-    PROCESSING: {
-        light: { textColour: "#ffffff", backgroundColour: "#b45309" },
-        dark: { textColour: "#ffffff", backgroundColour: "#92400e" },
-    },
-    COMPLETED: {
-        light: { textColour: "#ffffff", backgroundColour: "#047857" },
-        dark: { textColour: "#ffffff", backgroundColour: "#065f46" },
-    },
-    FAILED: {
-        light: { textColour: "#ffffff", backgroundColour: "#b91c1c" },
-        dark: { textColour: "#ffffff", backgroundColour: "#991b1b" },
-    },
-};
-
 function getStatusStyle(status: ProcessingStatus, theme: "light" | "dark") {
-    const palette = (documentsData.processingStatuses as ProcessingStatusColoursMap) || fallbackStatusColours;
-    const statusPalette = palette[status] || fallbackStatusColours[status];
+    const palette = (documentsData.processingStatuses as ProcessingStatusColoursMap);
+    const statusPalette = palette[status];
     const colours = statusPalette[theme];
 
     return {
@@ -46,7 +33,48 @@ function getStatusStyle(status: ProcessingStatus, theme: "light" | "dark") {
     };
 }
 
-export function DocumentsArea({ theme, activeTab, onTabChange, documents }: DocumentsAreaProps) {
+export function DocumentsArea({
+    theme,
+    activeTab,
+    onTabChange,
+    documents,
+    selectedFiles,
+    maxUploadBytes,
+    onFilesAdded,
+    onRemoveSelectedFile,
+    onUploadSelected,
+}: DocumentsAreaProps) {
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const [isDragActive, setIsDragActive] = useState(false);
+
+    const formatBytes = (bytes: number): string => {
+        if (bytes < 1024) return `${bytes} B`;
+        if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
+        return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+    };
+
+    const formatMaxMb = (bytes: number): string => {
+        const mb = bytes / (1024 * 1024);
+        return Number.isInteger(mb) ? `${mb} MB` : `${mb.toFixed(1)} MB`;
+    };
+
+    const selectedTotalBytes = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+
+    const openFilePicker = () => fileInputRef.current?.click();
+
+    const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(event.target.files || []);
+        onFilesAdded(files);
+        event.target.value = "";
+    };
+
+    const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        setIsDragActive(false);
+        const files = Array.from(event.dataTransfer.files || []);
+        onFilesAdded(files);
+    };
+
     return (
         <section className="flex h-full min-h-[22rem] flex-col rounded-[2rem] border border-[var(--color-tertiary)] bg-[var(--color-secondary)] p-4 shadow-sm sm:min-h-[26rem] sm:p-6">
             <div className="mb-4 grid grid-cols-2 gap-2 rounded-xl bg-[var(--color-primary)] p-1">
@@ -81,23 +109,70 @@ export function DocumentsArea({ theme, activeTab, onTabChange, documents }: Docu
             </div>
 
             {activeTab === "upload" ? (
-                <div className="flex flex-1 flex-col rounded-2xl border border-dashed border-[var(--color-tertiary)] bg-[var(--color-primary)] p-4">
+                <div
+                    className={`flex flex-1 flex-col rounded-2xl border border-dashed bg-[var(--color-primary)] p-4 transition ${
+                        isDragActive
+                            ? "border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]/20"
+                            : "border-[var(--color-tertiary)]"
+                    }`}
+                    onDragOver={(event) => {
+                        event.preventDefault();
+                        setIsDragActive(true);
+                    }}
+                    onDragLeave={() => setIsDragActive(false)}
+                    onDrop={handleDrop}
+                >
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        multiple
+                        className="hidden"
+                        onChange={handleFileInputChange}
+                    />
+
                     <div className="flex flex-1 flex-col items-center justify-center text-center">
                         <p className="text-base font-medium text-[var(--color-text)] sm:text-sm">Drop files here</p>
                         <p className="mt-1 text-sm text-[var(--color-text)]/70 sm:text-xs">or click one of the actions below</p>
                     </div>
 
+                    {selectedFiles.length > 0 && (
+                        <div className="mb-3 max-h-40 space-y-1 overflow-auto rounded-xl border border-[var(--color-tertiary)] bg-[var(--color-secondary)] p-2">
+                            <p className="px-1 text-xs font-semibold text-[var(--color-text)]/75">
+                                Selected files ({selectedFiles.length}) - {formatBytes(selectedTotalBytes)} / {formatMaxMb(maxUploadBytes)}
+                            </p>
+                            {selectedFiles.map((file) => (
+                                <div
+                                    key={`${file.name}:${file.size}:${file.lastModified}`}
+                                    className="flex items-center justify-between gap-2 rounded-lg bg-[var(--color-primary)] px-2 py-1"
+                                >
+                                    <div className="min-w-0">
+                                        <p className="truncate text-xs font-medium text-[var(--color-text)]">{file.name}</p>
+                                        <p className="text-[11px] text-[var(--color-text)]/65">{formatBytes(file.size)}</p>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => onRemoveSelectedFile(file)}
+                                        className="inline-flex items-center justify-center rounded-md p-1.5 text-[var(--color-text)]/70 transition hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400"
+                                        aria-label={`Remove ${file.name}`}
+                                    >
+                                        <FontAwesomeIcon icon={faTrash} className="h-3.5 w-3.5" />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
                     <div className="mt-4 flex flex-wrap justify-center gap-2">
                         <button
                             type="button"
-                            onClick={() => console.log("Choose files clicked")}
+                            onClick={openFilePicker}
                             className="rounded-xl border border-[var(--color-tertiary)] px-3 py-2 text-base text-[var(--color-text)] hover:border-[var(--color-accent)] sm:text-sm"
                         >
                             Choose Files
                         </button>
                         <button
                             type="button"
-                            onClick={() => console.log("Upload clicked")}
+                            onClick={onUploadSelected}
                             className="rounded-xl bg-[var(--color-accent)] px-3 py-2 text-base font-semibold text-white hover:opacity-90 sm:text-sm"
                         >
                             Upload
