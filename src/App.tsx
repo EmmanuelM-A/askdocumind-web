@@ -38,7 +38,16 @@ export default function App() {
 	const [activeTab, setActiveTab] = useState<DocumentTab>("upload");
 
 	useEffect(() => {
+		const savedTheme = localStorage.getItem("docuchat-theme") as Theme | null;
+		if (savedTheme) {
+			setTheme(savedTheme);
+			document.documentElement.setAttribute("data-theme", savedTheme);
+		}
+	}, []);
+
+	useEffect(() => {
 		document.documentElement.setAttribute("data-theme", theme);
+		localStorage.setItem("docuchat-theme", theme);
 	}, [theme]);
 
 	useEffect(() => {
