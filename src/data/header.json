@@ -1,0 +1,21 @@
+{
+	"logo": {
+		"src": "https://www.svgrepo.com/show/303128/ai.svg",
+		"alt": "DocuChat"
+	},
+	"appName": "DocuChat",
+	"navItems": [
+		{
+			"name": "Home",
+			"link": "/"
+		},
+		{
+			"name": "GitHub",
+			"link": "some-link"
+		},
+		{
+			"name": "Help",
+			"link": "some-link"
+		}
+	]
+}

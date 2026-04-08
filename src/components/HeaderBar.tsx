@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import headerData from "@/data/header.json";
 
 interface HeaderBarProps {
     theme: "light" | "dark";
@@ -10,7 +11,7 @@ interface HeaderBarProps {
 
 function IconHome() {
     return (
-        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-6 w-6 sm:h-5 sm:w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
             <path d="M3 11.5 12 4l9 7.5" />
             <path d="M6.5 10.5V20h11V10.5" />
         </svg>
@@ -19,7 +20,7 @@ function IconHome() {
 
 function IconGithub() {
     return (
-        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-6 w-6 sm:h-5 sm:w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
             <path d="M9 18c-4 1.2-4-2-6-2" />
             <path d="M15 22v-3.1c0-1 .1-1.7-.4-2.2 2.8-.3 5.7-1.4 5.7-6.2 0-1.4-.5-2.5-1.3-3.3.1-.3.6-1.6-.1-3.3 0 0-1.1-.3-3.6 1.3a12.6 12.6 0 0 0-6.6 0C6.2 3.6 5.1 4 5.1 4c-.7 1.7-.2 3-.1 3.3-.8.8-1.3 1.9-1.3 3.3 0 4.8 2.9 5.9 5.7 6.2-.5.5-.5 1.1-.5 2.2V22" />
         </svg>
@@ -28,7 +29,7 @@ function IconGithub() {
 
 function IconHelp() {
     return (
-        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-6 w-6 sm:h-5 sm:w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
             <circle cx="12" cy="12" r="9" />
             <path d="M9.6 9.2a2.8 2.8 0 1 1 4.8 2c-.9.8-1.8 1.2-1.8 2.8" />
             <circle cx="12" cy="17" r=".9" fill="currentColor" stroke="none" />
@@ -66,7 +67,7 @@ function NavButton({
         <button
             type="button"
             onClick={onClick}
-            className="inline-flex items-center justify-center gap-2 rounded-md border border-[var(--color-tertiary)] px-3 py-2 text-sm font-medium text-[var(--color-text)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:px-4 sm:text-base"
+            className="inline-flex items-center justify-center gap-2 rounded-md px-2 py-1.5 text-base font-medium text-[var(--color-text)] transition hover:text-[var(--color-accent)] sm:px-4 sm:text-sm"
         >
             <span className="sm:hidden" aria-hidden="true">
                 {icon}
@@ -89,15 +90,16 @@ export function HeaderBar({
                 <button
                     type="button"
                     onClick={() => console.log("Logo clicked")}
-                    className="text-sm font-semibold tracking-[0.15em] text-[var(--color-text)]"
+                    className="flex items-center gap-2 text-base font-semibold tracking-[0.15em] text-[var(--color-text)] sm:text-sm"
                 >
-                    LOGO
+                    <img src={headerData.logo.src} alt={headerData.logo.alt} className="h-6 w-6 sm:h-5 sm:w-5" />
+                    <span className="hidden sm:inline">{headerData.appName || "LOGO"}</span>
                 </button>
 
                 <nav className="flex items-center gap-2" aria-label="Top navigation">
-                    <NavButton label="HOME" icon={<IconHome />} onClick={onHomeClick} />
-                    <NavButton label="GITHUB" icon={<IconGithub />} onClick={onGithubClick} />
-                    <NavButton label="HELP" icon={<IconHelp />} onClick={onHelpClick} />
+                    <NavButton label={headerData.navItems[0]?.name || "HOME"} icon={<IconHome />} onClick={onHomeClick} />
+                    <NavButton label={headerData.navItems[1]?.name || "GITHUB"} icon={<IconGithub />} onClick={onGithubClick} />
+                    <NavButton label={headerData.navItems[2]?.name || "HELP"} icon={<IconHelp />} onClick={onHelpClick} />
                     <NavButton
                         label="Theme"
                         icon={<IconTheme theme={theme} />}

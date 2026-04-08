@@ -1,0 +1,19 @@
+{
+	"appName": "DocuChat",
+	"version": "v0.1.0",
+	"description": "Prototype UI | No auth mode",
+	"links": [
+		{
+			"name": "Privacy",
+			"href": "#"
+		},
+		{
+			"name": "Terms",
+			"href": "#"
+		},
+		{
+			"name": "Contact",
+			"href": "#"
+		}
+	]
+}
