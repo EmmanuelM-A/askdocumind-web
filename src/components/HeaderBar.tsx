@@ -10,7 +10,7 @@ interface HeaderBarProps {
 
 function IconHome() {
     return (
-        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
             <path d="M3 11.5 12 4l9 7.5" />
             <path d="M6.5 10.5V20h11V10.5" />
         </svg>
@@ -19,7 +19,7 @@ function IconHome() {
 
 function IconGithub() {
     return (
-        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
             <path d="M9 18c-4 1.2-4-2-6-2" />
             <path d="M15 22v-3.1c0-1 .1-1.7-.4-2.2 2.8-.3 5.7-1.4 5.7-6.2 0-1.4-.5-2.5-1.3-3.3.1-.3.6-1.6-.1-3.3 0 0-1.1-.3-3.6 1.3a12.6 12.6 0 0 0-6.6 0C6.2 3.6 5.1 4 5.1 4c-.7 1.7-.2 3-.1 3.3-.8.8-1.3 1.9-1.3 3.3 0 4.8 2.9 5.9 5.7 6.2-.5.5-.5 1.1-.5 2.2V22" />
         </svg>
@@ -28,7 +28,7 @@ function IconGithub() {
 
 function IconHelp() {
     return (
-        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
             <circle cx="12" cy="12" r="9" />
             <path d="M9.6 9.2a2.8 2.8 0 1 1 4.8 2c-.9.8-1.8 1.2-1.8 2.8" />
             <circle cx="12" cy="17" r=".9" fill="currentColor" stroke="none" />
@@ -39,14 +39,14 @@ function IconHelp() {
 function IconTheme({ theme }: { theme: "light" | "dark" }) {
     if (theme === "dark") {
         return (
-            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
                 <path d="M21 12.8A8.8 8.8 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z" />
             </svg>
         );
     }
 
     return (
-        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
             <circle cx="12" cy="12" r="4" />
             <path d="M12 2v2.4M12 19.6V22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M2 12h2.4M19.6 12H22M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7" />
         </svg>
@@ -66,13 +66,12 @@ function NavButton({
         <button
             type="button"
             onClick={onClick}
-            className="inline-flex items-center gap-2 rounded-md border border-[var(--color-tertiary)] px-2.5 py-1.5 text-xs font-medium text-[var(--color-text)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+            className="inline-flex items-center justify-center gap-2 rounded-md border border-[var(--color-tertiary)] px-3 py-2 text-sm font-medium text-[var(--color-text)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:px-4 sm:text-base"
         >
-            {icon}
-            <span className="hidden sm:inline">{label}</span>
             <span className="sm:hidden" aria-hidden="true">
-                {label[0]}
+                {icon}
             </span>
+            <span className="hidden sm:inline">{label}</span>
         </button>
     );
 }
@@ -100,7 +99,7 @@ export function HeaderBar({
                     <NavButton label="GITHUB" icon={<IconGithub />} onClick={onGithubClick} />
                     <NavButton label="HELP" icon={<IconHelp />} onClick={onHelpClick} />
                     <NavButton
-                        label={theme === "dark" ? "LIGHT" : "DARK"}
+                        label="Theme"
                         icon={<IconTheme theme={theme} />}
                         onClick={onThemeToggle}
                     />

@@ -1,22 +1,10 @@
 import { useState } from "react";
 
-interface ChatAreaProps {
-    chatSessionId: string;
-}
-
-export function ChatArea({ chatSessionId }: ChatAreaProps) {
+export function ChatArea() {
     const [draft, setDraft] = useState("");
 
     return (
         <section className="flex h-full min-h-[22rem] flex-col rounded-[2rem] border border-[var(--color-tertiary)] bg-[var(--color-secondary)] p-4 shadow-sm sm:min-h-[26rem] sm:p-6">
-            <header className="mb-4 flex items-center justify-between">
-                <h2 className="text-sm font-semibold tracking-[0.14em] text-[var(--color-text)] sm:text-base">
-                    CHAT AREA
-                </h2>
-                <span className="rounded-full bg-[var(--color-primary)] px-3 py-1 text-[11px] font-medium text-[var(--color-text)]">
-                    Session: {chatSessionId}
-                </span>
-            </header>
 
             <div className="flex-1 rounded-2xl border border-[var(--color-tertiary)] bg-[var(--color-primary)] p-4 text-sm text-[var(--color-text)]/80">
                 <p className="mb-2 font-medium text-[var(--color-text)]">Welcome to DocuChat.</p>

@@ -66,7 +66,6 @@ export default function App() {
 			<section className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 gap-4 px-4 py-5 sm:gap-5 sm:px-6 sm:py-6 lg:grid-cols-2 lg:gap-6 lg:py-7">
 				<div className="order-1 lg:order-2">
 					<DocumentsArea
-						chatSessionId={DEMO_CHAT_SESSION_ID}
 						activeTab={activeTab}
 						onTabChange={setActiveTab}
 						documents={demoDocuments}
@@ -74,7 +73,7 @@ export default function App() {
 				</div>
 
 				<div className="order-2 lg:order-1">
-					<ChatArea chatSessionId={DEMO_CHAT_SESSION_ID} />
+					<ChatArea />
 				</div>
 			</section>
 

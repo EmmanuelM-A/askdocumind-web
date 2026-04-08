@@ -3,7 +3,6 @@ import type { Document as UploadedDocument } from "@/types/documents.ts";
 type DocumentTab = "upload" | "documents";
 
 interface DocumentsAreaProps {
-    chatSessionId: string;
     activeTab: DocumentTab;
     onTabChange: (tab: DocumentTab) => void;
     documents: UploadedDocument[];
@@ -22,18 +21,9 @@ function statusClass(status: UploadedDocument["processingStatus"]): string {
     }
 }
 
-export function DocumentsArea({ chatSessionId, activeTab, onTabChange, documents }: DocumentsAreaProps) {
+export function DocumentsArea({ activeTab, onTabChange, documents }: DocumentsAreaProps) {
     return (
         <section className="flex h-full min-h-[22rem] flex-col rounded-[2rem] border border-[var(--color-tertiary)] bg-[var(--color-secondary)] p-4 shadow-sm sm:min-h-[26rem] sm:p-6">
-            <header className="mb-4 flex items-center justify-between">
-                <h2 className="text-sm font-semibold tracking-[0.14em] text-[var(--color-text)] sm:text-base">
-                    UPLOAD AREA
-                </h2>
-                <span className="rounded-full bg-[var(--color-primary)] px-3 py-1 text-[11px] font-medium text-[var(--color-text)]">
-                    Chat: {chatSessionId}
-                </span>
-            </header>
-
             <div className="mb-4 grid grid-cols-2 gap-2 rounded-xl bg-[var(--color-primary)] p-1">
                 <button
                     type="button"
@@ -47,7 +37,7 @@ export function DocumentsArea({ chatSessionId, activeTab, onTabChange, documents
                             : "text-[var(--color-text)] hover:bg-[var(--color-tertiary)]"
                     }`}
                 >
-                    Uploading Docs
+                    Upload Docs
                 </button>
                 <button
                     type="button"
