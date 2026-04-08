@@ -10,11 +10,8 @@ export const settings = {
     },
 
     "api": {
-        BASE_URL: String(import.meta.env.DOCU_CHAT_API_BASE_URL),
-        BASE_VERSION: String(import.meta.env.DOCU_CHAT_API_VERSION)
-    },
-
-    "testing": {
-        TEST_HEALTH_ENDPOINT: "https://httpbin.org" // DO NOT CHANGE
+        BASE_URL: import.meta.env.DOCU_CHAT_API_BASE_URL ?? "",
+        BASE_VERSION: import.meta.env.DOCU_CHAT_API_VERSION ?? "",
+        IS_WEB_SEARCH_ENABLED: Boolean(import.meta.env.DOCU_CHAT_API_ENABLED === "true") ?? false,
     }
 }

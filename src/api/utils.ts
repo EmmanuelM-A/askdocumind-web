@@ -32,7 +32,7 @@ export function extractAPIData<T>(raw: unknown, operation: string): T {
         throw new Error(response.error.details || response.message || `${operation} failed`);
     }
 
-    if (!response.data) {
+    if (response.data === undefined || response.data === null) {
         throw new Error(`${operation} failed: missing or invalid data payload`);
     }
 

@@ -20,6 +20,41 @@ interface HeadersRecord {
     [key: string]: string;
 }
 
+function isFormDataBody(value: unknown): value is FormData {
+    return typeof FormData !== "undefined" && value instanceof FormData;
+}
+
+function removeContentTypeHeader(headers: HeadersRecord): HeadersRecord {
+    const normalized: HeadersRecord = { ...headers };
+    for (const key of Object.keys(normalized)) {
+        if (key.toLowerCase() === "content-type") {
+            delete normalized[key];
+        }
+    }
+    return normalized;
+}
+
+function serializeBodyForRequestKey(body: unknown): string {
+    if (body == null) return "";
+
+    if (isFormDataBody(body)) {
+        const entries: string[] = [];
+        for (const [key, value] of body.entries()) {
+            if (typeof value === "string") {
+                entries.push(`${key}:${value}`);
+                continue;
+            }
+
+            entries.push(`${key}:[file:${value.name}:${value.size}:${value.type}]`);
+        }
+
+        entries.sort();
+        return `form:${entries.join("|")}`;
+    }
+
+    return stableSerialize(body);
+}
+
 /**
  * Base URL used to build every DocuChat API request.
  */
@@ -203,7 +238,7 @@ export async function sendRequest(
 
     const url: string = buildUrl(route, endpoint, query);
 
-    const stableBody: string = body != null ? stableSerialize(body) : "";
+    const stableBody: string = serializeBodyForRequestKey(body);
     const computedKey: string = `${(method as string).toUpperCase()}::${url}::${stableBody}`;
     const requestKey: string = requestKeyOverride || computedKey;
 
@@ -222,18 +257,20 @@ export async function sendRequest(
 
     // Build fetch options
     const methodHeaders = getMethodHeaders(method);
+    const mergedHeaders: HeadersRecord = {
+        ...methodHeaders,
+        ...headers,
+    };
+
     const optionsFetch: RequestInit = {
         method,
-        headers: {
-            ...methodHeaders,
-            ...headers,
-        },
+        headers: isFormDataBody(body) ? removeContentTypeHeader(mergedHeaders) : mergedHeaders,
         signal,
     };
 
     // Add body for methods that support it
     if (body !== null && (method === "POST" || method === "PUT" || method === "PATCH")) {
-        if (typeof body === "string") {
+        if (isFormDataBody(body) || typeof body === "string") {
             optionsFetch.body = body;
         } else {
             optionsFetch.body = JSON.stringify(body);
