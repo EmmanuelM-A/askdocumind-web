@@ -4,6 +4,7 @@ import { DocumentsArea } from "@/components/DocumentsArea.tsx";
 import { FooterBar } from "@/components/FooterBar.tsx";
 import { HeaderBar } from "@/components/HeaderBar.tsx";
 import { createChatSession } from "@/api/chat-session-endpoints.ts";
+import { createAnonymousUserSession } from "@/api/auth-endpoints.ts";
 import { settings } from "@/config/configs.ts";
 import type { UUID } from "@/types/api.ts";
 import type { Document as UploadedDocument } from "@/types/documents.ts";
@@ -21,6 +22,29 @@ interface UploadNotice {
 	type: NoticeType;
 	message: string;
 }
+
+interface BootstrapResult {
+	userId: UUID;
+	chatId: UUID;
+}
+
+let bootstrapPromise: Promise<BootstrapResult> | null = null;
+
+const bootstrapAnonymousUserAndChat = (): Promise<BootstrapResult> => {
+	if (!bootstrapPromise) {
+		bootstrapPromise = (async () => {
+			const userId = await createAnonymousUserSession();
+			const chat = await createChatSession({ title: "Anonymous DocuChat Chat" });
+
+			return { userId, chatId: chat.chat_id };
+		})().catch((error) => {
+			bootstrapPromise = null;
+			throw error;
+		});
+	}
+
+	return bootstrapPromise;
+};
 
 const demoDocuments: UploadedDocument[] = [
 	{
@@ -141,31 +165,28 @@ export default function App() {
 	}, [theme]);
 
 	useEffect(() => {
-		console.log("Bootstrapping anonymous chat session on app load...");
-	}, []);
-
-	useEffect(() => {
 		let isMounted = true;
 
-		const bootstrapChatSession = async () => {
+		const bootstrapSessionData = async () => {
 			setIsChatSessionLoading(true);
 			try {
-				const response = await createChatSession({ title: "Anonymous DocuChat Chat" });
+				const { userId, chatId } = await bootstrapAnonymousUserAndChat();
 				if (!isMounted) return;
 
-				setChatSessionId(response.chat_id);
-				console.log("Chat session created:", response.chat_id);
+				setChatSessionId(chatId);
+				console.log("Anonymous user session created:", userId);
+				console.log("Chat session created:", chatId);
 				showNotice("success", "Chat session ready.");
 			} catch (error) {
 				if (!isMounted) return;
-				console.error("Failed to create chat session:", error);
-				showNotice("error", "Failed to create chat session.");
+				console.error("Failed to bootstrap anonymous user + chat session:", error);
+				showNotice("error", "Failed to initialize session.");
 			} finally {
 				if (isMounted) setIsChatSessionLoading(false);
 			}
 		};
 
-		void bootstrapChatSession();
+		void bootstrapSessionData();
 
 		return () => {
 			isMounted = false;

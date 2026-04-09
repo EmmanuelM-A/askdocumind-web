@@ -1,7 +1,7 @@
 import {sendRequest} from "@/api/api-client.ts";
 import {API_ENDPOINTS} from "@/config/constants.ts";
 import {extractAPIData} from "@/api/utils.ts";
-import {UUID} from "node:crypto";
+import type { UUID } from "@/types/api.ts";
 
 
 export async function createAnonymousUserSession(): Promise<UUID>  {
