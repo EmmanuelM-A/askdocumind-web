@@ -7,5 +7,7 @@ export const API_ENDPOINTS = {
     DOCS_UPLOADS: "uploads/",
     CHAT_SESSIONS: "sessions/",
 
-    CHATBOT: "chat/"
+    CHATBOT: "chat/",
+
+    ANONYMOUS_AUTH: "auth/anonymous/",
 } as const;
