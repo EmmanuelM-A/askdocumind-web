@@ -1,10 +1,9 @@
 
-
 export const API_ENDPOINTS = {
     API_HEALTH: "/health/api",
     DB_HEALTH: "/health/db",
 
-    DOCS_UPLOADS: "uploads/",
+    DOCS_UPLOADS: "documents/",
     CHAT_SESSIONS: "sessions/",
 
     CHATBOT: "chat/",

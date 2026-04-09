@@ -12,7 +12,6 @@ import type { Document as UploadedDocument } from "@/types/documents.ts";
 type Theme = "light" | "dark";
 type DocumentTab = "upload" | "documents";
 
-const DEMO_CHAT_SESSION_ID = "bfac02c2-3e32-41ce-99ce-7e6ea545d583";
 const MAX_CHAT_UPLOAD_MB = settings.documents.MAX_MB_PER_CHAT;
 const MAX_CHAT_UPLOAD_BYTES = MAX_CHAT_UPLOAD_MB * 1024 * 1024;
 
@@ -46,35 +45,13 @@ const bootstrapAnonymousUserAndChat = (): Promise<BootstrapResult> => {
 	return bootstrapPromise;
 };
 
-const demoDocuments: UploadedDocument[] = [
-	{
-		id: "18f73de3-ab95-4e92-afbf-5859257616e3",
-		chatSessionId: DEMO_CHAT_SESSION_ID,
-		filename: "architecture-notes.pdf",
-		fileSize: 452010,
-		vectorId: "bbff6161-d99a-4e5f-b4b7-bac2f38be2d7",
-		processingStatus: "COMPLETED",
-		createdAt: "2026-04-08T07:00:00.000Z",
-		updatedAt: "2026-04-08T07:05:00.000Z",
-	},
-	{
-		id: "00e7f972-1f84-4991-9960-2dcfcd56fca5",
-		chatSessionId: DEMO_CHAT_SESSION_ID,
-		filename: "release-plan-v2.docx",
-		fileSize: 289200,
-		vectorId: "2f68f9ad-913c-49f8-9f4a-300c86ce7e77",
-		processingStatus: "PROCESSING",
-		createdAt: "2026-04-08T07:10:00.000Z",
-		updatedAt: "2026-04-08T07:11:00.000Z",
-	},
-];
-
 export default function App() {
 	const [theme, setTheme] = useState<Theme>("light");
 	const [activeTab, setActiveTab] = useState<DocumentTab>("upload");
 	const [chatSessionId, setChatSessionId] = useState<UUID | null>(null);
 	const [isChatSessionLoading, setIsChatSessionLoading] = useState(true);
 	const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+	const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);
 	const [notice, setNotice] = useState<UploadNotice | null>(null);
 
 	const showNotice = (type: NoticeType, message: string) => {
@@ -134,21 +111,6 @@ export default function App() {
 		const targetKey = getFileKey(targetFile);
 		setSelectedFiles((prev) => prev.filter((file) => getFileKey(file) !== targetKey));
 		console.log("Removed selected file:", targetFile.name);
-	};
-
-	const handleUploadLocal = () => {
-		if (!selectedFiles.length) {
-			showNotice("error", "No files selected yet.");
-			console.log("Upload clicked with no selected files.");
-			return;
-		}
-
-		console.log("Upload action (local only, no API):", selectedFiles.map((file) => ({
-			name: file.name,
-			size: file.size,
-			lastModified: file.lastModified,
-		})), chatSessionId);
-		showNotice("success", `Upload triggered for ${selectedFiles.length} file(s) (local-only mode).`);
 	};
 
 	useEffect(() => {
@@ -233,15 +195,16 @@ export default function App() {
 				<div className="order-1 lg:order-2">
 					<DocumentsArea
 						theme={theme}
+						chatSessionId={chatSessionId}
 						isChatSessionLoading={isChatSessionLoading}
 						activeTab={activeTab}
 						onTabChange={setActiveTab}
-						documents={demoDocuments}
+						documents={uploadedDocuments}
 						selectedFiles={selectedFiles}
 						maxUploadBytes={MAX_CHAT_UPLOAD_BYTES}
 						onFilesAdded={handleFilesAdded}
 						onRemoveSelectedFile={handleRemoveSelectedFile}
-						onUploadSelected={handleUploadLocal}
+						onDocumentsRefreshed={setUploadedDocuments}
 					/>
 				</div>
 

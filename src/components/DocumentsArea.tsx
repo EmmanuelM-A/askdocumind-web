@@ -1,17 +1,20 @@
-import { type ChangeEvent, type DragEvent, useRef, useState } from "react";
+import { type ChangeEvent, type DragEvent, useRef, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotate, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { uploadDocuments, getUploadedDocuments } from "@/api/document-endpoints.ts";
 import documentsData from "@/data/documents.json";
 import type {
     Document as UploadedDocument,
     ProcessingStatus,
     ProcessingStatusColoursMap,
 } from "@/types/documents.ts";
+import type { UUID } from "@/types/api.ts";
 
 type DocumentTab = "upload" | "documents";
 
 interface DocumentsAreaProps {
     theme: "light" | "dark";
+    chatSessionId: UUID | null;
     isChatSessionLoading: boolean;
     activeTab: DocumentTab;
     onTabChange: (tab: DocumentTab) => void;
@@ -20,7 +23,7 @@ interface DocumentsAreaProps {
     maxUploadBytes: number;
     onFilesAdded: (files: File[]) => void;
     onRemoveSelectedFile: (file: File) => void;
-    onUploadSelected: () => void;
+    onDocumentsRefreshed?: (docs: UploadedDocument[]) => void;
 }
 
 function getStatusStyle(status: ProcessingStatus, theme: "light" | "dark") {
@@ -36,6 +39,7 @@ function getStatusStyle(status: ProcessingStatus, theme: "light" | "dark") {
 
 export function DocumentsArea({
     theme,
+    chatSessionId,
     isChatSessionLoading,
     activeTab,
     onTabChange,
@@ -44,10 +48,12 @@ export function DocumentsArea({
     maxUploadBytes,
     onFilesAdded,
     onRemoveSelectedFile,
-    onUploadSelected,
+    onDocumentsRefreshed,
 }: DocumentsAreaProps) {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [isDragActive, setIsDragActive] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
+    const [isFetchingDocuments, setIsFetchingDocuments] = useState(false);
 
     const formatBytes = (bytes: number): string => {
         if (bytes < 1024) return `${bytes} B`;
@@ -76,6 +82,51 @@ export function DocumentsArea({
         const files = Array.from(event.dataTransfer.files || []);
         onFilesAdded(files);
     };
+
+    const handleUploadWithAPI = async () => {
+        if (!selectedFiles.length || !chatSessionId) {
+            console.error("No files selected or chat session not ready");
+            return;
+        }
+
+        setIsUploading(true);
+        try {
+            const quantityUploaded = await uploadDocuments({
+                chatSessionId,
+                documents: selectedFiles
+            });
+            console.log(`Successfully uploaded ${quantityUploaded} document(s)`);
+
+            // Refresh documents list
+            await handleRefreshDocuments();
+        } catch (error) {
+            console.error("Failed to upload documents:", error);
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+    const handleRefreshDocuments = async () => {
+        if (!chatSessionId) return;
+
+        setIsFetchingDocuments(true);
+        try {
+            const uploadedDocs = await getUploadedDocuments(chatSessionId);
+            console.log("Fetched uploaded documents:", uploadedDocs);
+            onDocumentsRefreshed?.(uploadedDocs);
+        } catch (error) {
+            console.error("Failed to fetch uploaded documents:", error);
+        } finally {
+            setIsFetchingDocuments(false);
+        }
+    };
+
+    // Fetch documents when chat session becomes available
+    useEffect(() => {
+        if (chatSessionId && !isChatSessionLoading) {
+            void handleRefreshDocuments();
+        }
+    }, [chatSessionId, isChatSessionLoading]);
 
     return (
         <section className="flex h-full min-h-[22rem] flex-col rounded-[2rem] border border-[var(--color-tertiary)] bg-[var(--color-secondary)] p-4 shadow-sm sm:min-h-[26rem] sm:p-6">
@@ -175,11 +226,11 @@ export function DocumentsArea({
                         </button>
                         <button
                             type="button"
-                            onClick={onUploadSelected}
+                            onClick={handleUploadWithAPI}
                             className="rounded-xl bg-[var(--color-accent)] px-3 py-2 text-base font-semibold text-white hover:opacity-90 sm:text-sm"
-                            disabled={isChatSessionLoading}
+                            disabled={isChatSessionLoading || isUploading || !chatSessionId}
                         >
-                            Upload
+                            {isUploading ? "Uploading..." : "Upload"}
                         </button>
                     </div>
                 </div>
@@ -220,8 +271,9 @@ export function DocumentsArea({
                     ))}
                     <button
                         type="button"
-                        onClick={() => console.log("Refresh uploaded documents clicked")}
-                        className="absolute bottom-3 right-3 inline-flex items-center justify-center rounded-md p-2 text-[var(--color-text)]/70 transition hover:text-[var(--color-accent)]"
+                        onClick={handleRefreshDocuments}
+                        disabled={isFetchingDocuments || !chatSessionId}
+                        className="absolute bottom-3 right-3 inline-flex items-center justify-center rounded-md p-2 text-[var(--color-text)]/70 transition hover:text-[var(--color-accent)] disabled:opacity-50"
                         aria-label="Refresh documents list"
                     >
                         <FontAwesomeIcon icon={faRotate} className="h-5 w-5" />

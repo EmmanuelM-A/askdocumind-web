@@ -31,8 +31,10 @@ export async function uploadDocuments({ chatSessionId, documents }: UploadDocume
 export async function getUploadedDocuments(chatSessionId: UUID): Promise<Array<Document>>  {
     const rawResponse = await sendRequest({
         endpoint: API_ENDPOINTS.DOCS_UPLOADS,
-        method: "POST",
-        route: `${chatSessionId}`
+        method: "GET",
+        query: {
+            chat_id: chatSessionId,
+        }
     });
 
     return extractAPIData<Array<Document>>(rawResponse, "Get uploaded documents");
