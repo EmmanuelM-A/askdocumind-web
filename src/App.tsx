@@ -3,7 +3,7 @@ import { ChatArea } from "@/components/ChatArea.tsx";
 import { DocumentsArea } from "@/components/DocumentsArea.tsx";
 import { FooterBar } from "@/components/FooterBar.tsx";
 import { HeaderBar } from "@/components/HeaderBar.tsx";
-import { createChatSession } from "@/api/chat-session-endpoints.ts";
+import { initChatSession } from "@/api/chat-session-endpoints.ts";
 import { createAnonymousUserSession } from "@/api/auth-endpoints.ts";
 import { settings } from "@/config/configs.ts";
 import type { UUID } from "@/types/api.ts";
@@ -34,7 +34,7 @@ const bootstrapAnonymousUserAndChat = (): Promise<BootstrapResult> => {
 	if (!bootstrapPromise) {
 		bootstrapPromise = (async () => {
 			const userId = await createAnonymousUserSession();
-			const chat = await createChatSession({ title: "Anonymous DocuChat Chat" });
+			const chat = await initChatSession({ user_id: userId, title: "Anonymous DocuChat Chat" });
 
 			return { userId, chatId: chat.chat_id };
 		})().catch((error) => {
@@ -233,7 +233,6 @@ export default function App() {
 				<div className="order-1 lg:order-2">
 					<DocumentsArea
 						theme={theme}
-						chatSessionId={chatSessionId}
 						isChatSessionLoading={isChatSessionLoading}
 						activeTab={activeTab}
 						onTabChange={setActiveTab}

@@ -17,7 +17,7 @@ export function ChatArea({ chatSessionId, isChatSessionLoading }: ChatAreaProps)
                     {isChatSessionLoading
                         ? "Creating your chat session..."
                         : chatSessionId
-                            ? `Active chat session: ${chatSessionId}`
+                            ? "Chat session is active."
                             : "Chat session unavailable."}
                 </p>
             </div>

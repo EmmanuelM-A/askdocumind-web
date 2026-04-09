@@ -24,3 +24,8 @@ export interface UpdateChatSession {
 export interface DeletedChatSession {
     chat_id: UUID;
 }
+
+export interface InitChatSession {
+    user_id: UUID;
+    title?: string;
+}

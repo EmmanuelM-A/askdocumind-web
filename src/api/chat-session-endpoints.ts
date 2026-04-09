@@ -5,7 +5,8 @@ import {
     ChatSession,
     CreateChatSession,
     CreatedChatSession,
-    UpdateChatSession
+    UpdateChatSession,
+    InitChatSession
 } from "@/types/chat-sessions.ts";
 import {extractAPIData} from "@/api/utils.ts";
 import {ChatMessage} from "@/types/chat-messages.ts";
@@ -58,4 +59,14 @@ export async function getChatSessionMessages(chatSessionId: UUID): Promise<Array
     });
 
     return extractAPIData<Array<ChatMessage>>(rawResponse, "Get chat messages");
+}
+
+export async function initChatSession(data: InitChatSession): Promise<CreatedChatSession>  {
+    const rawResponse = await sendRequest({
+        endpoint: `${API_ENDPOINTS.CHAT_SESSIONS}init`,
+        method: "POST",
+        body: data,
+    });
+
+    return extractAPIData(rawResponse, "Initialize chat session");
 }

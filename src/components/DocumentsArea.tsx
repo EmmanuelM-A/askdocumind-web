@@ -12,7 +12,6 @@ type DocumentTab = "upload" | "documents";
 
 interface DocumentsAreaProps {
     theme: "light" | "dark";
-    chatSessionId: string | null;
     isChatSessionLoading: boolean;
     activeTab: DocumentTab;
     onTabChange: (tab: DocumentTab) => void;
@@ -37,7 +36,6 @@ function getStatusStyle(status: ProcessingStatus, theme: "light" | "dark") {
 
 export function DocumentsArea({
     theme,
-    chatSessionId,
     isChatSessionLoading,
     activeTab,
     onTabChange,
@@ -137,13 +135,6 @@ export function DocumentsArea({
                     <div className="flex flex-1 flex-col items-center justify-center text-center">
                         <p className="text-base font-medium text-[var(--color-text)] sm:text-sm">Drop files here</p>
                         <p className="mt-1 text-sm text-[var(--color-text)]/70 sm:text-xs">or click one of the actions below</p>
-                        <p className="mt-3 text-[11px] text-[var(--color-text)]/55">
-                            {isChatSessionLoading
-                                ? "Preparing your chat session..."
-                                : chatSessionId
-                                    ? `Upload target session: ${chatSessionId}`
-                                    : "Chat session unavailable."}
-                        </p>
                     </div>
 
                     {selectedFiles.length > 0 && (
