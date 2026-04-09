@@ -7,12 +7,12 @@ export interface Document {
     filename: string;
     fileSize: number;
     vectorId: UUID;
-    processingStatus: "PROCESSING" | "COMPLETED" | "FAILED";
+    processing_status: "PROCESSING" | "COMPLETED" | "FAILED";
     createdAt: string;
     updatedAt: string;
 }
 
-export type ProcessingStatus = Document["processingStatus"];
+export type ProcessingStatus = Document["processing_status"];
 
 export interface StatusColours {
     textColour: string;

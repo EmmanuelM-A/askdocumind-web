@@ -29,6 +29,17 @@ interface DocumentsAreaProps {
 function getStatusStyle(status: ProcessingStatus, theme: "light" | "dark") {
     const palette = (documentsData.processingStatuses as ProcessingStatusColoursMap);
     const statusPalette = palette[status];
+
+    // Fallback to COMPLETED style if status is not found
+    if (!statusPalette) {
+        const fallbackPalette = palette["COMPLETED"];
+        const colours = fallbackPalette[theme];
+        return {
+            color: colours.textColour,
+            backgroundColor: colours.backgroundColour,
+        };
+    }
+
     const colours = statusPalette[theme];
 
     return {
@@ -253,9 +264,9 @@ export function DocumentsArea({
                                 <div className="flex items-center gap-2.5">
                                     <span
                                         className="rounded-full px-2.5 py-1 text-xs font-semibold whitespace-nowrap sm:text-[11px]"
-                                        style={getStatusStyle(doc.processingStatus, theme)}
+                                        style={getStatusStyle(doc.processing_status, theme)}
                                     >
-                                        {doc.processingStatus}
+                                        {doc.processing_status}
                                     </span>
                                     <button
                                         type="button"
