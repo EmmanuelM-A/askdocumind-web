@@ -1,15 +1,5 @@
 {
 	"processingStatuses": {
-		"PENDING": {
-			"light": {
-				"textColour": "#075985",
-				"backgroundColour": "#e0f2fe"
-			},
-			"dark": {
-				"textColour": "#7dd3fc",
-				"backgroundColour": "rgba(14, 165, 233, 0.20)"
-			}
-		},
 		"PROCESSING": {
 			"light": {
 				"textColour": "#92400e",

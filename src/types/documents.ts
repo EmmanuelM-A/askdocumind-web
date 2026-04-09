@@ -7,7 +7,7 @@ export interface Document {
     filename: string;
     fileSize: number;
     vectorId: UUID;
-    processingStatus: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED";
+    processingStatus: "PROCESSING" | "COMPLETED" | "FAILED";
     createdAt: string;
     updatedAt: string;
 }
