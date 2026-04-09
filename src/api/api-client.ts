@@ -201,6 +201,7 @@ interface RequestOptions {
     timeoutMs?: number;
     signal?: AbortSignal | null;
     requestKeyOverride?: string | null;
+    credentials?: RequestCredentials;
 }
 
 // Send request interface
@@ -234,6 +235,7 @@ export async function sendRequest(
         timeoutMs = 0,
         signal: callerSignal = null,
         requestKeyOverride = null,
+        credentials = "include",
     } = options;
 
     const url: string = buildUrl(route, endpoint, query);
@@ -266,6 +268,7 @@ export async function sendRequest(
         method,
         headers: isFormDataBody(body) ? removeContentTypeHeader(mergedHeaders) : mergedHeaders,
         signal,
+        credentials,
     };
 
     // Add body for methods that support it

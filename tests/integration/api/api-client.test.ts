@@ -241,6 +241,35 @@ describeIfDevelopment("sendRequest Integration Tests with httpbin.org", () => {
             expect(sentHeaders["X-Request-ID"]).toBe("test-123");
             expect(sentHeaders["X-Version"]).toBe("1.0");
             expect(sentHeaders["Accept-Version"]).toBeDefined();
+            expect(requestInit.credentials).toBe("include");
+        } finally {
+            vi.stubGlobal("fetch", originalFetch as typeof fetch);
+        }
+    });
+
+    test("15. Credentials mode can be overridden per request", async () => {
+        const originalFetch = globalThis.fetch;
+        const fetchMock = vi.fn().mockResolvedValue(
+            new Response(JSON.stringify({ ok: true }), {
+                status: 200,
+                headers: { "Content-Type": "application/json" },
+            }),
+        );
+
+        vi.stubGlobal("fetch", fetchMock as typeof fetch);
+
+        try {
+            await sendRequest({
+                route: HTTP_BIN_BASE,
+                endpoint: "get",
+                method: "GET",
+                options: {
+                    credentials: "omit",
+                },
+            });
+
+            const [, requestInit] = fetchMock.mock.calls[0] as [string, RequestInit];
+            expect(requestInit.credentials).toBe("omit");
         } finally {
             vi.stubGlobal("fetch", originalFetch as typeof fetch);
         }
