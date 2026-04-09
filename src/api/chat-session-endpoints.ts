@@ -1,5 +1,5 @@
 import {sendRequest} from "@/api/api-client.ts";
-import {API_ENDPOINTS} from "@/config/constants.ts";
+import {API_ROUTES} from "@/config/constants.ts";
 import {UUID} from "@/types/api.ts";
 import {
     ChatSession,
@@ -14,7 +14,7 @@ import {ChatMessage} from "@/types/chat-messages.ts";
 
 export async function createChatSession(data: CreateChatSession): Promise<CreatedChatSession>  {
     const rawResponse = await sendRequest({
-        endpoint: API_ENDPOINTS.CHAT_SESSIONS,
+        route: API_ROUTES.CHAT_SESSIONS,
         method: "POST",
         body: data,
     });
@@ -24,7 +24,7 @@ export async function createChatSession(data: CreateChatSession): Promise<Create
 
 export async function getChatSession(chatSessionId: UUID): Promise<ChatSession> {
     const rawResponse = await sendRequest({
-        endpoint: `${API_ENDPOINTS.CHAT_SESSIONS}${chatSessionId}`,
+        route: `${API_ROUTES.CHAT_SESSIONS}${chatSessionId}`,
         method: "GET",
     });
 
@@ -33,7 +33,7 @@ export async function getChatSession(chatSessionId: UUID): Promise<ChatSession> 
 
 export async function updateChatSession(chatSessionId: UUID, data: UpdateChatSession): Promise<ChatSession> {
     const rawResponse = await sendRequest({
-        endpoint: `${API_ENDPOINTS.CHAT_SESSIONS}${chatSessionId}`,
+        route: `${API_ROUTES.CHAT_SESSIONS}${chatSessionId}`,
         method: "PATCH",
         body: data,
     });
@@ -43,7 +43,7 @@ export async function updateChatSession(chatSessionId: UUID, data: UpdateChatSes
 
 export async function deleteChatSession(chatSessionId: UUID): Promise<UUID> {
     const rawResponse = await sendRequest({
-        endpoint: `${API_ENDPOINTS.CHAT_SESSIONS}${chatSessionId}`
+        route: `${API_ROUTES.CHAT_SESSIONS}${chatSessionId}`
     });
 
     const { chat_id } = extractAPIData<{ chat_id: UUID }>(rawResponse, "Delete chat session");
@@ -53,9 +53,9 @@ export async function deleteChatSession(chatSessionId: UUID): Promise<UUID> {
 
 export async function getChatSessionMessages(chatSessionId: UUID): Promise<Array<ChatMessage>> {
     const rawResponse = await sendRequest({
-        endpoint: API_ENDPOINTS.CHAT_SESSIONS,
+        route: API_ROUTES.CHAT_SESSIONS,
         method: "GET",
-        route: `${chatSessionId}/messages`,
+        endpoint: `${chatSessionId}/messages`,
     });
 
     return extractAPIData<Array<ChatMessage>>(rawResponse, "Get chat messages");
@@ -63,7 +63,8 @@ export async function getChatSessionMessages(chatSessionId: UUID): Promise<Array
 
 export async function initChatSession(data: InitChatSession): Promise<CreatedChatSession>  {
     const rawResponse = await sendRequest({
-        endpoint: `${API_ENDPOINTS.CHAT_SESSIONS}init`,
+        route: API_ROUTES.CHAT_SESSIONS,
+        endpoint: "init",
         method: "POST",
         body: data,
     });

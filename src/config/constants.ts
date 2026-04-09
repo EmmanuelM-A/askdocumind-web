@@ -1,9 +1,8 @@
 
-export const API_ENDPOINTS = {
-    API_HEALTH: "/health/api",
-    DB_HEALTH: "/health/db",
+export const API_ROUTES = {
+    HEALTH: "/health",
 
-    DOCS_UPLOADS: "documents/",
+    DOCUMENTS: "documents/",
     CHAT_SESSIONS: "sessions/",
 
     CHATBOT: "chat/",

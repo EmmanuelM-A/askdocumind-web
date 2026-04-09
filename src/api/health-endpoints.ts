@@ -1,11 +1,12 @@
 import {sendRequest} from "@/api/api-client.ts";
-import {API_ENDPOINTS} from "@/config/constants.ts";
+import {API_ROUTES} from "@/config/constants.ts";
 import {APIResponse, HealthDataFormat} from "@/types/api.ts";
 
 
 export async function isApiConnectionHealthy(): Promise<boolean> {
     const response = await sendRequest({
-        endpoint: API_ENDPOINTS.API_HEALTH,
+        route: API_ROUTES.HEALTH,
+        endpoint: "api",
         method: "GET"
     }) as APIResponse;
 
@@ -16,7 +17,8 @@ export async function isApiConnectionHealthy(): Promise<boolean> {
 
 export async function isDatabaseConnectionHealthy(): Promise<boolean> {
     const response = await sendRequest({
-        endpoint: API_ENDPOINTS.DB_HEALTH,
+        route: API_ROUTES.HEALTH,
+        endpoint: "db",
         method: "GET"
     }) as APIResponse;
 

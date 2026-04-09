@@ -1,12 +1,12 @@
 import {sendRequest} from "@/api/api-client.ts";
-import {API_ENDPOINTS} from "@/config/constants.ts";
+import {API_ROUTES} from "@/config/constants.ts";
 import {extractAPIData} from "@/api/utils.ts";
 import type { UUID } from "@/types/api.ts";
 
 
 export async function createAnonymousUserSession(): Promise<UUID>  {
     const rawResponse = await sendRequest({
-        endpoint: API_ENDPOINTS.ANONYMOUS_AUTH,
+        route: API_ROUTES.ANONYMOUS_AUTH,
         method: "POST",
     });
 

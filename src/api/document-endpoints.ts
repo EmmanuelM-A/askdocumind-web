@@ -1,5 +1,5 @@
 import {sendRequest} from "@/api/api-client.ts";
-import {API_ENDPOINTS} from "@/config/constants.ts";
+import {API_ROUTES} from "@/config/constants.ts";
 import {extractAPIData} from "@/api/utils.ts";
 import {UUID} from "@/types/api.ts";
 import {Document} from "@/types/documents.ts";
@@ -18,7 +18,7 @@ export async function uploadDocuments({ chatSessionId, documents }: UploadDocume
     }
 
     const rawResponse = await sendRequest({
-        endpoint: API_ENDPOINTS.DOCS_UPLOADS,
+        route: API_ROUTES.DOCUMENTS,
         method: "POST",
         body: multipart,
     });
@@ -30,7 +30,7 @@ export async function uploadDocuments({ chatSessionId, documents }: UploadDocume
 
 export async function getUploadedDocuments(chatSessionId: UUID): Promise<Array<Document>>  {
     const rawResponse = await sendRequest({
-        endpoint: API_ENDPOINTS.DOCS_UPLOADS,
+        route: API_ROUTES.DOCUMENTS,
         method: "GET",
         query: {
             chat_id: chatSessionId,
