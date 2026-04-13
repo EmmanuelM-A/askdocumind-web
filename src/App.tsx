@@ -205,6 +205,7 @@ export default function App() {
 						onFilesAdded={handleFilesAdded}
 						onRemoveSelectedFile={handleRemoveSelectedFile}
 						onUploadSuccess={() => setSelectedFiles([])}
+						onUploadNotice={showNotice}
 						onDeleteNotice={showNotice}
 						onDocumentsRefreshed={setUploadedDocuments}
 					/>

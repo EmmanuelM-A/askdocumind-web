@@ -24,6 +24,7 @@ interface DocumentsAreaProps {
     onFilesAdded: (files: File[]) => void;
     onRemoveSelectedFile: (file: File) => void;
     onUploadSuccess?: () => void;
+    onUploadNotice?: (type: "success" | "error", message: string) => void;
     onDeleteNotice?: (type: "success" | "error", message: string) => void;
     onDocumentsRefreshed?: (docs: UploadedDocument[]) => void;
 }
@@ -62,6 +63,7 @@ export function DocumentsArea({
     onFilesAdded,
     onRemoveSelectedFile,
     onUploadSuccess,
+    onUploadNotice,
     onDeleteNotice,
     onDocumentsRefreshed,
 }: DocumentsAreaProps) {
@@ -86,6 +88,12 @@ export function DocumentsArea({
 
     const openFilePicker = () => fileInputRef.current?.click();
 
+    const formatFileNamesForToast = (files: File[]): string => {
+        if (files.length === 1) return files[0].name;
+        if (files.length === 2) return `${files[0].name}, ${files[1].name}`;
+        return `${files[0].name}, ${files[1].name} +${files.length - 2} more`;
+    };
+
     const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(event.target.files || []);
         onFilesAdded(files);
@@ -105,19 +113,24 @@ export function DocumentsArea({
             return;
         }
 
+        const filesSnapshot = [...selectedFiles];
+        const fileNamesLabel = formatFileNamesForToast(filesSnapshot);
+
         setIsUploading(true);
         try {
             const quantityUploaded = await uploadDocuments({
                 chatSessionId,
-                documents: selectedFiles
+                documents: filesSnapshot
             });
             console.log(`Successfully uploaded ${quantityUploaded} document(s)`);
+            onUploadNotice?.("success", `${fileNamesLabel} uploaded.`);
             onUploadSuccess?.();
 
             // Refresh documents list
             await handleRefreshDocuments();
         } catch (error) {
             console.error("Failed to upload documents:", error);
+            onUploadNotice?.("error", `Failed to upload ${fileNamesLabel}.`);
         } finally {
             setIsUploading(false);
         }
