@@ -93,10 +93,10 @@ export function ChatArea({ chatSessionId, isChatSessionLoading }: ChatAreaProps)
     };
 
     return (
-        <section className="flex h-full min-h-[22rem] flex-col rounded-[2rem] border border-[var(--color-tertiary)] bg-[var(--color-secondary)] p-4 shadow-sm sm:min-h-[26rem] sm:p-6">
+        <section className="flex h-full min-h-0 flex-col overflow-hidden rounded-[2rem] border border-[var(--color-tertiary)] bg-[var(--color-secondary)] p-4 shadow-sm sm:p-6">
             <div
                 ref={messageListRef}
-                className="flex-1 space-y-3 overflow-auto rounded-2xl border border-[var(--color-tertiary)] bg-[var(--color-primary)] p-4 text-sm text-[var(--color-text)]/80"
+                className="min-h-0 flex-1 space-y-3 overflow-y-auto rounded-2xl border border-[var(--color-tertiary)] bg-[var(--color-primary)] p-4 text-sm text-[var(--color-text)]/80"
             >
                 {messages.map((message) => (
                     <div key={message.id} className={bubbleClasses[message.role]}>
