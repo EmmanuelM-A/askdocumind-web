@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from "react";
+import { getChatSessionMessages } from "@/api/chat-session-endpoints.ts";
 import { chatWithChatbot } from "@/api/chatbot-endpoints.ts";
 import type { ChatbotResponse } from "@/types/chatbot.ts";
+import type { ChatMessage } from "@/types/chat-messages.ts";
+import type { UUID } from "@/types/api.ts";
 import {settings} from "@/config/configs.ts";
 
 interface ChatAreaProps {
-    chatSessionId: string | null;
+    chatSessionId: UUID | null;
     isChatSessionLoading: boolean;
 }
 
@@ -35,6 +38,60 @@ export function ChatArea({ chatSessionId, isChatSessionLoading }: ChatAreaProps)
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        const loadChatHistory = async () => {
+            if (!chatSessionId || isChatSessionLoading) return;
+
+            try {
+                const chatHistory = await getChatSessionMessages(chatSessionId);
+
+                if (!isMounted) return;
+
+                if (!chatHistory.length) {
+                    setMessages([
+                        {
+                            id: "welcome",
+                            role: "SYSTEM",
+                            content: "Ask a question about your uploaded docs to start chatting.",
+                        },
+                    ]);
+                    return;
+                }
+
+                const sortedHistory = [...chatHistory].sort((left, right) =>
+                    new Date(left.createdAt).getTime() - new Date(right.createdAt).getTime(),
+                );
+
+                setMessages(
+                    sortedHistory.map((message: ChatMessage) => ({
+                        id: message.id,
+                        role: message.role,
+                        content: message.content,
+                    })),
+                );
+            } catch (error) {
+                console.error("Failed to load chat history:", error);
+                if (!isMounted) return;
+
+                setMessages([
+                    {
+                        id: "history-error",
+                        role: "SYSTEM",
+                        content: "Could not load previous messages. You can still continue the chat below.",
+                    },
+                ]);
+            }
+        };
+
+        void loadChatHistory();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [chatSessionId, isChatSessionLoading]);
 
     const formatChatbotResponse = (response: ChatbotResponse): string => {
         const trimmedAnswer = response.answer.trim();

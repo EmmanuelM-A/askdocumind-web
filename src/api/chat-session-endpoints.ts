@@ -55,7 +55,7 @@ export async function getChatSessionMessages(chatSessionId: UUID): Promise<Array
     const rawResponse = await sendRequest({
         route: API_ROUTES.CHAT_SESSIONS,
         method: "GET",
-        endpoint: `${chatSessionId}/messages`,
+        endpoint: `/${chatSessionId}/messages`,
     });
 
     return extractAPIData<Array<ChatMessage>>(rawResponse, "Get chat messages");
