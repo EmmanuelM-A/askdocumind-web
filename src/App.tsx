@@ -205,6 +205,7 @@ export default function App() {
 						onFilesAdded={handleFilesAdded}
 						onRemoveSelectedFile={handleRemoveSelectedFile}
 						onUploadSuccess={() => setSelectedFiles([])}
+						onDeleteNotice={showNotice}
 						onDocumentsRefreshed={setUploadedDocuments}
 					/>
 				</div>

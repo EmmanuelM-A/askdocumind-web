@@ -40,10 +40,13 @@ export async function getUploadedDocuments(chatSessionId: UUID): Promise<Array<D
     return extractAPIData<Array<Document>>(rawResponse, "Get uploaded documents");
 }
 
-export async function deleteUploadedDocument(chatSessionId: UUID): Promise<void> {
+export async function deleteUploadedDocument(documentId: UUID, chatSessionId: UUID): Promise<void> {
     await sendRequest({
         route: API_ROUTES.DOCUMENTS,
         method: "DELETE",
-        endpoint: `${chatSessionId}`
+        endpoint: `${documentId}`,
+        query: {
+            chat_id: chatSessionId,
+        }
     });
 }

@@ -1,7 +1,7 @@
 import { type ChangeEvent, type DragEvent, useRef, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotate, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { uploadDocuments, getUploadedDocuments } from "@/api/document-endpoints.ts";
+import { uploadDocuments, getUploadedDocuments, deleteUploadedDocument } from "@/api/document-endpoints.ts";
 import documentsData from "@/data/documents.json";
 import type {
     Document as UploadedDocument,
@@ -24,6 +24,7 @@ interface DocumentsAreaProps {
     onFilesAdded: (files: File[]) => void;
     onRemoveSelectedFile: (file: File) => void;
     onUploadSuccess?: () => void;
+    onDeleteNotice?: (type: "success" | "error", message: string) => void;
     onDocumentsRefreshed?: (docs: UploadedDocument[]) => void;
 }
 
@@ -61,12 +62,14 @@ export function DocumentsArea({
     onFilesAdded,
     onRemoveSelectedFile,
     onUploadSuccess,
+    onDeleteNotice,
     onDocumentsRefreshed,
 }: DocumentsAreaProps) {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [isDragActive, setIsDragActive] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [isFetchingDocuments, setIsFetchingDocuments] = useState(false);
+    const [deletingDocumentId, setDeletingDocumentId] = useState<UUID | null>(null);
 
     const formatBytes = (bytes: number): string => {
         if (bytes < 1024) return `${bytes} B`;
@@ -132,6 +135,22 @@ export function DocumentsArea({
             console.error("Failed to fetch uploaded documents:", error);
         } finally {
             setIsFetchingDocuments(false);
+        }
+    };
+
+    const handleDeleteDocument = async (documentId: UUID, filename: string) => {
+        if (!chatSessionId || deletingDocumentId) return;
+
+        setDeletingDocumentId(documentId);
+        try {
+            await deleteUploadedDocument(documentId, chatSessionId);
+            await handleRefreshDocuments();
+            onDeleteNotice?.("success", `${filename} deleted.`);
+        } catch (error) {
+            console.error("Failed to delete document:", error);
+            onDeleteNotice?.("error", "Failed to delete document.");
+        } finally {
+            setDeletingDocumentId(null);
         }
     };
 
@@ -273,7 +292,8 @@ export function DocumentsArea({
                                     </span>
                                     <button
                                         type="button"
-                                        onClick={() => console.log("Delete document clicked:", doc.id)}
+                                        onClick={() => void handleDeleteDocument(doc.id, doc.filename)}
+                                        disabled={deletingDocumentId === doc.id}
                                         className="inline-flex items-center justify-center rounded-md p-2 text-[var(--color-text)]/70 transition hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400"
                                         aria-label="Delete document"
                                     >
