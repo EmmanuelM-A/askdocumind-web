@@ -204,6 +204,7 @@ export default function App() {
 						maxUploadBytes={MAX_CHAT_UPLOAD_BYTES}
 						onFilesAdded={handleFilesAdded}
 						onRemoveSelectedFile={handleRemoveSelectedFile}
+						onUploadSuccess={() => setSelectedFiles([])}
 						onDocumentsRefreshed={setUploadedDocuments}
 					/>
 				</div>

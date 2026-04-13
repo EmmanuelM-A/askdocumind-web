@@ -23,6 +23,7 @@ interface DocumentsAreaProps {
     maxUploadBytes: number;
     onFilesAdded: (files: File[]) => void;
     onRemoveSelectedFile: (file: File) => void;
+    onUploadSuccess?: () => void;
     onDocumentsRefreshed?: (docs: UploadedDocument[]) => void;
 }
 
@@ -59,6 +60,7 @@ export function DocumentsArea({
     maxUploadBytes,
     onFilesAdded,
     onRemoveSelectedFile,
+    onUploadSuccess,
     onDocumentsRefreshed,
 }: DocumentsAreaProps) {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -107,6 +109,7 @@ export function DocumentsArea({
                 documents: selectedFiles
             });
             console.log(`Successfully uploaded ${quantityUploaded} document(s)`);
+            onUploadSuccess?.();
 
             // Refresh documents list
             await handleRefreshDocuments();
@@ -258,7 +261,7 @@ export function DocumentsArea({
                                         {doc.filename}
                                     </p>
                                     <p className="mt-1 text-sm text-[var(--color-text)]/75 sm:text-xs">
-                                        {Math.round(doc.fileSize / 1024)} KB
+                                        {Math.round(doc.file_size / 1024)} KB
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-2.5">

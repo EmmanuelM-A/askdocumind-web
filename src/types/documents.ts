@@ -3,13 +3,13 @@ import {UUID} from "@/types/api.ts";
 
 export interface Document {
     id: UUID;
-    chatSessionId: UUID;
+    session_id: UUID;
     filename: string;
-    fileSize: number;
-    vectorId: UUID;
+    file_size: number;
+    vector_id: UUID;
     processing_status: "PROCESSING" | "COMPLETED" | "FAILED";
-    createdAt: string;
-    updatedAt: string;
+    created_at: string;
+    updated_at: string;
 }
 
 export type ProcessingStatus = Document["processing_status"];
