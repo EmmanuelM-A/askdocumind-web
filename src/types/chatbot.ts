@@ -1,8 +1,8 @@
 
 export interface ChatWithChatbot {
-    userQuery: string;
-    chatSessionId: string;
-    isWebSearchEnabled: boolean;
+    user_query: string;
+    chat_id: string;
+    web_search_enabled: boolean;
 }
 
 export interface ChatbotResponse {
