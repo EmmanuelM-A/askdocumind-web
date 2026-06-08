@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
+import { createAnonymousUserSession } from "@/api/auth-endpoints.ts";
+import { initChatSession } from "@/api/chat-session-endpoints.ts";
 import { ChatArea } from "@/components/ChatArea.tsx";
 import { DocumentsArea } from "@/components/DocumentsArea.tsx";
 import { FooterBar } from "@/components/FooterBar.tsx";
 import { HeaderBar } from "@/components/HeaderBar.tsx";
-import { initChatSession } from "@/api/chat-session-endpoints.ts";
-import { createAnonymousUserSession } from "@/api/auth-endpoints.ts";
 import { settings } from "@/config/configs.ts";
 import type { UUID } from "@/types/api.ts";
 import type { Document as UploadedDocument } from "@/types/documents.ts";
@@ -33,7 +33,10 @@ const bootstrapAnonymousUserAndChat = (): Promise<BootstrapResult> => {
 	if (!bootstrapPromise) {
 		bootstrapPromise = (async () => {
 			const userId = await createAnonymousUserSession();
-			const chat = await initChatSession({ user_id: userId, title: "Anonymous DocuChat Chat" });
+			const chat = await initChatSession({
+				user_id: userId,
+				title: "Anonymous DocuChat Chat",
+			});
 
 			return { userId, chatId: chat.chat_id };
 		})().catch((error) => {
@@ -55,10 +58,11 @@ export default function App() {
 	const [notice, setNotice] = useState<UploadNotice | null>(null);
 
 	const showNotice = useCallback((type: NoticeType, message: string) => {
-		setNotice({type, message});
+		setNotice({ type, message });
 	}, []);
 
-	const getFileKey = (file: File): string => `${file.name.toLowerCase()}::${file.size}::${file.lastModified}`;
+	const getFileKey = (file: File): string =>
+		`${file.name.toLowerCase()}::${file.size}::${file.lastModified}`;
 
 	const handleFilesAdded = (incomingFiles: File[]) => {
 		if (!incomingFiles.length) return;
@@ -89,11 +93,17 @@ export default function App() {
 
 		if (accepted.length) {
 			setSelectedFiles((prev) => [...prev, ...accepted]);
-			console.log("Files added locally:", accepted.map((f) => f.name));
+			console.log(
+				"Files added locally:",
+				accepted.map((f) => f.name),
+			);
 		}
 
 		if (overflowCount > 0) {
-			showNotice("error", `${overflowCount} file(s) skipped: total selected files cannot exceed ${MAX_CHAT_UPLOAD_MB}MB.`);
+			showNotice(
+				"error",
+				`${overflowCount} file(s) skipped: total selected files cannot exceed ${MAX_CHAT_UPLOAD_MB}MB.`,
+			);
 			return;
 		}
 
@@ -132,7 +142,7 @@ export default function App() {
 		const bootstrapSessionData = async () => {
 			setIsChatSessionLoading(true);
 			try {
-				const {userId, chatId} = await bootstrapAnonymousUserAndChat();
+				const { userId, chatId } = await bootstrapAnonymousUserAndChat();
 				if (!isMounted) return;
 
 				setChatSessionId(chatId);
@@ -153,7 +163,7 @@ export default function App() {
 		return () => {
 			isMounted = false;
 		};
-	}, []);
+	}, [showNotice]);
 
 	useEffect(() => {
 		if (!notice) return;
@@ -192,8 +202,8 @@ export default function App() {
 			/>
 
 			<section className="mx-auto flex w-full flex-1 items-center justify-center px-4 py-5 sm:px-6 sm:py-6">
-				<div className="grid w-full max-w-6xl grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-6">
-					<div className="order-1 aspect-square lg:order-2">
+				<div className="grid w-full max-w-[1500px] grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-6">
+					<div className="order-1 aspect-square lg:order-2 lg:min-w-[460px]">
 						<DocumentsArea
 							theme={theme}
 							chatSessionId={chatSessionId}
@@ -212,13 +222,16 @@ export default function App() {
 						/>
 					</div>
 
-					<div className="order-2 aspect-square lg:order-1">
-					<ChatArea chatSessionId={chatSessionId} isChatSessionLoading={isChatSessionLoading} />
+					<div className="order-2 aspect-square lg:order-1 lg:min-w-[460px]">
+						<ChatArea
+							chatSessionId={chatSessionId}
+							isChatSessionLoading={isChatSessionLoading}
+						/>
+					</div>
 				</div>
-			</div>
-		</section>
+			</section>
 
-		<FooterBar />
+			<FooterBar />
 		</main>
 	);
 }
