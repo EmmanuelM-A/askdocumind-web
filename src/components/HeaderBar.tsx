@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import headerData from "@/data/header.json";
 import logoIcon from "@/assets/icons/logo.svg";
+import headerData from "@/data/header.json";
 
 interface HeaderBarProps {
     theme: "light" | "dark";
@@ -68,7 +68,7 @@ function NavButton({
         <button
             type="button"
             onClick={onClick}
-            className="inline-flex items-center justify-center gap-2 rounded-md px-2 py-1.5 text-base font-medium text-[var(--color-text)] transition hover:text-[var(--color-accent)] sm:px-4 sm:text-sm"
+            className="inline-flex items-center justify-center gap-2 rounded-md px-2 py-1.5 text-3xl font-medium text-[var(--color-text)] transition hover:text-[var(--color-accent)] sm:px-4"
         >
             <span className="sm:hidden" aria-hidden="true">
                 {icon}
@@ -91,7 +91,7 @@ export function HeaderBar({
                 <button
                     type="button"
                     onClick={() => console.log("Logo clicked")}
-                    className="flex items-center gap-4 text-base font-semibold tracking-[0.08em] text-[var(--color-text)] sm:text-sm"
+                    className="flex items-center gap-4 text-3xl font-semibold tracking-[0.08em] text-[var(--color-text)]"
                 >
                     <img
                         src={logoIcon}

@@ -201,7 +201,10 @@ export default function App() {
 				onHelpClick={() => console.log("HELP clicked (informational)")}
 			/>
 
-			<section className="mx-auto flex w-full flex-1 items-center justify-center px-4 py-5 sm:px-6 sm:py-6">
+			<section className="mx-auto flex w-full flex-1 flex-col items-center justify-center px-4 py-5 sm:px-6 sm:py-6">
+				<p className="mb-4 text-center text-lg font-semibold text-[var(--color-text)]/75">
+					Uploaded documents are stored for this session only and permanently deleted when it ends.
+				</p>
 				<div className="grid w-full max-w-[1500px] grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-6">
 					<div className="order-1 aspect-square lg:order-2 lg:min-w-[460px]">
 						<DocumentsArea
