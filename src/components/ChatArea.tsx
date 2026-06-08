@@ -11,7 +11,7 @@ interface ChatAreaProps {
     isChatSessionLoading: boolean;
 }
 
-type ChatBubbleRole = "USER" | "ASSISTANT" | "SYSTEM";
+type ChatBubbleRole = "USER" | "ASSISTANT" | "SYSTEM" | "ERROR";
 
 interface ChatBubble {
     id: string;
@@ -134,7 +134,7 @@ export function ChatArea({ chatSessionId, isChatSessionLoading }: ChatAreaProps)
                 ...prev,
                 {
                     id: `${Date.now()}-system-error`,
-                    role: "SYSTEM",
+                    role: "ERROR",
                     content: "Sorry, something went wrong while sending your message.",
                 },
             ]);
@@ -147,6 +147,7 @@ export function ChatArea({ chatSessionId, isChatSessionLoading }: ChatAreaProps)
         USER: "ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-[var(--color-accent)] px-4 py-3 text-white",
         ASSISTANT: "mr-auto max-w-[85%] rounded-2xl rounded-bl-md bg-[var(--color-secondary)] px-4 py-3 text-[var(--color-text)] shadow-sm",
         SYSTEM: "mx-auto max-w-[90%] rounded-2xl bg-[var(--color-primary)] px-4 py-2 text-center text-[var(--text-xs)] text-[var(--color-text)]/70",
+        ERROR: "mx-auto max-w-[90%] rounded-2xl border border-red-400 bg-red-50 px-4 py-3 text-center text-[var(--text-xs)] text-red-600",
     };
 
     return (
