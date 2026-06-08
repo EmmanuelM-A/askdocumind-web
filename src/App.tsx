@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ChatArea } from "@/components/ChatArea.tsx";
 import { DocumentsArea } from "@/components/DocumentsArea.tsx";
 import { FooterBar } from "@/components/FooterBar.tsx";
@@ -54,9 +54,9 @@ export default function App() {
 	const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);
 	const [notice, setNotice] = useState<UploadNotice | null>(null);
 
-	const showNotice = (type: NoticeType, message: string) => {
-		setNotice({ type, message });
-	};
+	const showNotice = useCallback((type: NoticeType, message: string) => {
+		setNotice({type, message});
+	}, []);
 
 	const getFileKey = (file: File): string => `${file.name.toLowerCase()}::${file.size}::${file.lastModified}`;
 
@@ -132,7 +132,7 @@ export default function App() {
 		const bootstrapSessionData = async () => {
 			setIsChatSessionLoading(true);
 			try {
-				const { userId, chatId } = await bootstrapAnonymousUserAndChat();
+				const {userId, chatId} = await bootstrapAnonymousUserAndChat();
 				if (!isMounted) return;
 
 				setChatSessionId(chatId);
@@ -191,32 +191,34 @@ export default function App() {
 				onHelpClick={() => console.log("HELP clicked (informational)")}
 			/>
 
-			<section className="mx-auto grid min-h-0 w-full max-w-7xl flex-1 grid-cols-1 gap-4 px-4 py-5 sm:gap-5 sm:px-6 sm:py-6 lg:grid-cols-2 lg:gap-6 lg:py-7">
-				<div className="order-1 min-h-0 lg:order-2">
-					<DocumentsArea
-						theme={theme}
-						chatSessionId={chatSessionId}
-						isChatSessionLoading={isChatSessionLoading}
-						activeTab={activeTab}
-						onTabChange={setActiveTab}
-						documents={uploadedDocuments}
-						selectedFiles={selectedFiles}
-						maxUploadBytes={MAX_CHAT_UPLOAD_BYTES}
-						onFilesAdded={handleFilesAdded}
-						onRemoveSelectedFile={handleRemoveSelectedFile}
-						onUploadSuccess={() => setSelectedFiles([])}
-						onUploadNotice={showNotice}
-						onDeleteNotice={showNotice}
-						onDocumentsRefreshed={setUploadedDocuments}
-					/>
-				</div>
+			<section className="mx-auto flex w-full flex-1 items-center justify-center px-4 py-5 sm:px-6 sm:py-6">
+				<div className="grid w-full max-w-6xl grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-6">
+					<div className="order-1 aspect-square lg:order-2">
+						<DocumentsArea
+							theme={theme}
+							chatSessionId={chatSessionId}
+							isChatSessionLoading={isChatSessionLoading}
+							activeTab={activeTab}
+							onTabChange={setActiveTab}
+							documents={uploadedDocuments}
+							selectedFiles={selectedFiles}
+							maxUploadBytes={MAX_CHAT_UPLOAD_BYTES}
+							onFilesAdded={handleFilesAdded}
+							onRemoveSelectedFile={handleRemoveSelectedFile}
+							onUploadSuccess={() => setSelectedFiles([])}
+							onUploadNotice={showNotice}
+							onDeleteNotice={showNotice}
+							onDocumentsRefreshed={setUploadedDocuments}
+						/>
+					</div>
 
-				<div className="order-2 min-h-0 lg:order-1">
+					<div className="order-2 aspect-square lg:order-1">
 					<ChatArea chatSessionId={chatSessionId} isChatSessionLoading={isChatSessionLoading} />
 				</div>
-			</section>
+			</div>
+		</section>
 
-			<FooterBar />
+		<FooterBar />
 		</main>
 	);
 }

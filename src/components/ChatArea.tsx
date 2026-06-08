@@ -17,6 +17,7 @@ interface ChatBubble {
     id: string;
     role: ChatBubbleRole;
     content: string;
+    sources?: string[];
 }
 
 export function ChatArea({ chatSessionId, isChatSessionLoading }: ChatAreaProps) {
@@ -31,12 +32,10 @@ export function ChatArea({ chatSessionId, isChatSessionLoading }: ChatAreaProps)
     const [isSending, setIsSending] = useState(false);
     const messageListRef = useRef<HTMLDivElement | null>(null);
 
-    const scrollToBottom = () => {
-        messageListRef.current?.scrollTo({ top: messageListRef.current.scrollHeight, behavior: "smooth" });
-    };
-
     useEffect(() => {
-        scrollToBottom();
+        if (messages.length > 0) {
+            messageListRef.current?.scrollTo({ top: messageListRef.current.scrollHeight, behavior: "smooth" });
+        }
     }, [messages]);
 
     useEffect(() => {
@@ -126,6 +125,7 @@ export function ChatArea({ chatSessionId, isChatSessionLoading }: ChatAreaProps)
                     id: `${Date.now()}-assistant`,
                     role: "ASSISTANT",
                     content: formatChatbotResponse(response),
+                    sources: response.sources ?? [],
                 },
             ]);
         } catch (error) {
@@ -146,22 +146,29 @@ export function ChatArea({ chatSessionId, isChatSessionLoading }: ChatAreaProps)
     const bubbleClasses: Record<ChatBubbleRole, string> = {
         USER: "ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-[var(--color-accent)] px-4 py-3 text-white",
         ASSISTANT: "mr-auto max-w-[85%] rounded-2xl rounded-bl-md bg-[var(--color-secondary)] px-4 py-3 text-[var(--color-text)] shadow-sm",
-        SYSTEM: "mx-auto max-w-[90%] rounded-2xl bg-[var(--color-primary)] px-4 py-2 text-center text-xs text-[var(--color-text)]/70",
+        SYSTEM: "mx-auto max-w-[90%] rounded-2xl bg-[var(--color-primary)] px-4 py-2 text-center text-[var(--text-xs)] text-[var(--color-text)]/70",
     };
 
     return (
-        <section className="flex h-full min-h-0 flex-col overflow-hidden rounded-[2rem] border border-[var(--color-tertiary)] bg-[var(--color-secondary)] p-4 shadow-sm sm:p-6">
+        <section className="flex h-full w-full flex-col overflow-hidden rounded-[2rem] border border-[var(--color-tertiary)] bg-[var(--color-secondary)] p-4 shadow-sm sm:p-6">
             <div
                 ref={messageListRef}
-                className="min-h-0 flex-1 space-y-3 overflow-y-auto rounded-2xl border border-[var(--color-tertiary)] bg-[var(--color-primary)] p-4 text-sm text-[var(--color-text)]/80"
+                className="min-h-0 flex-1 overflow-y-auto space-y-3 rounded-2xl border border-[var(--color-tertiary)] bg-[var(--color-primary)] p-4 text-[var(--text-sm)] text-[var(--color-text)]/80"
             >
                 {messages.map((message) => (
-                    <div key={message.id} className={bubbleClasses[message.role]}>
-                        <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
+                    <div key={message.id} className="flex flex-col">
+                        <div className={bubbleClasses[message.role]}>
+                            <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
+                        </div>
+                        {message.role === "ASSISTANT" && message.sources && message.sources.length > 0 && (
+                            <p className="mt-1 mr-auto text-right text-[var(--text-xs)] text-[var(--color-text)]/40">
+                                {message.sources.join(", ")}
+                            </p>
+                        )}
                     </div>
                 ))}
 
-                <p className="pt-1 text-xs text-[var(--color-text)]/60">
+                <p className="pt-1 text-[var(--text-xs)] text-[var(--color-text)]/60">
                     {isChatSessionLoading
                         ? "Creating your chat session..."
                         : chatSessionId
@@ -183,12 +190,12 @@ export function ChatArea({ chatSessionId, isChatSessionLoading }: ChatAreaProps)
                     value={draft}
                     onChange={(event) => setDraft(event.target.value)}
                     placeholder="Ask a question about your uploaded docs..."
-                    className="h-10 w-full rounded-xl border border-[var(--color-tertiary)] bg-[var(--color-primary)] px-3 text-sm text-[var(--color-text)] outline-none placeholder:text-[var(--color-text)]/50 focus:border-[var(--color-accent)]"
+                    className="h-10 w-full rounded-xl border border-[var(--color-tertiary)] bg-[var(--color-primary)] px-3 text-[var(--text-sm)] text-[var(--color-text)] outline-none placeholder:text-[var(--color-text)]/50 focus:border-[var(--color-accent)]"
                     disabled={isChatSessionLoading || !chatSessionId || isSending}
                 />
                 <button
                     type="submit"
-                    className="inline-flex h-10 items-center justify-center rounded-xl bg-[var(--color-accent)] px-4 text-sm font-semibold text-white transition hover:opacity-90"
+                    className="inline-flex h-10 items-center justify-center rounded-xl bg-[var(--color-accent)] px-4 text-[var(--text-sm)] font-semibold text-white transition hover:opacity-90"
                     disabled={isChatSessionLoading || !chatSessionId || isSending}
                 >
                     {isSending ? "Sending..." : "Send"}

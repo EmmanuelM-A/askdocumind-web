@@ -175,7 +175,7 @@ export function DocumentsArea({
     }, [chatSessionId, isChatSessionLoading]);
 
     return (
-        <section className="flex h-full min-h-[22rem] flex-col rounded-[2rem] border border-[var(--color-tertiary)] bg-[var(--color-secondary)] p-4 shadow-sm sm:min-h-[26rem] sm:p-6">
+        <section className="flex h-full w-full flex-col rounded-[2rem] border border-[var(--color-tertiary)] bg-[var(--color-secondary)] p-4 shadow-sm sm:p-6">
             <div className="mb-4 grid grid-cols-2 gap-2 rounded-xl bg-[var(--color-primary)] p-1">
                 <button
                     type="button"
@@ -183,7 +183,7 @@ export function DocumentsArea({
                         console.log("Tab switched: upload");
                         onTabChange("upload");
                     }}
-                    className={`rounded-lg px-3 py-2 text-base font-medium transition sm:text-sm ${
+                    className={`rounded-lg px-3 py-2 text-[var(--text-base)] font-medium transition ${
                         activeTab === "upload"
                             ? "bg-[var(--color-accent)] text-white"
                             : "text-[var(--color-text)] hover:bg-[var(--color-tertiary)]"
@@ -197,7 +197,7 @@ export function DocumentsArea({
                         console.log("Tab switched: uploaded documents");
                         onTabChange("documents");
                     }}
-                    className={`rounded-lg px-3 py-2 text-base font-medium transition sm:text-sm ${
+                    className={`rounded-lg px-3 py-2 text-[var(--text-base)] font-medium transition ${
                         activeTab === "documents"
                             ? "bg-[var(--color-accent)] text-white"
                             : "text-[var(--color-text)] hover:bg-[var(--color-tertiary)]"
@@ -230,13 +230,13 @@ export function DocumentsArea({
                     />
 
                     <div className="flex flex-1 flex-col items-center justify-center text-center">
-                        <p className="text-base font-medium text-[var(--color-text)] sm:text-sm">Drop files here</p>
-                        <p className="mt-1 text-sm text-[var(--color-text)]/70 sm:text-xs">or click one of the actions below</p>
+                        <p className="text-[var(--text-base)] font-medium text-[var(--color-text)]">Drop files here</p>
+                        <p className="mt-1 text-[var(--text-sm)] text-[var(--color-text)]/70">or click one of the actions below</p>
                     </div>
 
                     {selectedFiles.length > 0 && (
                         <div className="mb-3 max-h-40 space-y-1 overflow-auto rounded-xl border border-[var(--color-tertiary)] bg-[var(--color-secondary)] p-2">
-                            <p className="px-1 text-xs font-semibold text-[var(--color-text)]/75">
+                            <p className="px-1 text-[var(--text-xs)] font-semibold text-[var(--color-text)]/75">
                                 Selected files ({selectedFiles.length}) - {formatBytes(selectedTotalBytes)} / {formatMaxMb(maxUploadBytes)}
                             </p>
                             {selectedFiles.map((file) => (
@@ -245,7 +245,7 @@ export function DocumentsArea({
                                     className="flex items-center justify-between gap-2 rounded-lg bg-[var(--color-primary)] px-2 py-1"
                                 >
                                     <div className="min-w-0">
-                                        <p className="truncate text-xs font-medium text-[var(--color-text)]">{file.name}</p>
+                                        <p className="truncate text-[var(--text-xs)] font-medium text-[var(--color-text)]">{file.name}</p>
                                         <p className="text-[11px] text-[var(--color-text)]/65">{formatBytes(file.size)}</p>
                                     </div>
                                     <button
@@ -265,7 +265,7 @@ export function DocumentsArea({
                         <button
                             type="button"
                             onClick={openFilePicker}
-                            className="rounded-xl border border-[var(--color-tertiary)] px-3 py-2 text-base text-[var(--color-text)] hover:border-[var(--color-accent)] sm:text-sm"
+                            className="rounded-xl border border-[var(--color-tertiary)] px-3 py-2 text-[var(--text-base)] text-[var(--color-text)] hover:border-[var(--color-accent)]"
                             disabled={isChatSessionLoading}
                         >
                             Choose Files
@@ -273,7 +273,7 @@ export function DocumentsArea({
                         <button
                             type="button"
                             onClick={handleUploadWithAPI}
-                            className="rounded-xl bg-[var(--color-accent)] px-3 py-2 text-base font-semibold text-white hover:opacity-90 sm:text-sm"
+                            className="rounded-xl bg-[var(--color-accent)] px-3 py-2 text-[var(--text-base)] font-semibold text-white hover:opacity-90"
                             disabled={isChatSessionLoading || isUploading || !chatSessionId}
                         >
                             {isUploading ? "Uploading..." : "Upload"}
@@ -289,16 +289,16 @@ export function DocumentsArea({
                         >
                             <div className="flex items-center justify-between gap-2">
                                 <div>
-                                    <p className="truncate text-base font-medium text-[var(--color-text)] sm:text-sm">
+                                    <p className="truncate text-[var(--text-base)] font-medium text-[var(--color-text)]">
                                         {doc.filename}
                                     </p>
-                                    <p className="mt-1 text-sm text-[var(--color-text)]/75 sm:text-xs">
+                                    <p className="mt-1 text-[var(--text-sm)] text-[var(--color-text)]/75">
                                         {Math.round(doc.file_size / 1024)} KB
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-2.5">
                                     <span
-                                        className="rounded-full px-2.5 py-1 text-xs font-semibold whitespace-nowrap sm:text-[11px]"
+                                        className="rounded-full px-2.5 py-1 text-[var(--text-xs)] font-semibold whitespace-nowrap"
                                         style={getStatusStyle(doc.processing_status, theme)}
                                     >
                                         {doc.processing_status}

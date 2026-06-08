@@ -8,5 +8,4 @@ export interface ChatWithChatbot {
 export interface ChatbotResponse {
     answer: string;
     sources: string[];
-    sourceType: string;
 }
