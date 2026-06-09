@@ -11,6 +11,5 @@ export async function chatWithChatbot(data: ChatWithChatbot): Promise<ChatbotRes
 		endpoint: "/",
 	});
 
-	console.log("[chatWithChatbot] raw response:", rawResponse);
 	return extractAPIData<ChatbotResponse>(rawResponse, "Create chat session");
 }

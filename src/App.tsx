@@ -93,10 +93,7 @@ export default function App() {
 
 		if (accepted.length) {
 			setSelectedFiles((prev) => [...prev, ...accepted]);
-			console.log(
-				"Files added locally:",
-				accepted.map((f) => f.name),
-			);
+			if (import.meta.env.DEV) console.log("Files added locally:", accepted.map((f) => f.name));
 		}
 
 		if (overflowCount > 0) {
@@ -120,7 +117,7 @@ export default function App() {
 	const handleRemoveSelectedFile = (targetFile: File) => {
 		const targetKey = getFileKey(targetFile);
 		setSelectedFiles((prev) => prev.filter((file) => getFileKey(file) !== targetKey));
-		console.log("Removed selected file:", targetFile.name);
+		if (import.meta.env.DEV) console.log("Removed selected file:", targetFile.name);
 	};
 
 	useEffect(() => {
@@ -146,8 +143,10 @@ export default function App() {
 				if (!isMounted) return;
 
 				setChatSessionId(chatId);
-				console.log("Anonymous user session created:", userId);
-				console.log("Chat session created:", chatId);
+				if (import.meta.env.DEV) {
+					console.log("Anonymous user session created:", userId);
+					console.log("Chat session created:", chatId);
+				}
 				showNotice("success", "Chat session ready.");
 			} catch (error) {
 				if (!isMounted) return;
@@ -194,11 +193,11 @@ export default function App() {
 				onThemeToggle={() => {
 					const nextTheme = theme === "dark" ? "light" : "dark";
 					setTheme(nextTheme);
-					console.log(`Theme toggled: ${nextTheme}`);
+					if (import.meta.env.DEV) console.log(`Theme toggled: ${nextTheme}`);
 				}}
-				onHomeClick={() => console.log("HOME clicked (informational)")}
-				onGithubClick={() => console.log("GITHUB clicked (informational)")}
-				onHelpClick={() => console.log("HELP clicked (informational)")}
+				onHomeClick={() => { if (import.meta.env.DEV) console.log("HOME clicked (informational)"); }}
+				onGithubClick={() => { if (import.meta.env.DEV) console.log("GITHUB clicked (informational)"); }}
+				onHelpClick={() => { if (import.meta.env.DEV) console.log("HELP clicked (informational)"); }}
 			/>
 
 			<section className="mx-auto flex w-full flex-1 flex-col items-center justify-center px-4 py-5 sm:px-6 sm:py-6">
