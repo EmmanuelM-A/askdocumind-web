@@ -8,7 +8,6 @@ export async function chatWithChatbot(data: ChatWithChatbot): Promise<ChatbotRes
 		route: API_ROUTES.CHATBOT,
 		method: "POST",
 		body: data,
-		endpoint: "/",
 	});
 
 	return extractAPIData<ChatbotResponse>(rawResponse, "Create chat session");
