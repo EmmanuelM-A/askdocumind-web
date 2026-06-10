@@ -168,9 +168,12 @@ function buildUrl(
         return absoluteQs ? `${absoluteUrl}?${absoluteQs}` : absoluteUrl;
     }
 
+    const lastSegment = endpoint || route;
+    const trailingSlash = lastSegment.endsWith("/") ? "/" : "";
+
     const parts = [safeBaseUrl, route, endpoint].map(trimSlashes).filter(Boolean);
 
-    let base = parts.join("/");
+    let base = parts.join("/") + trailingSlash;
 
     // If BASE_URL is empty, ensure we start with / for relative URLs
     if (!safeBaseUrl && base && !base.startsWith("/")) {
