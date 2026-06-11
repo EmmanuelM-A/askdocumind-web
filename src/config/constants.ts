@@ -2,10 +2,10 @@
 export const API_ROUTES = {
     HEALTH: "/health",
 
-    DOCUMENTS: "documents/",
-    CHAT_SESSIONS: "sessions/",
+    DOCUMENTS: "documents",
+    CHAT_SESSIONS: "sessions",
 
-    CHATBOT: "chat/",
+    CHATBOT: "chat",
 
-    ANONYMOUS_AUTH: "auth/anonymous/",
+    ANONYMOUS_AUTH: "auth/anonymous",
 } as const;
