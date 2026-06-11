@@ -24,7 +24,8 @@ export async function createChatSession(data: CreateChatSession): Promise<Create
 
 export async function getChatSession(chatSessionId: UUID): Promise<ChatSession> {
     const rawResponse = await sendRequest({
-        route: `${API_ROUTES.CHAT_SESSIONS}${chatSessionId}`,
+        route: API_ROUTES.CHAT_SESSIONS,
+        endpoint: chatSessionId,
         method: "GET",
     });
 
@@ -33,7 +34,8 @@ export async function getChatSession(chatSessionId: UUID): Promise<ChatSession> 
 
 export async function updateChatSession(chatSessionId: UUID, data: UpdateChatSession): Promise<ChatSession> {
     const rawResponse = await sendRequest({
-        route: `${API_ROUTES.CHAT_SESSIONS}${chatSessionId}`,
+        route: API_ROUTES.CHAT_SESSIONS,
+        endpoint: chatSessionId,
         method: "PATCH",
         body: data,
     });
@@ -43,7 +45,8 @@ export async function updateChatSession(chatSessionId: UUID, data: UpdateChatSes
 
 export async function deleteChatSession(chatSessionId: UUID): Promise<UUID> {
     const rawResponse = await sendRequest({
-        route: `${API_ROUTES.CHAT_SESSIONS}${chatSessionId}`
+        route: API_ROUTES.CHAT_SESSIONS,
+        endpoint: chatSessionId,
     });
 
     const { chat_id } = extractAPIData<{ chat_id: UUID }>(rawResponse, "Delete chat session");
