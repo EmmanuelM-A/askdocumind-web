@@ -242,6 +242,7 @@ export async function sendRequest(
     } = options;
 
     const url: string = buildUrl(route, endpoint, query);
+    console.log(`[API-CLIENT] ${(method as string).toUpperCase()} ${url}`);
 
     const stableBody: string = serializeBodyForRequestKey(body);
     const computedKey: string = `${(method as string).toUpperCase()}::${url}::${stableBody}`;
