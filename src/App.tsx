@@ -6,6 +6,7 @@ import { DocumentsArea } from "@/components/DocumentsArea.tsx";
 import { FooterBar } from "@/components/FooterBar.tsx";
 import { HeaderBar } from "@/components/HeaderBar.tsx";
 import { settings } from "@/config/configs.ts";
+import { logger } from "@/lib/logger.ts";
 import type { UUID } from "@/types/api.ts";
 import type { Document as UploadedDocument } from "@/types/documents.ts";
 
@@ -92,11 +93,7 @@ export default function App() {
 
 		if (accepted.length) {
 			setSelectedFiles((prev) => [...prev, ...accepted]);
-			if (import.meta.env.DEV)
-				console.log(
-					"Files added locally:",
-					accepted.map((f) => f.name),
-				);
+			logger.log("Files added locally:", accepted.map((f) => f.name));
 		}
 
 		if (overflowCount > 0) {
@@ -120,7 +117,7 @@ export default function App() {
 	const handleRemoveSelectedFile = (targetFile: File) => {
 		const targetKey = getFileKey(targetFile);
 		setSelectedFiles((prev) => prev.filter((file) => getFileKey(file) !== targetKey));
-		if (import.meta.env.DEV) console.log("Removed selected file:", targetFile.name);
+		logger.log("Removed selected file:", targetFile.name);
 	};
 
 	useEffect(() => {
@@ -146,14 +143,12 @@ export default function App() {
 				if (!isMounted) return;
 
 				setChatSessionId(chatId);
-				if (import.meta.env.DEV) {
-					console.log("Anonymous user session created:", userId);
-					console.log("Chat session created:", chatId);
-				}
+				logger.log("Anonymous user session created:", userId);
+				logger.log("Chat session created:", chatId);
 				showNotice("success", "Chat session ready.");
 			} catch (error) {
 				if (!isMounted) return;
-				console.error("Failed to bootstrap anonymous user + chat session:", error);
+				logger.error("Failed to bootstrap anonymous user + chat session:", error);
 				showNotice("error", "Failed to initialize session.");
 			} finally {
 				if (isMounted) setIsChatSessionLoading(false);
@@ -196,7 +191,7 @@ export default function App() {
 				onThemeToggle={() => {
 					const nextTheme = theme === "dark" ? "light" : "dark";
 					setTheme(nextTheme);
-					if (import.meta.env.DEV) console.log(`Theme toggled: ${nextTheme}`);
+					logger.log(`Theme toggled: ${nextTheme}`);
 				}}
 			/>
 
