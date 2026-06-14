@@ -1,76 +1,38 @@
-import {sendRequest} from "@/api/api-client.ts";
-import {API_ROUTES} from "@/config/constants.ts";
-import {UUID} from "@/types/api.ts";
-import {
-    ChatSession,
-    CreateChatSession,
-    CreatedChatSession,
-    UpdateChatSession,
-    InitChatSession
-} from "@/types/chat-sessions.ts";
-import {extractAPIData} from "@/api/utils.ts";
-import {ChatMessage} from "@/types/chat-messages.ts";
-
-
-export async function createChatSession(data: CreateChatSession): Promise<CreatedChatSession>  {
-    const rawResponse = await sendRequest({
-        route: API_ROUTES.CHAT_SESSIONS,
-        method: "POST",
-        body: data,
-    });
-
-    return extractAPIData(rawResponse, "Create chat session");
-}
-
-export async function getChatSession(chatSessionId: UUID): Promise<ChatSession> {
-    const rawResponse = await sendRequest({
-        route: API_ROUTES.CHAT_SESSIONS,
-        endpoint: chatSessionId,
-        method: "GET",
-    });
-
-    return extractAPIData<ChatSession>(rawResponse, "Get chat session");
-}
-
-export async function updateChatSession(chatSessionId: UUID, data: UpdateChatSession): Promise<ChatSession> {
-    const rawResponse = await sendRequest({
-        route: API_ROUTES.CHAT_SESSIONS,
-        endpoint: chatSessionId,
-        method: "PATCH",
-        body: data,
-    });
-
-    return extractAPIData<ChatSession>(rawResponse, "Update chat session");
-}
+import { sendRequest } from "@/api/api-client.ts";
+import { extractAPIData } from "@/api/utils.ts";
+import { API_ROUTES } from "@/config/constants.ts";
+import type { UUID } from "@/types/api.ts";
+import type { ChatMessage } from "@/types/chat-messages.ts";
+import type { CreateChatSession } from "@/types/chat-sessions.ts";
 
 export async function deleteChatSession(chatSessionId: UUID): Promise<UUID> {
-    const rawResponse = await sendRequest({
-        route: API_ROUTES.CHAT_SESSIONS,
-        endpoint: chatSessionId,
-    });
+	const rawResponse = await sendRequest({
+		route: API_ROUTES.CHAT_SESSIONS,
+		endpoint: chatSessionId,
+	});
 
-    const { chat_id } = extractAPIData<{ chat_id: UUID }>(rawResponse, "Delete chat session");
+	const { chat_id } = extractAPIData<{ chat_id: UUID }>(rawResponse, "Delete chat session");
 
-    return chat_id;
+	return chat_id;
 }
 
 export async function getChatSessionMessages(chatSessionId: UUID): Promise<Array<ChatMessage>> {
-    const rawResponse = await sendRequest({
-        route: API_ROUTES.CHAT_SESSIONS,
-        method: "GET",
-        endpoint: `/${chatSessionId}/messages`,
-    });
+	const rawResponse = await sendRequest({
+		route: API_ROUTES.CHAT_SESSIONS,
+		method: "GET",
+		endpoint: `/${chatSessionId}/messages`,
+	});
 
-    return extractAPIData<Array<ChatMessage>>(rawResponse, "Get chat messages");
+	return extractAPIData<Array<ChatMessage>>(rawResponse, "Get chat messages");
 }
 
-export async function initChatSession(data: InitChatSession): Promise<CreatedChatSession>  {
-    const rawResponse = await sendRequest({
-        route: API_ROUTES.CHAT_SESSIONS,
-        endpoint: "init",
-        method: "POST",
-        body: data,
-    });
+export async function initChatSession(data: CreateChatSession): Promise<{ chat_id: UUID }> {
+	const rawResponse = await sendRequest({
+		route: API_ROUTES.CHAT_SESSIONS,
+		endpoint: "init",
+		method: "POST",
+		body: data,
+	});
 
-    return extractAPIData(rawResponse, "Initialize chat session");
+	return extractAPIData(rawResponse, "Initialize chat session");
 }

@@ -1,31 +1,21 @@
-import {UUID} from "@/types/api.ts";
-
+import type { UUID } from "@/types/api.ts";
 
 export interface CreateChatSession {
-    title: string;
-}
-
-export interface CreatedChatSession {
-    chat_id: UUID;
+	title: string;
 }
 
 export interface ChatSession {
-    id: UUID;
-    user_id: UUID;
-    title: string;
-    total_messages: number;
-    created_at: string;
+	id: UUID;
+	user_id: UUID;
+	title: string;
+	total_messages: number;
+	created_at: string;
 }
 
 export interface UpdateChatSession {
-    title: string;
+	title: string;
 }
 
 export interface DeletedChatSession {
-    chat_id: UUID;
-}
-
-export interface InitChatSession {
-    user_id: UUID;
-    title?: string;
+	chat_id: UUID;
 }
