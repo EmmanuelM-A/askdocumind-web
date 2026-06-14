@@ -7,7 +7,7 @@ export function FooterBar() {
                 <div className="grid gap-1 py-1 sm:grid-cols-3 sm:items-center sm:gap-4">
                     <div className="flex items-baseline gap-2">
                         <p className="text-2xl font-semibold text-[var(--color-text)]">{footerData.appName}</p>
-                        <p className="text-lg text-[var(--color-text)]/60">{footerData.version}</p>
+                        <p className="text-lg text-[var(--color-text)]/60">v{__APP_VERSION__}</p>
                     </div>
 
                     <p className="text-center text-xl text-[var(--color-text)]/70">{footerData.description}</p>
