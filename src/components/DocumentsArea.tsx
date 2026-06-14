@@ -7,6 +7,7 @@ import {
 	uploadDocuments,
 } from "@/api/document-endpoints.ts";
 import documentsData from "@/data/documents.json";
+import { logger } from "@/lib/logger.ts";
 import type { UUID } from "@/types/api.ts";
 import type {
 	ProcessingStatus,
@@ -113,7 +114,7 @@ export function DocumentsArea({
 
 	const handleUploadWithAPI = async () => {
 		if (!selectedFiles.length || !chatSessionId) {
-			console.error("No files selected or chat session not ready");
+			logger.error("No files selected or chat session not ready");
 			return;
 		}
 
@@ -132,7 +133,7 @@ export function DocumentsArea({
 			// Refresh documents list
 			await handleRefreshDocuments();
 		} catch (error) {
-			console.error("Failed to upload documents:", error);
+			logger.error("Failed to upload documents:", error);
 			onUploadNotice?.("error", `Failed to upload ${fileNamesLabel}.`);
 		} finally {
 			setIsUploading(false);
@@ -145,10 +146,10 @@ export function DocumentsArea({
 		setIsFetchingDocuments(true);
 		try {
 			const uploadedDocs = await getUploadedDocuments(chatSessionId);
-			console.log("Fetched uploaded documents:", uploadedDocs);
+			logger.log("Fetched uploaded documents:", uploadedDocs);
 			onDocumentsRefreshed?.(uploadedDocs);
 		} catch (error) {
-			console.error("Failed to fetch uploaded documents:", error);
+			logger.error("Failed to fetch uploaded documents:", error);
 		} finally {
 			setIsFetchingDocuments(false);
 		}
@@ -163,7 +164,7 @@ export function DocumentsArea({
 			await handleRefreshDocuments();
 			onDeleteNotice?.("success", `${filename} deleted.`);
 		} catch (error) {
-			console.error("Failed to delete document:", error);
+			logger.error("Failed to delete document:", error);
 			onDeleteNotice?.("error", "Failed to delete document.");
 		} finally {
 			setDeletingDocumentId(null);
@@ -183,7 +184,7 @@ export function DocumentsArea({
 				<button
 					type="button"
 					onClick={() => {
-						console.log("Tab switched: upload");
+						logger.log("Tab switched: upload");
 						onTabChange("upload");
 					}}
 					className={`rounded-lg px-3 py-2 text-[var(--text-base)] font-medium transition ${
@@ -197,7 +198,7 @@ export function DocumentsArea({
 				<button
 					type="button"
 					onClick={() => {
-						console.log("Tab switched: uploaded documents");
+						logger.log("Tab switched: uploaded documents");
 						onTabChange("documents");
 					}}
 					className={`rounded-lg px-3 py-2 text-[var(--text-base)] font-medium transition ${

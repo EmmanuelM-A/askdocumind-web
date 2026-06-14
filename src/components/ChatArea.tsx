@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { getChatSessionMessages } from "@/api/chat-session-endpoints.ts";
 import { chatWithChatbot } from "@/api/chatbot-endpoints.ts";
 import { settings } from "@/config/configs.ts";
+import { logger } from "@/lib/logger.ts";
 import type { UUID } from "@/types/api.ts";
 import type { ChatMessage } from "@/types/chat-messages.ts";
 import type { ChatbotResponse } from "@/types/chatbot.ts";
@@ -76,7 +77,7 @@ export function ChatArea({ chatSessionId, isChatSessionLoading }: ChatAreaProps)
 					})),
 				);
 			} catch (error) {
-				console.error("Failed to load chat history:", error);
+				logger.error("Failed to load chat history:", error);
 				if (!isMounted) return;
 
 				setMessages([
@@ -134,7 +135,7 @@ export function ChatArea({ chatSessionId, isChatSessionLoading }: ChatAreaProps)
 				},
 			]);
 		} catch (error) {
-			console.error("Failed to send chat message:", error);
+			logger.error("Failed to send chat message:", error);
 			setMessages((prev) => [
 				...prev,
 				{

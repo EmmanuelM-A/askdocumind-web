@@ -3,6 +3,7 @@
  */
 export const settings = {
     "api": {
+        ENV: import.meta.env.VITE_ENV,
         BASE_URL: import.meta.env.VITE_DOCU_CHAT_API_BASE_URL,
         BASE_VERSION: import.meta.env.VITE_DOCU_CHAT_API_VERSION ?? "1",
         IS_WEB_SEARCH_ENABLED: Boolean(import.meta.env.VITE_WEB_SEARCH_ENABLED === "true") ?? false,
