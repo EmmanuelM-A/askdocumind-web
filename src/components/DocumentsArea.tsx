@@ -122,11 +122,10 @@ export function DocumentsArea({
 
 		setIsUploading(true);
 		try {
-			const quantityUploaded = await uploadDocuments({
+			await uploadDocuments({
 				chatSessionId,
 				documents: filesSnapshot,
 			});
-			console.log(`Successfully uploaded ${quantityUploaded} document(s)`);
 			onUploadNotice?.("success", `${fileNamesLabel} uploaded.`);
 			onUploadSuccess?.();
 

@@ -244,9 +244,10 @@ export async function sendRequest({
 	const activeRequests = getRequestMap();
 
 	// Check for existing in-flight request
-	if (preventDuplicate && activeRequests.has(requestKey)) {
+	const existingRequest = preventDuplicate ? activeRequests.get(requestKey) : undefined;
+	if (existingRequest) {
 		console.debug(`[API-CLIENT] Returning existing in-flight request for key: ${requestKey}`);
-		return activeRequests.get(requestKey)!;
+		return existingRequest;
 	}
 
 	// Use caller-provided signal when available so components can cancel.

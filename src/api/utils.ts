@@ -1,40 +1,40 @@
-import {APIResponse} from "@/types/api.ts";
+import type { APIResponse } from "@/types/api.ts";
 
 /**
  * Check if the value passed is an object and if it is not null.
  */
 export function isRecord(value: unknown): value is Record<string, unknown> {
-    return typeof value === "object" && value !== null;
+	return typeof value === "object" && value !== null;
 }
 
 /**
  * Checks if the value follows the structure of the API format.
  */
 export function isAPIResponse(value: unknown): value is APIResponse {
-    return (
-        isRecord(value) &&
-        typeof value.success === "boolean" &&
-        typeof value.message === "string" &&
-        typeof value.timestamp === "string"
-    );
+	return (
+		isRecord(value) &&
+		typeof value.success === "boolean" &&
+		typeof value.message === "string" &&
+		typeof value.timestamp === "string"
+	);
 }
 
 /**
  * Checks if the data has been returned
  */
 export function extractAPIData<T>(raw: unknown, operation: string): T {
-    if (!isAPIResponse(raw)) {
-        throw new Error(`${operation} failed: malformed API response`);
-    }
+	if (!isAPIResponse(raw)) {
+		throw new Error(`${operation} failed: malformed API response`);
+	}
 
-    const response = raw;
-    if (response.error) {
-        throw new Error(response.error.details || response.message || `${operation} failed`);
-    }
+	const response = raw;
+	if (response.error) {
+		throw new Error(response.error.details || response.message || `${operation} failed`);
+	}
 
-    if (response.data === undefined || response.data === null) {
-        throw new Error(`${operation} failed: missing or invalid data payload`);
-    }
+	if (response.data === undefined || response.data === null) {
+		throw new Error(`${operation} failed: missing or invalid data payload`);
+	}
 
-    return response.data as T;
+	return response.data as T;
 }
