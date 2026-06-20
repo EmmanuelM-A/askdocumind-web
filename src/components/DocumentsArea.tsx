@@ -6,6 +6,7 @@ import {
 	getUploadedDocuments,
 	uploadDocuments,
 } from "@/api/document-endpoints.ts";
+import { getApiErrorMessage } from "@/api/utils.ts";
 import documentsData from "@/data/documents.json";
 import { logger } from "@/lib/logger.ts";
 import type { UUID } from "@/types/api.ts";
@@ -134,7 +135,8 @@ export function DocumentsArea({
 			await handleRefreshDocuments();
 		} catch (error) {
 			logger.error("Failed to upload documents:", error);
-			onUploadNotice?.("error", `Failed to upload ${fileNamesLabel}.`);
+			const reason = getApiErrorMessage(error, `Failed to upload ${fileNamesLabel}.`);
+			onUploadNotice?.("error", reason);
 		} finally {
 			setIsUploading(false);
 		}
@@ -150,6 +152,7 @@ export function DocumentsArea({
 			onDocumentsRefreshed?.(uploadedDocs);
 		} catch (error) {
 			logger.error("Failed to fetch uploaded documents:", error);
+			onDeleteNotice?.("error", "Failed to refresh documents. Please try again.");
 		} finally {
 			setIsFetchingDocuments(false);
 		}
@@ -291,12 +294,27 @@ export function DocumentsArea({
 							className="rounded-xl bg-[var(--color-accent)] px-3 py-2 text-[var(--text-base)] font-semibold text-white hover:opacity-90"
 							disabled={isChatSessionLoading || isUploading || !chatSessionId}
 						>
-							{isUploading ? "Uploading..." : "Upload"}
+							{isUploading ? (
+								<span className="inline-flex items-center gap-1.5">
+									<span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+									Uploading...
+								</span>
+							) : "Upload"}
 						</button>
 					</div>
 				</section>
 			) : (
 				<div className="relative flex-1 space-y-2 overflow-auto rounded-2xl border border-[var(--color-tertiary)] bg-[var(--color-primary)] p-3">
+					{documents.length === 0 && !isFetchingDocuments && (
+						<div className="flex h-full flex-col items-center justify-center gap-1 text-center">
+							<p className="text-[var(--text-base)] font-medium text-[var(--color-text)]">
+								No documents yet
+							</p>
+							<p className="text-[var(--text-sm)] text-[var(--color-text)]/60">
+								Upload files from the Upload Docs tab to get started.
+							</p>
+						</div>
+					)}
 					{documents.map((doc) => (
 						<article
 							key={doc.id}
@@ -340,7 +358,7 @@ export function DocumentsArea({
 						className="absolute bottom-3 right-3 inline-flex items-center justify-center rounded-md p-2 text-[var(--color-text)]/70 transition hover:text-[var(--color-accent)] disabled:opacity-50"
 						aria-label="Refresh documents list"
 					>
-						<FontAwesomeIcon icon={faRotate} className="h-5 w-5" />
+						<FontAwesomeIcon icon={faRotate} className={`h-5 w-5 ${isFetchingDocuments ? "animate-spin" : ""}`} />
 					</button>
 				</div>
 			)}

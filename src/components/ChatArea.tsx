@@ -208,7 +208,12 @@ export function ChatArea({ chatSessionId, isChatSessionLoading }: ChatAreaProps)
 					className="inline-flex h-10 items-center justify-center rounded-xl bg-[var(--color-accent)] px-4 text-[var(--text-sm)] font-semibold text-white transition hover:opacity-90"
 					disabled={isChatSessionLoading || !chatSessionId || isSending}
 				>
-					{isSending ? "Sending..." : "Send"}
+					{isSending ? (
+						<span className="inline-flex items-center gap-1.5">
+							<span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+							Sending...
+						</span>
+					) : "Send"}
 				</button>
 			</form>
 		</section>
