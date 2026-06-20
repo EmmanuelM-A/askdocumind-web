@@ -36,7 +36,10 @@ export async function getUploadedDocuments(chatSessionId: UUID): Promise<Array<D
 		},
 	});
 
-	const { documents } = extractAPIData<{ documents: Array<Document> }>(rawResponse, "Get uploaded documents");
+	const { documents } = extractAPIData<{ documents: Array<Document> }>(
+		rawResponse,
+		"Get uploaded documents",
+	);
 	return documents;
 }
 

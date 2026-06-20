@@ -41,7 +41,7 @@ function getStatusStyle(status: ProcessingStatus, theme: "light" | "dark") {
 
 	// Fallback to COMPLETED style if status is not found
 	if (!statusPalette) {
-		const fallbackPalette = palette["COMPLETED"];
+		const fallbackPalette = palette.COMPLETED;
 		const colours = fallbackPalette[theme];
 		return {
 			color: colours.textColour,
@@ -179,7 +179,8 @@ export function DocumentsArea({
 		if (chatSessionId && !isChatSessionLoading) {
 			void handleRefreshDocuments();
 		}
-	}, [chatSessionId, isChatSessionLoading]);
+		// biome-ignore lint/correctness/useExhaustiveDependencies: Applied unsafe fix here
+	}, [chatSessionId, isChatSessionLoading, handleRefreshDocuments]);
 
 	return (
 		<section className="flex h-full w-full flex-col rounded-[2rem] border border-[var(--color-tertiary)] bg-[var(--color-secondary)] p-4 shadow-sm sm:p-6">
@@ -299,7 +300,9 @@ export function DocumentsArea({
 									<span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
 									Uploading...
 								</span>
-							) : "Upload"}
+							) : (
+								"Upload"
+							)}
 						</button>
 					</div>
 				</section>
@@ -358,7 +361,10 @@ export function DocumentsArea({
 						className="absolute bottom-3 right-3 inline-flex items-center justify-center rounded-md p-2 text-[var(--color-text)]/70 transition hover:text-[var(--color-accent)] disabled:opacity-50"
 						aria-label="Refresh documents list"
 					>
-						<FontAwesomeIcon icon={faRotate} className={`h-5 w-5 ${isFetchingDocuments ? "animate-spin" : ""}`} />
+						<FontAwesomeIcon
+							icon={faRotate}
+							className={`h-5 w-5 ${isFetchingDocuments ? "animate-spin" : ""}`}
+						/>
 					</button>
 				</div>
 			)}

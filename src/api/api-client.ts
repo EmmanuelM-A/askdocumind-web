@@ -318,7 +318,9 @@ export async function sendRequest({
 				abortErr.name = "AbortError";
 				throw abortErr;
 			}
-			logger.error(`[API-CLIENT] Request failed: ${method.toUpperCase()} ${url} - ${error.message}`);
+			logger.error(
+				`[API-CLIENT] Request failed: ${method.toUpperCase()} ${url} - ${error.message}`,
+			);
 			return Promise.reject(err);
 		} finally {
 			if (timeoutId) clearTimeout(timeoutId);

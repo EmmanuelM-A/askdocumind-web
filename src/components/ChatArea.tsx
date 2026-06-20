@@ -213,7 +213,9 @@ export function ChatArea({ chatSessionId, isChatSessionLoading }: ChatAreaProps)
 							<span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
 							Sending...
 						</span>
-					) : "Send"}
+					) : (
+						"Send"
+					)}
 				</button>
 			</form>
 		</section>

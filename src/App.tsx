@@ -93,7 +93,10 @@ export default function App() {
 
 		if (accepted.length) {
 			setSelectedFiles((prev) => [...prev, ...accepted]);
-			logger.log("Files added locally:", accepted.map((f) => f.name));
+			logger.log(
+				"Files added locally:",
+				accepted.map((f) => f.name),
+			);
 		}
 
 		if (overflowCount > 0) {
