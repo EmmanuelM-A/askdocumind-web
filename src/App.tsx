@@ -35,7 +35,7 @@ const bootstrapAnonymousUserAndChat = (): Promise<BootstrapResult> => {
 		bootstrapPromise = (async () => {
 			const userId = await createAnonymousUserSession();
 			const chat = await initChatSession({
-				title: "Anonymous DocuChat Chat",
+				title: "Anonymous AskDocuMind Chat",
 			});
 
 			return { userId, chatId: chat.chat_id };
@@ -124,7 +124,7 @@ export default function App() {
 	};
 
 	useEffect(() => {
-		const savedTheme = localStorage.getItem("docuchat-theme") as Theme | null;
+		const savedTheme = localStorage.getItem("askdocumindweb-theme") as Theme | null;
 		if (savedTheme) {
 			setTheme(savedTheme);
 			document.documentElement.setAttribute("data-theme", savedTheme);
@@ -133,7 +133,7 @@ export default function App() {
 
 	useEffect(() => {
 		document.documentElement.setAttribute("data-theme", theme);
-		localStorage.setItem("docuchat-theme", theme);
+		localStorage.setItem("askdocumindweb-theme", theme);
 	}, [theme]);
 
 	useEffect(() => {

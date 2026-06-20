@@ -1,11 +1,11 @@
 {
 	"logo": {
 		"src": "/src/assets/icons/logo.svg",
-		"alt": "DocuChat",
+		"alt": "AskDocuMind",
 		"link": "/",
 		"minWidth": "72px"
 	},
-	"appName": "DocuChat",
+	"appName": "AskDocuMind",
 	"navItems": [
 		{
 			"name": "Home",
