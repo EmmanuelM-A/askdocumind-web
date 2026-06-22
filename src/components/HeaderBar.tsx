@@ -1,6 +1,11 @@
 import type { ReactNode } from "react";
 import logoIcon from "@/assets/icons/logo.svg";
+import githubIcon from "@/assets/icons/github-icon.svg";
 import headerData from "@/data/header.json";
+
+const navIconMap: Record<string, string> = {
+	GitHub: githubIcon,
+};
 
 interface HeaderBarProps {
 	theme: "light" | "dark";
@@ -76,6 +81,18 @@ export function HeaderBar({ theme, onThemeToggle }: HeaderBarProps) {
 				</div>
 
 				<nav className="flex items-center gap-2" aria-label="Top navigation">
+					{headerData.navItems.map((item) => (
+						<a
+							key={item.name}
+							href={item.link}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="inline-flex items-center justify-center gap-2 rounded-md px-2 py-1.5 text-3xl font-medium text-[var(--color-text)] transition hover:text-[var(--color-accent)] sm:px-4"
+						>
+							{navIconMap[item.name] && <img src={navIconMap[item.name]} alt={item.name} className="h-5 w-5 sm:hidden" />}
+							<span className="hidden sm:inline">{item.name}</span>
+						</a>
+					))}
 					<NavButton
 						label="Theme"
 						icon={<IconTheme theme={theme} />}
