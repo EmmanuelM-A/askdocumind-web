@@ -89,7 +89,7 @@ export function HeaderBar({ theme, onThemeToggle }: HeaderBarProps) {
 							rel="noopener noreferrer"
 							className="inline-flex items-center justify-center gap-2 rounded-md px-2 py-1.5 text-3xl font-medium text-[var(--color-text)] transition hover:text-[var(--color-accent)] sm:px-4"
 						>
-							{navIconMap[item.name] && <img src={navIconMap[item.name]} alt={item.name} className="h-6 w-6 sm:hidden" />}
+							{navIconMap[item.name] && <img src={navIconMap[item.name]} alt={item.name} className={`h-6 w-6 sm:hidden ${theme === "dark" ? "invert" : ""}`} />}
 							<span className="hidden sm:inline">{item.name}</span>
 						</a>
 					))}
