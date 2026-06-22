@@ -35,7 +35,7 @@ const bootstrapAnonymousUserAndChat = (): Promise<BootstrapResult> => {
 		bootstrapPromise = (async () => {
 			const userId = await createAnonymousUserSession();
 			const chat = await initChatSession({
-				title: "Anonymous DocuChat Chat",
+				title: "Anonymous AskDocuMind Chat",
 			});
 
 			return { userId, chatId: chat.chat_id };
@@ -93,7 +93,10 @@ export default function App() {
 
 		if (accepted.length) {
 			setSelectedFiles((prev) => [...prev, ...accepted]);
-			logger.log("Files added locally:", accepted.map((f) => f.name));
+			logger.log(
+				"Files added locally:",
+				accepted.map((f) => f.name),
+			);
 		}
 
 		if (overflowCount > 0) {
@@ -121,7 +124,7 @@ export default function App() {
 	};
 
 	useEffect(() => {
-		const savedTheme = localStorage.getItem("docuchat-theme") as Theme | null;
+		const savedTheme = localStorage.getItem("askdocumindweb-theme") as Theme | null;
 		if (savedTheme) {
 			setTheme(savedTheme);
 			document.documentElement.setAttribute("data-theme", savedTheme);
@@ -130,7 +133,7 @@ export default function App() {
 
 	useEffect(() => {
 		document.documentElement.setAttribute("data-theme", theme);
-		localStorage.setItem("docuchat-theme", theme);
+		localStorage.setItem("askdocumindweb-theme", theme);
 	}, [theme]);
 
 	useEffect(() => {
@@ -195,9 +198,9 @@ export default function App() {
 				}}
 			/>
 
-			<section className="mx-auto flex w-full flex-1 min-h-0 flex-col items-center overflow-hidden px-4 py-4 sm:px-6">
-				<div className="grid flex-1 min-h-0 w-full max-w-[1500px] grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-6">
-					<div className="order-1 min-h-0 overflow-hidden lg:order-2 lg:min-w-[460px]">
+			<section className="mx-auto flex w-full flex-1 min-h-0 flex-col items-center overflow-y-auto lg:overflow-hidden px-4 py-4 sm:px-6">
+				<div className="grid w-full max-w-[1500px] grid-cols-1 gap-4 sm:gap-5 lg:flex-1 lg:min-h-0 lg:grid-cols-2 lg:gap-6">
+					<div className="order-1 h-[360px] lg:order-2 lg:h-auto lg:min-h-0 lg:min-w-[460px] lg:overflow-hidden">
 						<DocumentsArea
 							theme={theme}
 							chatSessionId={chatSessionId}
@@ -216,7 +219,7 @@ export default function App() {
 						/>
 					</div>
 
-					<div className="order-2 min-h-0 overflow-hidden lg:order-1 lg:min-w-[460px]">
+					<div className="order-2 h-[360px] lg:order-1 lg:h-auto lg:min-h-0 lg:min-w-[460px] lg:overflow-hidden">
 						<ChatArea
 							chatSessionId={chatSessionId}
 							isChatSessionLoading={isChatSessionLoading}

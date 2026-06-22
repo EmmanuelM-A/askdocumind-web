@@ -57,7 +57,7 @@ function serializeBodyForRequestKey(body: unknown): string {
 }
 
 /**
- * Base URL used to build every DocuChat API request.
+ * Base URL used to build every AskDocuMind API request.
  */
 const BASE_URL = settings.api.BASE_URL;
 
@@ -318,7 +318,9 @@ export async function sendRequest({
 				abortErr.name = "AbortError";
 				throw abortErr;
 			}
-			logger.error(`[API-CLIENT] Request failed: ${method.toUpperCase()} ${url} - ${error.message}`);
+			logger.error(
+				`[API-CLIENT] Request failed: ${method.toUpperCase()} ${url} - ${error.message}`,
+			);
 			return Promise.reject(err);
 		} finally {
 			if (timeoutId) clearTimeout(timeoutId);

@@ -38,3 +38,20 @@ export function extractAPIData<T>(raw: unknown, operation: string): T {
 
 	return response.data as T;
 }
+
+/**
+ * Extracts a user-friendly message from an API error response.
+ * Falls back to the provided fallback string when no specific message is available.
+ */
+export function getApiErrorMessage(error: unknown, fallback: string): string {
+	if (!error || typeof error !== "object") return fallback;
+	const data = (error as Record<string, unknown>).data;
+	if (!data || typeof data !== "object") return fallback;
+	const rec = data as Record<string, unknown>;
+	if (rec.error && typeof rec.error === "object") {
+		const details = (rec.error as Record<string, unknown>).details;
+		if (typeof details === "string" && details) return details;
+	}
+	if (typeof rec.message === "string" && rec.message) return rec.message;
+	return fallback;
+}

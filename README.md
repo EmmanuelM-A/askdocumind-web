@@ -1,6 +1,6 @@
-# DocuChat Frontend
+# AskDocuMind Frontend
 
-A React + Vite + TypeScript + Tailwind CSS single-page app for the DocuChat document-aware chatbot.
+A React + Vite + TypeScript + Tailwind CSS single-page app for the AskDocuMind document-aware chatbot.
 
 ## Running locally
 
@@ -14,8 +14,8 @@ npm run dev
 Create a `.env` file in the project root:
 
 ```bash
-VITE_DOCU_CHAT_API_BASE_URL=http://localhost:5000/api
-VITE_DOCU_CHAT_API_VERSION=1
+VITE_ASK_DOCU_MIND_API_BASE_URL=http://localhost:5000/api
+VITE_ASK_DOCU_MIND_API_VERSION=1
 VITE_MAX_FILES_MB_PER_CHAT=1
 VITE_WEB_SEARCH_ENABLED=false
 ```

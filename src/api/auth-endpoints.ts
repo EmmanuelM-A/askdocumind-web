@@ -6,7 +6,7 @@ import type { UUID } from "@/types/api.ts";
 export async function createAnonymousUserSession(): Promise<UUID> {
 	const rawResponse = await sendRequest({
 		route: API_ROUTES.ANONYMOUS_AUTH,
-		method: "POST"
+		method: "POST",
 	});
 
 	const { user_id } = extractAPIData<{ user_id: UUID }>(

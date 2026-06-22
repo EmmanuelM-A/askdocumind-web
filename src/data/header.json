@@ -1,23 +1,16 @@
 {
 	"logo": {
 		"src": "/src/assets/icons/logo.svg",
-		"alt": "DocuChat",
+		"alt": "AskDocuMind",
 		"link": "/",
 		"minWidth": "72px"
 	},
-	"appName": "DocuChat",
+	"appName": "AskDocuMind",
 	"navItems": [
 		{
-			"name": "Home",
-			"link": "/"
-		},
-		{
 			"name": "GitHub",
-			"link": "some-link"
-		},
-		{
-			"name": "Help",
-			"link": "some-link"
+			"link": "https://github.com/EmmanuelM-A/askdocumind-api",
+			"altIcon": "../assets/icons/github-icon.svg"
 		}
 	]
 }

@@ -1,11 +1,12 @@
 import { faRotate, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type ChangeEvent, type DragEvent, useEffect, useRef, useState } from "react";
+import { type ChangeEvent, type DragEvent, useCallback, useEffect, useRef, useState } from "react";
 import {
 	deleteUploadedDocument,
 	getUploadedDocuments,
 	uploadDocuments,
 } from "@/api/document-endpoints.ts";
+import { getApiErrorMessage } from "@/api/utils.ts";
 import documentsData from "@/data/documents.json";
 import { logger } from "@/lib/logger.ts";
 import type { UUID } from "@/types/api.ts";
@@ -40,7 +41,7 @@ function getStatusStyle(status: ProcessingStatus, theme: "light" | "dark") {
 
 	// Fallback to COMPLETED style if status is not found
 	if (!statusPalette) {
-		const fallbackPalette = palette["COMPLETED"];
+		const fallbackPalette = palette.COMPLETED;
 		const colours = fallbackPalette[theme];
 		return {
 			color: colours.textColour,
@@ -134,13 +135,14 @@ export function DocumentsArea({
 			await handleRefreshDocuments();
 		} catch (error) {
 			logger.error("Failed to upload documents:", error);
-			onUploadNotice?.("error", `Failed to upload ${fileNamesLabel}.`);
+			const reason = getApiErrorMessage(error, `Failed to upload ${fileNamesLabel}.`);
+			onUploadNotice?.("error", reason);
 		} finally {
 			setIsUploading(false);
 		}
 	};
 
-	const handleRefreshDocuments = async () => {
+	const handleRefreshDocuments = useCallback(async () => {
 		if (!chatSessionId) return;
 
 		setIsFetchingDocuments(true);
@@ -150,10 +152,11 @@ export function DocumentsArea({
 			onDocumentsRefreshed?.(uploadedDocs);
 		} catch (error) {
 			logger.error("Failed to fetch uploaded documents:", error);
+			onDeleteNotice?.("error", "Failed to refresh documents. Please try again.");
 		} finally {
 			setIsFetchingDocuments(false);
 		}
-	};
+	}, [chatSessionId, onDocumentsRefreshed, onDeleteNotice]);
 
 	const handleDeleteDocument = async (documentId: UUID, filename: string) => {
 		if (!chatSessionId || deletingDocumentId) return;
@@ -176,7 +179,7 @@ export function DocumentsArea({
 		if (chatSessionId && !isChatSessionLoading) {
 			void handleRefreshDocuments();
 		}
-	}, [chatSessionId, isChatSessionLoading]);
+	}, [chatSessionId, isChatSessionLoading, handleRefreshDocuments]);
 
 	return (
 		<section className="flex h-full w-full flex-col rounded-[2rem] border border-[var(--color-tertiary)] bg-[var(--color-secondary)] p-4 shadow-sm sm:p-6">
@@ -291,12 +294,29 @@ export function DocumentsArea({
 							className="rounded-xl bg-[var(--color-accent)] px-3 py-2 text-[var(--text-base)] font-semibold text-white hover:opacity-90"
 							disabled={isChatSessionLoading || isUploading || !chatSessionId}
 						>
-							{isUploading ? "Uploading..." : "Upload"}
+							{isUploading ? (
+								<span className="inline-flex items-center gap-1.5">
+									<span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+									Uploading...
+								</span>
+							) : (
+								"Upload"
+							)}
 						</button>
 					</div>
 				</section>
 			) : (
 				<div className="relative flex-1 space-y-2 overflow-auto rounded-2xl border border-[var(--color-tertiary)] bg-[var(--color-primary)] p-3">
+					{documents.length === 0 && !isFetchingDocuments && (
+						<div className="flex h-full flex-col items-center justify-center gap-1 text-center">
+							<p className="text-[var(--text-base)] font-medium text-[var(--color-text)]">
+								No documents yet
+							</p>
+							<p className="text-[var(--text-sm)] text-[var(--color-text)]/60">
+								Upload files from the Upload Docs tab to get started.
+							</p>
+						</div>
+					)}
 					{documents.map((doc) => (
 						<article
 							key={doc.id}
@@ -340,7 +360,10 @@ export function DocumentsArea({
 						className="absolute bottom-3 right-3 inline-flex items-center justify-center rounded-md p-2 text-[var(--color-text)]/70 transition hover:text-[var(--color-accent)] disabled:opacity-50"
 						aria-label="Refresh documents list"
 					>
-						<FontAwesomeIcon icon={faRotate} className="h-5 w-5" />
+						<FontAwesomeIcon
+							icon={faRotate}
+							className={`h-5 w-5 ${isFetchingDocuments ? "animate-spin" : ""}`}
+						/>
 					</button>
 				</div>
 			)}
