@@ -31,6 +31,7 @@ export function ChatArea({ chatSessionId, isChatSessionLoading }: ChatAreaProps)
 		},
 	]);
 	const [isSending, setIsSending] = useState(false);
+	const [webSearchEnabled, setWebSearchEnabled] = useState(false);
 	const messageListRef = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
@@ -122,7 +123,7 @@ export function ChatArea({ chatSessionId, isChatSessionLoading }: ChatAreaProps)
 			const response = await chatWithChatbot({
 				user_query: trimmedDraft,
 				chat_id: chatSessionId,
-				web_search_enabled: settings.api.IS_WEB_SEARCH_ENABLED,
+				web_search_enabled: webSearchEnabled,
 			});
 
 			setMessages((prev) => [
@@ -190,33 +191,51 @@ export function ChatArea({ chatSessionId, isChatSessionLoading }: ChatAreaProps)
 			</div>
 
 			<form
-				className="mt-4 flex items-center gap-2"
+				className="mt-4 flex flex-col gap-2"
 				onSubmit={async (event) => {
 					event.preventDefault();
 					await handleSendMessage();
 				}}
 			>
-				<input
-					value={draft}
-					onChange={(event) => setDraft(event.target.value)}
-					placeholder="Ask a question about your uploaded docs..."
-					className="h-10 w-full rounded-xl border border-[var(--color-tertiary)] bg-[var(--color-primary)] px-3 text-[var(--text-sm)] text-[var(--color-text)] outline-none placeholder:text-[var(--color-text)]/50 focus:border-[var(--color-accent)]"
-					disabled={isChatSessionLoading || !chatSessionId || isSending}
-				/>
-				<button
-					type="submit"
-					className="inline-flex h-10 items-center justify-center rounded-xl bg-[var(--color-accent)] px-4 text-[var(--text-sm)] font-semibold text-white transition hover:opacity-90"
-					disabled={isChatSessionLoading || !chatSessionId || isSending}
+				<label
+					className={`flex items-center gap-2 text-[var(--text-xs)] select-none ${
+						settings.api.IS_WEB_SEARCH_ENABLED
+							? "cursor-pointer text-[var(--color-text)]/70"
+							: "cursor-not-allowed text-[var(--color-text)]/40"
+					}`}
 				>
-					{isSending ? (
-						<span className="inline-flex items-center gap-1.5">
-							<span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-							Sending...
-						</span>
-					) : (
-						"Send"
-					)}
-				</button>
+					<input
+						type="checkbox"
+						checked={webSearchEnabled}
+						onChange={(e) => setWebSearchEnabled(e.target.checked)}
+						disabled={!settings.api.IS_WEB_SEARCH_ENABLED}
+						className="accent-[var(--color-accent)] disabled:opacity-50"
+					/>
+					Enable web search fallback for query
+				</label>
+				<div className="flex items-center gap-2">
+					<input
+						value={draft}
+						onChange={(event) => setDraft(event.target.value)}
+						placeholder="Ask a question about your uploaded docs..."
+						className="h-10 w-full rounded-xl border border-[var(--color-tertiary)] bg-[var(--color-primary)] px-3 text-[var(--text-sm)] text-[var(--color-text)] outline-none placeholder:text-[var(--color-text)]/50 focus:border-[var(--color-accent)]"
+						disabled={isChatSessionLoading || !chatSessionId || isSending}
+					/>
+					<button
+						type="submit"
+						className="inline-flex h-10 items-center justify-center rounded-xl bg-[var(--color-accent)] px-4 text-[var(--text-sm)] font-semibold text-white transition hover:opacity-90"
+						disabled={isChatSessionLoading || !chatSessionId || isSending}
+					>
+						{isSending ? (
+							<span className="inline-flex items-center gap-1.5">
+								<span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+								Sending...
+							</span>
+						) : (
+							"Send"
+						)}
+					</button>
+				</div>
 			</form>
 		</section>
 	);

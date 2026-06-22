@@ -1,6 +1,6 @@
 import { faRotate, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type ChangeEvent, type DragEvent, useEffect, useRef, useState } from "react";
+import { type ChangeEvent, type DragEvent, useCallback, useEffect, useRef, useState } from "react";
 import {
 	deleteUploadedDocument,
 	getUploadedDocuments,
@@ -142,7 +142,7 @@ export function DocumentsArea({
 		}
 	};
 
-	const handleRefreshDocuments = async () => {
+	const handleRefreshDocuments = useCallback(async () => {
 		if (!chatSessionId) return;
 
 		setIsFetchingDocuments(true);
@@ -156,7 +156,7 @@ export function DocumentsArea({
 		} finally {
 			setIsFetchingDocuments(false);
 		}
-	};
+	}, [chatSessionId, onDocumentsRefreshed, onDeleteNotice]);
 
 	const handleDeleteDocument = async (documentId: UUID, filename: string) => {
 		if (!chatSessionId || deletingDocumentId) return;
@@ -179,7 +179,6 @@ export function DocumentsArea({
 		if (chatSessionId && !isChatSessionLoading) {
 			void handleRefreshDocuments();
 		}
-		// biome-ignore lint/correctness/useExhaustiveDependencies: Applied unsafe fix here
 	}, [chatSessionId, isChatSessionLoading, handleRefreshDocuments]);
 
 	return (
