@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import footerData from "@/data/footer.json";
 
 export function FooterBar() {
@@ -16,7 +17,30 @@ export function FooterBar() {
 						{footerData.description}
 					</p>
 
-					<div aria-hidden="true" />
+					<nav
+						aria-label="Footer navigation"
+						className="flex items-center justify-center gap-4 sm:justify-end"
+					>
+						{footerData.links.map((link) =>
+							link.href.startsWith("/") ? (
+								<Link
+									key={link.name}
+									to={link.href}
+									className="text-sm text-[var(--color-text)]/60 transition hover:text-[var(--color-accent)]"
+								>
+									{link.name}
+								</Link>
+							) : (
+								<a
+									key={link.name}
+									href={link.href}
+									className="text-sm text-[var(--color-text)]/60 transition hover:text-[var(--color-accent)]"
+								>
+									{link.name}
+								</a>
+							),
+						)}
+					</nav>
 				</div>
 			</div>
 		</footer>

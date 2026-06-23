@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react";
 import { useCallback, useEffect, useState } from "react";
 import { createAnonymousUserSession } from "@/api/auth-endpoints.ts";
 import { initChatSession } from "@/api/chat-session-endpoints.ts";
@@ -9,6 +10,21 @@ import { settings } from "@/config/configs.ts";
 import { logger } from "@/lib/logger.ts";
 import type { UUID } from "@/types/api.ts";
 import type { Document as UploadedDocument } from "@/types/documents.ts";
+
+Sentry.init({
+	dsn: settings.api.SENTRY_DSN,
+	environment: settings.api.ENV,
+	tracesSampleRate: 0.1,
+	integrations: [
+		Sentry.browserTracingIntegration(),
+		Sentry.replayIntegration({
+			maskAllText: true, // mask user text in replays
+			blockAllMedia: false,
+		}),
+	],
+	replaysSessionSampleRate: 0.05, // record 5% of sessions
+	replaysOnErrorSampleRate: 1.0, // always record on error
+});
 
 type Theme = "light" | "dark";
 type DocumentTab = "upload" | "documents";

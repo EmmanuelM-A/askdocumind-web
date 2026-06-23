@@ -1,19 +1,19 @@
 {
 	"appName": "AskDocuMind",
-	"version": "v0.1.0",
+	"version": "v1.0.0",
 	"description": "Document-aware chatbot built with React, Python and LangChain.",
 	"links": [
 		{
 			"name": "Privacy",
-			"href": "#"
+			"href": "/privacy"
 		},
 		{
 			"name": "Terms",
-			"href": "#"
+			"href": "/terms"
 		},
 		{
 			"name": "Contact",
-			"href": "#"
+			"href": "mailto:madukaagbeze.ea@gmail.com"
 		}
 	]
 }
