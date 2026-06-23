@@ -1,6 +1,6 @@
 {
 	"appName": "AskDocuMind",
-	"version": "v0.1.0",
+	"version": "v1.0.0",
 	"description": "Document-aware chatbot built with React, Python and LangChain.",
 	"links": [
 		{
