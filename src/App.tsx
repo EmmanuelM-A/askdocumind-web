@@ -12,8 +12,8 @@ import type { UUID } from "@/types/api.ts";
 import type { Document as UploadedDocument } from "@/types/documents.ts";
 
 Sentry.init({
-	dsn: import.meta.env.VITE_SENTRY_DSN,
-	environment: import.meta.env.VITE_ENV ?? "production",
+	dsn: settings.api.SENTRY_DSN,
+	environment: settings.api.ENV,
 	tracesSampleRate: 0.1,
 	integrations: [
 		Sentry.browserTracingIntegration(),

@@ -3,10 +3,11 @@
  */
 export const settings = {
 	api: {
-		ENV: import.meta.env.VITE_ENV,
+		ENV: import.meta.env.VITE_ENV ?? "development",
 		BASE_URL: import.meta.env.VITE_ASK_DOCU_MIND_API_BASE_URL,
 		BASE_VERSION: import.meta.env.VITE_ASK_DOCU_MIND_API_VERSION ?? "1",
 		IS_WEB_SEARCH_ENABLED: Boolean(import.meta.env.VITE_WEB_SEARCH_ENABLED === "true") ?? false,
+		SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN,
 	},
 
 	documents: {
