@@ -5,15 +5,15 @@
 	"links": [
 		{
 			"name": "Privacy",
-			"href": "#"
+			"href": "/privacy"
 		},
 		{
 			"name": "Terms",
-			"href": "#"
+			"href": "/terms"
 		},
 		{
 			"name": "Contact",
-			"href": "#"
+			"href": "mailto:madukaagbeze.ea@gmail.com"
 		}
 	]
 }
