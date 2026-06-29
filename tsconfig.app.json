@@ -19,8 +19,8 @@
 		"noUncheckedSideEffectImports": true,
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["src/*"]
+			"@/*": ["src-old/*"]
 		}
 	},
-	"include": ["src"]
+	"include": ["src-old"]
 }
