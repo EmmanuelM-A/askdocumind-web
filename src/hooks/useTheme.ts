@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 type Theme = "light" | "dark";
 
 export function useTheme() {
-	const [theme, setTheme] = useState<Theme>(
-		() => (localStorage.getItem("askdocumindweb-theme") as Theme) ?? "light",
-	);
+	const [theme, setTheme] = useState<Theme>(() => {
+		if (typeof window === "undefined") return "light";
+		return (localStorage.getItem("askdocumindweb-theme") as Theme) ?? "light";
+	});
 
 	useEffect(() => {
 		document.documentElement.setAttribute("data-theme", theme);
