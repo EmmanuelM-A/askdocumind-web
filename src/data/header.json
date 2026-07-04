@@ -8,27 +8,27 @@
 		{
 			"label": "Home",
 			"link": "/",
-			"icon": ""
+			"icon": "/icons/home.svg"
 		},
 		{
 			"label": "Architecture",
 			"link": "/architecture",
-			"icon": ""
+			"icon": "/icons/architecture.svg"
 		},
 		{
 			"label": "Demo",
 			"link": "/demo",
-			"icon": ""
+			"icon": "/icons/demo.svg"
 		},
 		{
 			"label": "Feedback",
 			"link": "/feedback",
-			"icon": ""
+			"icon": "/icons/feeback.svg"
 		},
 		{
 			"label": "View Code",
 			"link": "https://github.com/EmmanuelM-A/askdocumind-api",
-			"icon": ""
+			"icon": "/icons/code.svg"
 		}
 	]
 }

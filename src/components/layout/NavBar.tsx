@@ -22,23 +22,42 @@ export function NavBar() {
 						width={40}
 						height={40}
 					/>
-					<span className="hidden text-base font-semibold tracking-tight text-(--color-text) sm:inline">
+					<span className="hidden text-base font-semibold tracking-tight text-(--color-text) min-[800px]:inline">
 						{headerData.logo.label}
 					</span>
 				</Link>
 
-				<nav
-					aria-label="Primary"
-					className="flex items-center gap-1 overflow-x-auto sm:gap-4"
-				>
+				<nav aria-label="Primary" className="flex items-center gap-4">
 					{headerData.navItems.map((item) => {
 						const isExternal = item.link.startsWith("http");
 						const isActive = !isExternal && pathname === item.link;
-						const linkClassName = `whitespace-nowrap rounded-full px-2 py-1 text-sm font-medium transition sm:px-3 ${
+						const linkClassName = `group relative flex items-center whitespace-nowrap rounded-full px-2 py-1 text-sm font-medium transition min-[800px]:px-3 ${
 							isActive
 								? "text-(--color-accent)"
 								: "text-(--color-text)/80 hover:text-(--color-accent)"
 						}`;
+						const content = (
+							<>
+								<span
+									aria-hidden="true"
+									className="block h-5.5 w-5.5 bg-current min-[800px]:hidden"
+									style={{
+										maskImage: `url(${item.icon})`,
+										maskSize: "contain",
+										maskRepeat: "no-repeat",
+										maskPosition: "center",
+										WebkitMaskImage: `url(${item.icon})`,
+										WebkitMaskSize: "contain",
+										WebkitMaskRepeat: "no-repeat",
+										WebkitMaskPosition: "center",
+									}}
+								/>
+								<span className="hidden min-[800px]:inline">{item.label}</span>
+								<span className="pointer-events-none absolute top-full left-1/2 mt-2 -translate-x-1/2 rounded-md bg-(--color-text) px-2 py-1 text-xs whitespace-nowrap text-(--color-primary) opacity-0 transition group-hover:opacity-100 min-[800px]:hidden">
+									{item.label}
+								</span>
+							</>
+						);
 
 						return isExternal ? (
 							<a
@@ -48,11 +67,11 @@ export function NavBar() {
 								rel="noopener noreferrer"
 								className={linkClassName}
 							>
-								{item.label}
+								{content}
 							</a>
 						) : (
 							<Link key={item.label} href={item.link} className={linkClassName}>
-								{item.label}
+								{content}
 							</Link>
 						);
 					})}
