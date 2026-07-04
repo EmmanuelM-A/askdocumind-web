@@ -15,7 +15,10 @@ export function NavBar() {
 	return (
 		<header className="sticky top-0 z-50 flex justify-center px-4 pt-4">
 			<div className="flex w-full max-w-5xl items-center justify-between gap-3 rounded-full border border-(--color-tertiary) bg-(--color-primary)/85 px-3 py-2 shadow-sm backdrop-blur">
-				<Link href={headerData.logo.link} className="flex shrink-0 items-center gap-2 pl-1">
+				<Link
+					href={headerData.logo.link}
+					className="hidden shrink-0 items-center gap-2 pl-1 min-[450px]:flex"
+				>
 					<Image
 						src="/assets/logo.svg"
 						alt={headerData.logo.label}
@@ -82,7 +85,17 @@ export function NavBar() {
 					onClick={toggleTheme}
 					aria-label="Toggle theme"
 					aria-pressed={theme === "dark"}
-					className="relative flex h-8 w-16 shrink-0 items-center rounded-full border border-(--color-tertiary) bg-(--color-secondary) transition-colors"
+					className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-(--color-tertiary) bg-(--color-secondary) text-(--color-text) transition-colors min-[450px]:hidden"
+				>
+					<FontAwesomeIcon icon={theme === "dark" ? faSun : faMoon} className="h-4 w-4" />
+				</button>
+
+				<button
+					type="button"
+					onClick={toggleTheme}
+					aria-label="Toggle theme"
+					aria-pressed={theme === "dark"}
+					className="relative hidden h-8 w-16 shrink-0 items-center rounded-full border border-(--color-tertiary) bg-(--color-secondary) transition-colors min-[450px]:flex"
 				>
 					<span className="absolute left-2 flex items-center text-(--color-text)/50">
 						<FontAwesomeIcon icon={faSun} className="h-3.5 w-3.5" />
