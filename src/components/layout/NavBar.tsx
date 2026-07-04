@@ -30,7 +30,7 @@ export function NavBar() {
 					</span>
 				</Link>
 
-				<nav aria-label="Primary" className="flex items-center gap-4">
+				<nav aria-label="Primary" className="flex shrink-0 items-center gap-4">
 					{headerData.navItems.map((item) => {
 						const isExternal = item.link.startsWith("http");
 						const isActive = !isExternal && pathname === item.link;
