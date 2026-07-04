@@ -1,3 +1,5 @@
+@layer vendor;
+@import "@fortawesome/fontawesome-svg-core/styles.css" layer(vendor);
 @import "tailwindcss";
 
 :root {
