@@ -1,7 +1,21 @@
+import { AboutSection } from "@/components/sections/AboutSection";
+import { BuiltWithSection } from "@/components/sections/BuiltWithSection";
+import { ClosingCtaSection } from "@/components/sections/ClosingCtaSection";
+import { Hero } from "@/components/sections/Hero";
+import { HowItWorksSection } from "@/components/sections/HowItWorksSection";
+import { ProblemSection } from "@/components/sections/ProblemSection";
+import { WhyItMattersSection } from "@/components/sections/WhyItMattersSection";
+
 export default function Home() {
 	return (
-		<div className="flex items-center justify-center h-screen">
-			<h1>Home Page</h1>
-		</div>
+		<>
+			<Hero />
+			<ProblemSection />
+			<AboutSection />
+			<HowItWorksSection />
+			<WhyItMattersSection />
+			<BuiltWithSection />
+			<ClosingCtaSection />
+		</>
 	);
 }

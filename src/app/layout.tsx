@@ -1,6 +1,7 @@
 import { config } from "@fortawesome/fontawesome-svg-core";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { FooterBar } from "@/components/layout/FooterBar";
 import { NavBar } from "@/components/layout/NavBar";
 import "./globals.css";
 
@@ -33,7 +34,10 @@ export default function RootLayout({
 		>
 			<body className="min-h-full flex flex-col">
 				<NavBar />
-				{children}
+				<main className="flex-1 overflow-y-auto">
+					{children}
+					<FooterBar />
+				</main>
 			</body>
 		</html>
 	);
