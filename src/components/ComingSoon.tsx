@@ -14,7 +14,7 @@ export function ComingSoon({
 		<div className="flex w-full flex-1 flex-col items-center justify-center gap-6 px-4 py-16 text-center">
 			<FontAwesomeIcon
 				icon={faScrewdriverWrench}
-				className="!h-[8.4rem] !w-[8.4rem] text-(--color-accent)"
+				className="h-[8.4rem]! w-[8.4rem]! text-(--color-accent)"
 			/>
 
 			<h1 className="whitespace-nowrap text-[clamp(1.75rem,6vw,4.5rem)] font-bold text-(--color-text)">
