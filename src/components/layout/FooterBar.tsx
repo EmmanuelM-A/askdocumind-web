@@ -1,5 +1,5 @@
 import Link from "next/link";
-import footerData from "@/data/footer.json";
+import footerData from "@/data/layout/footer.json";
 
 export function FooterBar() {
 	return (
