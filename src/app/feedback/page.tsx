@@ -1,7 +1,10 @@
+import { ComingSoon } from "@/components/ComingSoon";
+
 export default function FeedbackPage() {
 	return (
-		<div className="flex items-center justify-center h-screen">
-			<h1>Feedback Page</h1>
-		</div>
+		<ComingSoon
+			title="Feedback Page Coming Soon"
+			description="A way to share feedback and bug reports is on the way! Check back soon."
+		/>
 	);
 }
