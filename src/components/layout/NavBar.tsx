@@ -13,7 +13,7 @@ export function NavBar() {
 	const { theme, toggleTheme } = useTheme();
 
 	return (
-		<header className="sticky top-0 z-50 flex justify-center px-4 pt-4">
+		<header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4">
 			<div className="flex w-full max-w-5xl items-center justify-between gap-3 rounded-full border border-(--color-tertiary) bg-(--color-primary)/85 px-3 py-2 shadow-sm backdrop-blur">
 				<Link
 					href={headerData.logo.link}
