@@ -1,5 +1,7 @@
 # Privacy Policy
 
+Last updated: July 2026
+
 ## 1. Overview
 
 AskDocuMind is a document question-answering service. We are committed to handling your data minimally and transparently. This policy explains what we collect, how we use it, and how long we keep it.

@@ -1,5 +1,7 @@
 # Terms of Service
 
+Last updated: July 2026
+
 ## 1. Acceptance
 
 By using AskDocuMind ("the Service"), you agree to these Terms of Service. If you do not agree, do not use the Service.

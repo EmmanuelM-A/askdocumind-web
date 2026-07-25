@@ -26,9 +26,15 @@ const components: Components = {
 
 		return <h2 className="mt-10 mb-3 text-lg font-semibold text-(--color-text)">{children}</h2>;
 	},
-	p: ({ children }) => (
-		<p className="mb-3 text-sm leading-relaxed text-(--color-text)/80">{children}</p>
-	),
+	p: ({ children }) => {
+		const text = getText(children);
+
+		if (text.startsWith("Last updated:")) {
+			return <p className="mt-1 text-sm text-(--color-text)/60">{children}</p>;
+		}
+
+		return <p className="mb-3 text-sm leading-relaxed text-(--color-text)/80">{children}</p>;
+	},
 	ul: ({ children }) => (
 		<ul className="mb-3 space-y-2 text-sm leading-relaxed text-(--color-text)/80">
 			{children}
