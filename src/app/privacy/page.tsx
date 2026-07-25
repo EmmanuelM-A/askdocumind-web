@@ -80,7 +80,7 @@ const components: Components = {
 };
 
 export default async function PrivacyPage() {
-	const filePath = path.join(process.cwd(), "src/data/policy/content.md");
+	const filePath = path.join(process.cwd(), "src/data/privacy/content.md");
 	const content = await fs.readFile(filePath, "utf-8");
 
 	return (
