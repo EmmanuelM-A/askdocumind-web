@@ -7,7 +7,7 @@ import Link from "next/link";
  * @param backTo - The URL to navigate to when the back link button is clicked.
  * @returns A JSX element representing the back link button.
  */
-export function BackLink(buttonText: string, backTo: string) {
+export function BackLink({ buttonText, backTo }: { buttonText: string; backTo: string }) {
 	return (
 		<Link
 			href={backTo}
