@@ -1,17 +1,16 @@
 import architectureData from "@/data/architecture.json";
 
 export function ArchitectureHero() {
-	const { eyebrow, headline, subheadline } = architectureData.hero;
-
 	return (
-		<div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-3 px-4 pt-12 pb-4 text-center sm:px-6">
-			<p className="text-sm font-semibold tracking-wide text-(--color-accent) uppercase">
-				{eyebrow}
-			</p>
-			<h1 className="text-3xl font-bold tracking-tight text-balance text-(--color-text) sm:text-4xl">
-				{headline}
+		// biome-ignore lint/correctness/useUniqueElementIds: anchor-link target for a singleton section, needs a stable id
+		<section
+			id="introduction"
+			className="flex h-[calc(100vh-5rem)] w-full shrink-0 flex-col items-center justify-center gap-4 px-4 text-center sm:px-6"
+		>
+			<h1 className="text-4xl font-bold tracking-tight text-balance text-(--color-text) sm:text-5xl">
+				{architectureData.title}
 			</h1>
-			<p className="text-(--color-text)/70">{subheadline}</p>
-		</div>
+			<p className="max-w-2xl text-(--color-text)/70">{architectureData.description}</p>
+		</section>
 	);
 }

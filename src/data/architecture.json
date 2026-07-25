@@ -1,37 +1,26 @@
 {
-	"hero": {
-		"eyebrow": "Architecture",
-		"headline": "How AskDocuMind is built",
-		"subheadline": "A walkthrough of the system's moving parts — from the request flow to how documents are ingested and retrieved, diagram by diagram."
-	},
+	"title": "Architecture",
+	"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat, enim sed aliquet blandit, leo augue porta sapien, vitae venenatis nulla quam non ex. Donec nec quam urna. Proin pellentesque egestas congue.",
 	"sections": [
 		{
-			"id": "system-overview",
-			"number": 1,
 			"name": "System Overview",
 			"diagram": null,
-			"description": "Placeholder description of the system overview diagram."
+			"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat, enim sed aliquet blandit, leo augue porta sapien, vitae venenatis nulla quam non ex. Donec nec quam urna. Proin pellentesque egestas congue."
 		},
 		{
-			"id": "request-flow",
-			"number": 2,
 			"name": "Request Flow",
 			"diagram": null,
-			"description": "Placeholder description of how a request flows through the system."
+			"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat, enim sed aliquet blandit, leo augue porta sapien, vitae venenatis nulla quam non ex. Donec nec quam urna. Proin pellentesque egestas congue."
 		},
 		{
-			"id": "document-ingestion",
-			"number": 3,
 			"name": "Document Ingestion",
 			"diagram": null,
-			"description": "Placeholder description of the document upload and embedding pipeline."
+			"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat, enim sed aliquet blandit, leo augue porta sapien, vitae venenatis nulla quam non ex. Donec nec quam urna. Proin pellentesque egestas congue."
 		},
 		{
-			"id": "retrieval-pipeline",
-			"number": 4,
 			"name": "Retrieval Pipeline",
 			"diagram": null,
-			"description": "Placeholder description of the retrieval-augmented generation pipeline."
+			"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat, enim sed aliquet blandit, leo augue porta sapien, vitae venenatis nulla quam non ex. Donec nec quam urna. Proin pellentesque egestas congue."
 		}
 	]
 }

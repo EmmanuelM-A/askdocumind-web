@@ -34,7 +34,8 @@ export default function RootLayout({
 		>
 			<body className="min-h-full flex flex-col">
 				<NavBar />
-				<main className="flex flex-1 flex-col overflow-y-auto pt-20">
+				{/* biome-ignore lint/correctness/useUniqueElementIds: singleton root scroll container, needed as a stable target for programmatic scrolling */}
+				<main id="page-scroll" className="flex flex-1 flex-col overflow-y-auto pt-20">
 					{children}
 					<FooterBar />
 				</main>

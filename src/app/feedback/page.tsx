@@ -1,4 +1,4 @@
-import { ComingSoon } from "@/components/ComingSoon";
+import { ComingSoon } from "@/components/utils/ComingSoon";
 
 export default function FeedbackPage() {
 	return (

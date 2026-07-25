@@ -5,8 +5,8 @@ import footerData from "@/data/layout/footer.json";
 export function FooterBar() {
 	return (
 		<footer className="shrink-0 border-t border-(--color-tertiary) bg-(--color-primary)">
-			<div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-3 px-4 py-10 text-center sm:px-6">
-				<div className="flex items-baseline gap-2">
+			<div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-3 px-4 py-6 text-center sm:px-6">
+				<div className="flex flex-col items-center gap-1">
 					<p className="text-2xl font-bold text-(--color-text)">{footerData.appName}</p>
 					<p className="text-xs text-(--color-text)/50">{footerData.version}</p>
 				</div>
