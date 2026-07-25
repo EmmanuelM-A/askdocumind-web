@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { getArchitectureSections } from "@/lib/architecture";
 
 const navItems = [{ id: "introduction", name: "Introduction" }, ...getArchitectureSections()];
@@ -8,8 +9,13 @@ const navItems = [{ id: "introduction", name: "Introduction" }, ...getArchitectu
 export function ArchitectureNav() {
 	const [activeIndex, setActiveIndex] = useState(0);
 	const [diamondTop, setDiamondTop] = useState(0);
+	const [mounted, setMounted] = useState(false);
 	const listRef = useRef<HTMLUListElement | null>(null);
 	const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
+
+	useEffect(() => {
+		setMounted(true);
+	}, []);
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
@@ -48,7 +54,9 @@ export function ArchitectureNav() {
 		return () => window.removeEventListener("resize", updatePosition);
 	}, [activeIndex]);
 
-	return (
+	if (!mounted) return null;
+
+	return createPortal(
 		<nav
 			aria-label="Architecture diagrams"
 			className="fixed top-1/2 left-1/2 z-40 hidden items-stretch gap-4 sm:flex"
@@ -92,6 +100,7 @@ export function ArchitectureNav() {
 					style={{ top: `${diamondTop}px` }}
 				/>
 			</div>
-		</nav>
+		</nav>,
+		document.body,
 	);
 }

@@ -1,3 +1,4 @@
+import { DiagramViewer } from "@/components/architecture/DiagramViewer";
 import { SectionHeadingWithLines } from "@/components/layout/SectionHeadings";
 import type { ArchitectureDiagram } from "@/lib/architecture";
 
@@ -8,9 +9,7 @@ export function ArchitectureSection({ id, name, diagram, description }: Architec
 				<SectionHeadingWithLines title={name} />
 			</div>
 
-			<div className="flex h-72 w-full items-center justify-center rounded-3xl border border-dashed border-(--color-tertiary) bg-(--color-secondary) text-sm text-(--color-text)/40 sm:h-104">
-				{diagram ? name : `[ ${name} diagram placeholder ]`}
-			</div>
+			<DiagramViewer name={name} diagram={diagram} />
 
 			<p className="mt-3 text-justify text-sm text-(--color-text)/70">{description}</p>
 		</section>
