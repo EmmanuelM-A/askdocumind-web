@@ -1,0 +1,37 @@
+{
+	"hero": {
+		"eyebrow": "Architecture",
+		"headline": "How AskDocuMind is built",
+		"subheadline": "A walkthrough of the system's moving parts — from the request flow to how documents are ingested and retrieved, diagram by diagram."
+	},
+	"sections": [
+		{
+			"id": "system-overview",
+			"number": 1,
+			"name": "System Overview",
+			"diagram": null,
+			"description": "Placeholder description of the system overview diagram."
+		},
+		{
+			"id": "request-flow",
+			"number": 2,
+			"name": "Request Flow",
+			"diagram": null,
+			"description": "Placeholder description of how a request flows through the system."
+		},
+		{
+			"id": "document-ingestion",
+			"number": 3,
+			"name": "Document Ingestion",
+			"diagram": null,
+			"description": "Placeholder description of the document upload and embedding pipeline."
+		},
+		{
+			"id": "retrieval-pipeline",
+			"number": 4,
+			"name": "Retrieval Pipeline",
+			"diagram": null,
+			"description": "Placeholder description of the retrieval-augmented generation pipeline."
+		}
+	]
+}
