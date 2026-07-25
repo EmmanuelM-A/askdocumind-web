@@ -5,9 +5,6 @@ import { getArchitectureSections } from "@/lib/architecture";
 
 const navItems = [{ id: "introduction", name: "Introduction" }, ...getArchitectureSections()];
 
-// How far from the top of the viewport a section must cross before it's considered active.
-const ACTIVE_LINE_PX = 140;
-
 export function ArchitectureNav() {
 	const [activeIndex, setActiveIndex] = useState(0);
 	const [diamondTop, setDiamondTop] = useState(0);
@@ -15,30 +12,24 @@ export function ArchitectureNav() {
 	const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
 
 	useEffect(() => {
-		const scrollContainer = document.getElementById("page-scroll");
-		if (!scrollContainer) return;
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.intersectionRatio <= 0.5) continue;
 
-		const updateActiveSection = () => {
-			let currentIndex = 0;
-
-			for (let index = 0; index < navItems.length; index++) {
-				const element = document.getElementById(navItems[index].id);
-				if (element && element.getBoundingClientRect().top <= ACTIVE_LINE_PX) {
-					currentIndex = index;
+					const index = navItems.findIndex((item) => item.id === entry.target.id);
+					if (index !== -1) setActiveIndex(index);
 				}
-			}
+			},
+			{ threshold: 0.5 },
+		);
 
-			setActiveIndex(currentIndex);
-		};
+		for (const item of navItems) {
+			const element = document.getElementById(item.id);
+			if (element) observer.observe(element);
+		}
 
-		updateActiveSection();
-		scrollContainer.addEventListener("scroll", updateActiveSection, { passive: true });
-		window.addEventListener("resize", updateActiveSection);
-
-		return () => {
-			scrollContainer.removeEventListener("scroll", updateActiveSection);
-			window.removeEventListener("resize", updateActiveSection);
-		};
+		return () => observer.disconnect();
 	}, []);
 
 	useEffect(() => {

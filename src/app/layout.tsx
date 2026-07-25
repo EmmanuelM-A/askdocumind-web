@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { FooterBar } from "@/components/layout/FooterBar";
 import { NavBar } from "@/components/layout/NavBar";
+import { ScrollToTop } from "@/components/layout/ScrollToTop";
 import "./globals.css";
 
 config.autoAddCss = false;
@@ -34,6 +35,7 @@ export default function RootLayout({
 		>
 			<body className="min-h-full flex flex-col">
 				<NavBar />
+				<ScrollToTop />
 				{/* biome-ignore lint/correctness/useUniqueElementIds: singleton root scroll container, needed as a stable target for programmatic scrolling */}
 				<main id="page-scroll" className="flex flex-1 flex-col overflow-y-auto pt-20">
 					{children}
