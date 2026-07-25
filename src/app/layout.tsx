@@ -34,7 +34,7 @@ export default function RootLayout({
 		>
 			<body className="min-h-full flex flex-col">
 				<NavBar />
-				<main className="flex-1 overflow-y-auto pt-20">
+				<main className="flex flex-1 flex-col overflow-y-auto pt-20">
 					{children}
 					<FooterBar />
 				</main>

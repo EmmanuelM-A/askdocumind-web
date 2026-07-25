@@ -11,7 +11,7 @@ export function ComingSoon({
 	description = "This page isn't ready yet, but it's on the way. Check back soon.",
 }: ComingSoonProps) {
 	return (
-		<div className="flex min-h-[70vh] w-full flex-col items-center justify-center gap-6 px-4 py-16 text-center">
+		<div className="flex w-full flex-1 flex-col items-center justify-center gap-6 px-4 py-16 text-center">
 			<FontAwesomeIcon
 				icon={faScrewdriverWrench}
 				className="!h-[8.4rem] !w-[8.4rem] text-(--color-accent)"
