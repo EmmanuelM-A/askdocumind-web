@@ -1,13 +1,19 @@
 "use client";
 
-import { faFileLines, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faFileLines, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type ChangeEvent, useRef, useState } from "react";
+import { type ChangeEvent, useRef } from "react";
 
-interface DocumentChip {
+export interface DocumentChip {
 	id: string;
 	name: string;
 	sizeLabel: string;
+	status: "pending" | "uploaded";
+}
+
+interface DocumentChipsProps {
+	documents: DocumentChip[];
+	onDocumentsChange: (documents: DocumentChip[]) => void;
 }
 
 function formatBytes(bytes: number): string {
@@ -16,29 +22,29 @@ function formatBytes(bytes: number): string {
 	return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
-export function DocumentChips() {
-	const [documents, setDocuments] = useState<DocumentChip[]>([]);
+export function DocumentChips({ documents, onDocumentsChange }: DocumentChipsProps) {
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 
 	const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const files = Array.from(event.target.files ?? []);
-		setDocuments((prev) => [
-			...prev,
+		onDocumentsChange([
+			...documents,
 			...files.map((file) => ({
 				id: `${file.name}-${file.lastModified}`,
 				name: file.name,
 				sizeLabel: formatBytes(file.size),
+				status: "pending" as const,
 			})),
 		]);
 		event.target.value = "";
 	};
 
 	const removeDocument = (id: string) => {
-		setDocuments((prev) => prev.filter((doc) => doc.id !== id));
+		onDocumentsChange(documents.filter((doc) => doc.id !== id));
 	};
 
 	return (
-		<div className="flex shrink-0 flex-wrap items-center gap-2 rounded-2xl border border-(--color-tertiary) bg-(--color-secondary) p-3 shadow-sm">
+		<div className="flex min-w-0 flex-1 flex-wrap items-center gap-2 rounded-2xl border border-(--color-tertiary) bg-(--color-secondary) p-3 shadow-sm">
 			<input
 				ref={fileInputRef}
 				type="file"
@@ -54,12 +60,16 @@ export function DocumentChips() {
 					className="flex items-center gap-2 rounded-xl border border-(--color-tertiary) bg-(--color-primary) px-3 py-2"
 				>
 					<FontAwesomeIcon
-						icon={faFileLines}
-						className="h-4! w-4! text-(--color-accent)"
+						icon={doc.status === "uploaded" ? faCheck : faFileLines}
+						className={`h-4! w-4! ${
+							doc.status === "uploaded" ? "text-emerald-500" : "text-(--color-accent)"
+						}`}
 					/>
 					<div className="leading-tight">
 						<p className="text-xs font-medium text-(--color-text)">{doc.name}</p>
-						<p className="text-[11px] text-(--color-text)/60">{doc.sizeLabel}</p>
+						<p className="text-[11px] text-(--color-text)/60">
+							{doc.sizeLabel} · {doc.status === "uploaded" ? "Uploaded" : "Pending"}
+						</p>
 					</div>
 					<button
 						type="button"

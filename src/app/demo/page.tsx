@@ -1,16 +1,31 @@
 "use client";
 
-import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { faGear, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { ChatArea } from "@/components/demo/ChatArea";
 import { ConfigPanel } from "@/components/demo/ConfigPanel";
-import { DocumentChips } from "@/components/demo/DocumentChips";
+import { type DocumentChip, DocumentChips } from "@/components/demo/DocumentChips";
 import demoContent from "@/data/demo/content.json";
 
 export default function DemoPage() {
 	const [isConfigOpen, setIsConfigOpen] = useState(false);
 	const [configurations, setConfigurations] = useState(demoContent.configurations);
+	const [documents, setDocuments] = useState<DocumentChip[]>([]);
+	const [isUploading, setIsUploading] = useState(false);
+
+	const hasPendingDocuments = documents.some((doc) => doc.status === "pending");
+
+	const handleUpload = async () => {
+		if (!hasPendingDocuments || isUploading) return;
+
+		setIsUploading(true);
+		// Demo only: not wired up to the real API yet.
+		await new Promise((resolve) => setTimeout(resolve, 700));
+
+		setDocuments((prev) => prev.map((doc) => ({ ...doc, status: "uploaded" })));
+		setIsUploading(false);
+	};
 
 	return (
 		<div className="mx-auto flex h-full w-full max-w-4xl shrink-0 flex-col gap-4 overflow-hidden px-4 py-16 sm:px-6">
@@ -43,7 +58,22 @@ export default function DemoPage() {
 				/>
 			)}
 
-			<DocumentChips />
+			<div className="flex shrink-0 items-stretch gap-2">
+				<DocumentChips documents={documents} onDocumentsChange={setDocuments} />
+
+				<button
+					type="button"
+					onClick={() => void handleUpload()}
+					disabled={!hasPendingDocuments || isUploading}
+					aria-label={isUploading ? "Uploading" : "Upload"}
+					className="flex shrink-0 items-center justify-center rounded-xl bg-(--color-accent) px-4 text-white transition hover:opacity-90 disabled:opacity-50"
+				>
+					<FontAwesomeIcon
+						icon={faUpload}
+						className={`h-6! w-6! ${isUploading ? "animate-pulse" : ""}`}
+					/>
+				</button>
+			</div>
 
 			<ChatArea />
 		</div>
