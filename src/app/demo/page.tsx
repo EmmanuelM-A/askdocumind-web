@@ -13,7 +13,7 @@ export default function DemoPage() {
 	const [configurations, setConfigurations] = useState(demoContent.configurations);
 
 	return (
-		<div className="mx-auto flex h-[calc(100vh-5rem)] w-full max-w-4xl flex-col gap-4 px-4 py-6 sm:px-6">
+		<div className="mx-auto flex h-full w-full max-w-4xl shrink-0 flex-col gap-4 overflow-hidden px-4 py-16 sm:px-6">
 			<div className="flex shrink-0 items-center justify-between">
 				<div className="flex items-center gap-2">
 					<span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
