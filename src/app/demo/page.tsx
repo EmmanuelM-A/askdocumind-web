@@ -1,16 +1,51 @@
-import { ChatAreaPlaceholder } from "@/components/demo/ChatAreaPlaceholder";
-import { ConfigAreaPlaceholder } from "@/components/demo/ConfigAreaPlaceholder";
-import { DocumentsAreaPlaceholder } from "@/components/demo/DocumentsAreaPlaceholder";
+"use client";
+
+import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
+import { ChatArea } from "@/components/demo/ChatArea";
+import { ConfigPanel } from "@/components/demo/ConfigPanel";
+import { DocumentChips } from "@/components/demo/DocumentChips";
+import demoContent from "@/data/demo/content.json";
 
 export default function DemoPage() {
-	return (
-		<div className="mx-auto flex h-[75vh] min-h-[560px] w-full max-w-6xl flex-col gap-4 px-4 py-6 sm:px-6 lg:flex-row">
-			<ChatAreaPlaceholder />
+	const [isConfigOpen, setIsConfigOpen] = useState(false);
+	const [configurations, setConfigurations] = useState(demoContent.configurations);
 
-			<div className="flex w-full flex-col gap-4 lg:w-80 lg:shrink-0">
-				<DocumentsAreaPlaceholder />
-				<ConfigAreaPlaceholder />
+	return (
+		<div className="mx-auto flex h-[calc(100vh-5rem)] w-full max-w-4xl flex-col gap-4 px-4 py-6 sm:px-6">
+			<div className="flex shrink-0 items-center justify-between">
+				<div className="flex items-center gap-2">
+					<span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+					<p className="text-sm font-medium text-(--color-text)">
+						{demoContent.onConnection.success}
+					</p>
+				</div>
+
+				<button
+					type="button"
+					onClick={() => setIsConfigOpen((prev) => !prev)}
+					className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition ${
+						isConfigOpen
+							? "border-(--color-accent) text-(--color-accent)"
+							: "border-(--color-tertiary) text-(--color-text) hover:border-(--color-accent) hover:text-(--color-accent)"
+					}`}
+				>
+					<FontAwesomeIcon icon={faGear} className="h-4! w-4!" />
+					Configuration
+				</button>
 			</div>
+
+			{isConfigOpen && (
+				<ConfigPanel
+					configurations={configurations}
+					onConfigurationsChange={setConfigurations}
+				/>
+			)}
+
+			<DocumentChips />
+
+			<ChatArea />
 		</div>
 	);
 }

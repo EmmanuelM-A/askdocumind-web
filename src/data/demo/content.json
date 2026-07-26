@@ -1,0 +1,22 @@
+{
+    "onConnection": {
+        "success": "Chat Is Ready",
+        "failure": "Chat Is Not Ready"
+    },
+    "configurations": [
+        {
+            "label": "Configuration 1",
+            "checked": false 
+        },
+        {
+            "label": "Configuration 2",
+            "checked": true 
+        },
+        {
+            "label": "Configuration 3",
+            "checked": false 
+        }
+    ],
+    "chatBoxPlaceholder": "Ask a question about your uploaded documents to start chatting",
+    "chatBoxInputPlaceholder": "Ask a question about your document"
+}
