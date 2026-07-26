@@ -1,8 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import homeData from "@/data/home/home.json";
 
 export function Hero() {
-	const { eyebrow, headline, subheadline, buttons } = homeData.hero;
+	const { eyebrow, headline, subheadline, buttons, productPhoto } = homeData.hero;
 
 	return (
 		<section className="mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-5xl flex-col items-center justify-center gap-6 px-4 text-center sm:px-6">
@@ -42,8 +43,18 @@ export function Hero() {
 				})}
 			</div>
 
-			<div className="mt-8 flex h-56 w-full max-w-2xl items-center justify-center rounded-3xl border border-dashed border-(--color-tertiary) bg-(--color-secondary) text-sm text-(--color-text)/40">
-				[ product preview / screenshot placeholder ]
+			<div className="mt-8 flex h-56 w-full max-w-2xl items-center justify-center overflow-hidden rounded-3xl border border-dashed border-(--color-tertiary) bg-(--color-secondary) text-sm text-(--color-text)/40">
+				{productPhoto ? (
+					<Image
+						src={productPhoto}
+						alt="Image of AskDocuMind in use"
+						width={640}
+						height={360}
+						className="h-full w-full object-cover"
+					/>
+				) : (
+					"Image of AskDocuMind in use"
+				)}
 			</div>
 		</section>
 	);

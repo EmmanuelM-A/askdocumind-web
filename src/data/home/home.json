@@ -13,46 +13,46 @@
 				"href": "https://github.com/EmmanuelM-A/askdocumind-api"
 			}
 		],
-        "productPhoto": null
+		"productPhoto": null
 	},
 	"problem": {
 		"heading": "What is The Problem?",
-        "subtext": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        "cards": [
-            {
-                "icon": null,
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat, enim sed aliquet blandit, leo augue porta sapien, vitae venenatis nulla quam non ex. Donec nec quam urna. Proin pellentesque egestas congue."
-            },
-            {
-                "icon": null,
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat, enim sed aliquet blandit, leo augue porta sapien, vitae venenatis nulla quam non ex. Donec nec quam urna. Proin pellentesque egestas congue."
-            },
-            {
-                "icon": null,
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat, enim sed aliquet blandit, leo augue porta sapien, vitae venenatis nulla quam non ex. Donec nec quam urna. Proin pellentesque egestas congue."
-            }
-        ]
+		"subtext": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+		"cards": [
+			{
+				"icon": null,
+				"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat, enim sed aliquet blandit, leo augue porta sapien, vitae venenatis nulla quam non ex. Donec nec quam urna. Proin pellentesque egestas congue."
+			},
+			{
+				"icon": null,
+				"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat, enim sed aliquet blandit, leo augue porta sapien, vitae venenatis nulla quam non ex. Donec nec quam urna. Proin pellentesque egestas congue."
+			},
+			{
+				"icon": null,
+				"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat, enim sed aliquet blandit, leo augue porta sapien, vitae venenatis nulla quam non ex. Donec nec quam urna. Proin pellentesque egestas congue."
+			}
+		]
 	},
 	"about": {
 		"heading": "What AskDocuMind does",
 		"body": "AskDocuMind is a document-aware chatbot API. Upload a document, ask a question, and get back an answer that's grounded in your file's actual content — with sources, not guesses.",
-        "image": null
+		"image": null
 	},
 	"whoThisIsFor": {
 		"heading": "Who this is for",
 		"audience": [
 			{
-                "icon": null,
-                "description": ""
-            },
-            {
-                "icon": null,
-                "description": ""
-            },
-            {
-                "icon": null,
-                "description": ""
-            }
+				"icon": null,
+				"description": "Developers evaluating a document QA API"
+			},
+			{
+				"icon": null,
+				"description": "Students and researchers digging through long papers"
+			},
+			{
+				"icon": null,
+				"description": "Anyone tired of re-reading a PDF to find one answer"
+			}
 		]
 	},
 	"howItWorks": {
@@ -75,30 +75,54 @@
 				"description": "Receive grounded, cited responses."
 			}
 		],
-        "techStack": ["Tech 1", "Tech 2"]
+		"techStackHeading": "Built with",
+		"techStack": [
+			"Tech 1",
+			"Tech 2",
+			"Tech 3",
+			"Tech 4",
+			"Tech 5",
+			"Tech 6",
+			"Tech 7",
+			"Tech 8",
+			"Tech 9",
+			"Tech 10"
+		],
+		"ctaText": "Curious how it works under the hood?",
+		"cta": { "label": "View the architecture", "href": "/architecture" }
 	},
 	"whyItMatters": {
 		"heading": "Why it matters",
 		"reasons": [
 			{
-                "icon": null,
+				"icon": null,
 				"reason": "Grounded answers",
 				"explanation": "Responses trace back to your document, not a hallucination."
 			},
 			{
-                "icon": null,
-				"reason": "Grounded answers",
-				"explanation": "Responses trace back to your document, not a hallucination."
+				"icon": null,
+				"reason": "Fast",
+				"explanation": "Skip the manual searching and skimming."
 			},
 			{
-                "icon": null,
-				"reason": "Grounded answers",
-				"explanation": "Responses trace back to your document, not a hallucination."
+				"icon": null,
+				"reason": "Session-based & private",
+				"explanation": "Documents aren't kept around forever."
 			},
 			{
-                "icon": null,
-				"reason": "Grounded answers",
-				"explanation": "Responses trace back to your document, not a hallucination."
+				"icon": null,
+				"reason": "Open source",
+				"explanation": "The full implementation is on GitHub."
+			},
+			{
+				"icon": null,
+				"reason": "Multi-format support",
+				"explanation": "Upload PDFs, DOCX, TXT, or Markdown files."
+			},
+			{
+				"icon": null,
+				"reason": "Easy integration",
+				"explanation": "A simple API that drops into any application."
 			}
 		]
 	},
