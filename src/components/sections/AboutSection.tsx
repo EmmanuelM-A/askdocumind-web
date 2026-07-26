@@ -1,4 +1,4 @@
-import homeData from "@/data/home.json";
+import homeData from "@/data/home/home.json";
 
 export function AboutSection() {
 	const { title, body } = homeData.about;

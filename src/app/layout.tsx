@@ -33,6 +33,17 @@ export default function RootLayout({
 			lang="en"
 			className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
 		>
+			<head>
+				<script
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: must run before hydration to set the theme attribute before first paint, avoiding a flash of the wrong theme
+					dangerouslySetInnerHTML={{
+						__html: `try {
+	var theme = localStorage.getItem("askdocumindweb-theme") || "light";
+	document.documentElement.setAttribute("data-theme", theme);
+} catch (e) {}`,
+					}}
+				/>
+			</head>
 			<body className="min-h-full flex flex-col">
 				<NavBar />
 				<ScrollToTop />

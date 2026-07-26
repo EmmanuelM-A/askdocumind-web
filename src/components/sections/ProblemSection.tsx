@@ -1,11 +1,11 @@
-import homeData from "@/data/home.json";
+import homeData from "@/data/home/home.json";
 
 export function ProblemSection() {
 	const { title, body } = homeData.problem;
 
 	return (
-		<section className="bg-(--color-secondary)/60">
-			<div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-4 px-4 py-16 text-center sm:px-6">
+		<section className="flex min-h-[calc(100vh-5rem)] w-full items-center justify-center bg-(--color-secondary)/60">
+			<div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-4 px-4 text-center sm:px-6">
 				<h2 className="text-2xl font-bold tracking-tight text-(--color-text) sm:text-3xl">
 					{title}
 				</h2>

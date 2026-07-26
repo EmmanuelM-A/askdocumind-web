@@ -1,0 +1,110 @@
+{
+	"hero": {
+		"eyebrow": "AskDocuMind API",
+		"headline": "Ask your documents anything",
+		"subheadline": "Upload a file, ask a question, and get an answer grounded in your content - instantly.",
+		"buttons": [
+			{
+				"label": "Try the Demo",
+				"href": "/demo"
+			},
+			{
+				"label": "View Code",
+				"href": "https://github.com/EmmanuelM-A/askdocumind-api"
+			}
+		],
+        "productPhoto": null
+	},
+	"problem": {
+		"heading": "What is The Problem?",
+        "subtext": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        "cards": [
+            {
+                "icon": null,
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat, enim sed aliquet blandit, leo augue porta sapien, vitae venenatis nulla quam non ex. Donec nec quam urna. Proin pellentesque egestas congue."
+            },
+            {
+                "icon": null,
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat, enim sed aliquet blandit, leo augue porta sapien, vitae venenatis nulla quam non ex. Donec nec quam urna. Proin pellentesque egestas congue."
+            },
+            {
+                "icon": null,
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat, enim sed aliquet blandit, leo augue porta sapien, vitae venenatis nulla quam non ex. Donec nec quam urna. Proin pellentesque egestas congue."
+            }
+        ]
+	},
+	"about": {
+		"heading": "What AskDocuMind does",
+		"body": "AskDocuMind is a document-aware chatbot API. Upload a document, ask a question, and get back an answer that's grounded in your file's actual content — with sources, not guesses.",
+        "image": null
+	},
+	"whoThisIsFor": {
+		"heading": "Who this is for",
+		"audience": [
+			{
+                "icon": null,
+                "description": ""
+            },
+            {
+                "icon": null,
+                "description": ""
+            },
+            {
+                "icon": null,
+                "description": ""
+            }
+		]
+	},
+	"howItWorks": {
+		"heading": "How it works",
+		"steps": [
+			{
+				"title": "Upload",
+				"description": "Add a PDF, DOCX, TXT, or Markdown file."
+			},
+			{
+				"title": "Process",
+				"description": "Your document is chunked and embedded."
+			},
+			{
+				"title": "Ask",
+				"description": "Ask questions about it in natural language."
+			},
+			{
+				"title": "Get Answers",
+				"description": "Receive grounded, cited responses."
+			}
+		],
+        "techStack": ["Tech 1", "Tech 2"]
+	},
+	"whyItMatters": {
+		"heading": "Why it matters",
+		"reasons": [
+			{
+                "icon": null,
+				"reason": "Grounded answers",
+				"explanation": "Responses trace back to your document, not a hallucination."
+			},
+			{
+                "icon": null,
+				"reason": "Grounded answers",
+				"explanation": "Responses trace back to your document, not a hallucination."
+			},
+			{
+                "icon": null,
+				"reason": "Grounded answers",
+				"explanation": "Responses trace back to your document, not a hallucination."
+			},
+			{
+                "icon": null,
+				"reason": "Grounded answers",
+				"explanation": "Responses trace back to your document, not a hallucination."
+			}
+		]
+	},
+	"closingCta": {
+		"heading": "Ready to try it?",
+		"description": "See AskDocuMind answer questions about a real document.",
+		"cta": { "label": "Try the Demo", "href": "/demo" }
+	}
+}
