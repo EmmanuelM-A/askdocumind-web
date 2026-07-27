@@ -1,4 +1,4 @@
-import { IconSlot } from "@/components/sections/IconSlot";
+import { IconSlot } from "@/components/home/IconSlot";
 import homeData from "@/data/home/home.json";
 
 export function ProblemSection() {
