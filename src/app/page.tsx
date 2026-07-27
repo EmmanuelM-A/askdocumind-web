@@ -1,10 +1,10 @@
-import { AboutSection } from "@/components/sections/AboutSection";
-import { ClosingCtaSection } from "@/components/sections/ClosingCtaSection";
-import { Hero } from "@/components/sections/Hero";
-import { HowItWorksSection } from "@/components/sections/HowItWorksSection";
-import { ProblemSection } from "@/components/sections/ProblemSection";
-import { WhoThisIsForSection } from "@/components/sections/WhoThisIsForSection";
-import { WhyItMattersSection } from "@/components/sections/WhyItMattersSection";
+import { AboutSection } from "@/components/home/AboutSection";
+import { ClosingCtaSection } from "@/components/home/ClosingCtaSection";
+import { Hero } from "@/components/home/Hero";
+import { HowItWorksSection } from "@/components/home/HowItWorksSection";
+import { ProblemSection } from "@/components/home/ProblemSection";
+import { WhoThisIsForSection } from "@/components/home/WhoThisIsForSection";
+import { WhyItMattersSection } from "@/components/home/WhyItMattersSection";
 
 export default function Home() {
 	return (

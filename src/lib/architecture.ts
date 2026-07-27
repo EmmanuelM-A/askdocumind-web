@@ -1,4 +1,4 @@
-import architectureData from "@/data/architecture.json";
+import architectureData from "@/data/architecture/architecture.json";
 
 export interface ArchitectureDiagram {
 	id: string;
