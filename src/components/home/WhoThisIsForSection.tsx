@@ -8,13 +8,13 @@ export function WhoThisIsForSection() {
 	const { heading, audience } = homeData.whoThisIsFor;
 
 	return (
-		<section className="flex min-h-[70vh] w-full items-center justify-center bg-(--color-secondary)/60">
-			<div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-16 px-4 py-16 text-center sm:px-6 sm:py-20">
+		<section className="w-full bg-(--color-secondary)/60">
+			<div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-10 px-4 py-16 text-center sm:gap-16 sm:px-6 sm:py-20">
 				<h2 className="text-2xl font-bold tracking-tight text-(--color-text) sm:text-3xl">
 					{heading}
 				</h2>
 
-				<div className="grid w-full gap-6 sm:grid-cols-3">
+				<div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 					{audience.map((item, index) => (
 						<div
 							key={item.description}

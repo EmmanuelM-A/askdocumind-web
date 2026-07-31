@@ -6,16 +6,18 @@ export function Hero() {
 	const { eyebrow, headline, subheadline, buttons, productPhoto } = homeData.hero;
 
 	return (
-		<section className="mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-5xl flex-col items-center justify-center gap-6 px-4 text-center sm:px-6">
+		<section className="mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-5xl flex-col items-center justify-center gap-4 px-4 py-12 text-center sm:gap-6 sm:px-6">
 			<p className="text-sm font-semibold tracking-wide text-(--color-accent) uppercase">
 				{eyebrow}
 			</p>
 
-			<h1 className="text-4xl font-bold tracking-tight text-balance text-(--color-text) sm:text-5xl">
+			<h1 className="text-2xl font-bold tracking-tight text-balance text-(--color-text) sm:text-3xl md:text-4xl">
 				{headline}
 			</h1>
 
-			<p className="max-w-2xl text-lg text-balance text-(--color-text)/70">{subheadline}</p>
+			<p className="max-w-2xl text-sm text-balance text-(--color-text)/70 sm:text-base">
+				{subheadline}
+			</p>
 
 			<div className="mt-2 flex flex-wrap items-center justify-center gap-3">
 				{buttons.map((button, index) => {
@@ -43,7 +45,7 @@ export function Hero() {
 				})}
 			</div>
 
-			<div className="mt-8 flex h-56 w-full max-w-2xl items-center justify-center overflow-hidden rounded-3xl border border-dashed border-(--color-tertiary) bg-(--color-secondary) text-sm text-(--color-text)/40">
+			<div className="mt-6 flex h-44 w-full max-w-2xl items-center justify-center overflow-hidden rounded-3xl border border-dashed border-(--color-tertiary) bg-(--color-secondary) text-sm text-(--color-text)/40 sm:mt-8 sm:h-56 md:h-64">
 				{productPhoto ? (
 					<Image
 						src={productPhoto}

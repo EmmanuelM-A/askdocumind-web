@@ -5,7 +5,7 @@ export function ClosingCtaSection() {
 	const { heading, description, cta } = homeData.closingCta;
 
 	return (
-		<section className="mx-auto flex w-full max-w-5xl flex-col items-center gap-8 px-4 py-56 text-center sm:px-6">
+		<section className="mx-auto flex w-full max-w-5xl flex-col items-center gap-8 px-4 py-20 text-center sm:px-6 sm:py-32 md:py-44 lg:py-56">
 			<div className="flex flex-col items-center gap-5">
 				<h2 className="text-2xl font-bold tracking-tight text-(--color-text) sm:text-3xl">
 					{heading}

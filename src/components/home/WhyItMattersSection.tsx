@@ -22,13 +22,13 @@ export function WhyItMattersSection() {
 	const { heading, reasons } = homeData.whyItMatters;
 
 	return (
-		<section className="flex min-h-[calc((100vh-5rem)*0.85)] w-full items-center justify-center bg-(--color-secondary)/60">
-			<div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
+		<section className="w-full bg-(--color-secondary)/60">
+			<div className="mx-auto w-full max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
 				<h2 className="text-center text-2xl font-bold tracking-tight text-(--color-text) sm:text-3xl">
 					{heading}
 				</h2>
 
-				<div className="mt-16 grid gap-4 sm:grid-cols-2">
+				<div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 					{reasons.map((item) => (
 						<div
 							key={item.reason}
