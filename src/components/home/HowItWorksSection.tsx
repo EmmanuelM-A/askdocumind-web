@@ -5,13 +5,13 @@ export function HowItWorksSection() {
 	const { heading, steps, techStackHeading, techStack, ctaText, cta } = homeData.howItWorks;
 
 	return (
-		<section className="flex min-h-[calc((100vh-5rem)*0.9)] w-full items-center justify-center">
-			<div className="mx-auto w-full max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
+		<section className="w-full">
+			<div className="mx-auto w-full max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
 				<h2 className="text-center text-2xl font-bold tracking-tight text-(--color-text) sm:text-3xl">
 					{heading}
 				</h2>
 
-				<div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+				<div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
 					{steps.map((step, index) => (
 						<div
 							key={step.title}
