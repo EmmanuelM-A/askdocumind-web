@@ -2,7 +2,9 @@
 
 import { faGear, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createAnonymousUserSession } from "@/api/auth-endpoints.ts";
+import { initChatSession } from "@/api/chat-session-endpoints.ts";
 import { ChatArea } from "@/components/demo/ChatArea";
 import { ConfigPanel } from "@/components/demo/ConfigPanel";
 import { type DocumentChip, DocumentChips } from "@/components/demo/DocumentChips";
@@ -13,8 +15,34 @@ export default function DemoPage() {
 	const [configurations, setConfigurations] = useState(demoContent.configurations);
 	const [documents, setDocuments] = useState<DocumentChip[]>([]);
 	const [isUploading, setIsUploading] = useState(false);
+	const [connectionStatus, setConnectionStatus] = useState<"default" | "success" | "failure">(
+		"default",
+	);
 
 	const hasPendingDocuments = documents.some((doc) => doc.status === "pending");
+
+	useEffect(() => {
+		let cancelled = false;
+
+		(async () => {
+			try {
+				const userId = await createAnonymousUserSession();
+				console.log("Anonymous user session created:", userId);
+
+				const chatSession = await initChatSession({ title: "Demo Chat" });
+				console.log("Chat session initialized:", chatSession);
+
+				if (!cancelled) setConnectionStatus("success");
+			} catch (error) {
+				console.error("Failed to connect chat session:", error);
+				if (!cancelled) setConnectionStatus("failure");
+			}
+		})();
+
+		return () => {
+			cancelled = true;
+		};
+	}, []);
 
 	const handleUpload = async () => {
 		if (!hasPendingDocuments || isUploading) return;
@@ -31,9 +59,17 @@ export default function DemoPage() {
 		<div className="mx-auto flex h-full w-full max-w-4xl shrink-0 flex-col gap-4 overflow-hidden px-4 py-16 sm:px-6">
 			<div className="flex shrink-0 items-center justify-between">
 				<div className="flex items-center gap-2">
-					<span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+					<span
+						className={`h-2.5 w-2.5 rounded-full ${
+							connectionStatus === "success"
+								? "bg-emerald-500"
+								: connectionStatus === "failure"
+									? "bg-red-500"
+									: "bg-gray-400"
+						}`}
+					/>
 					<p className="text-sm font-medium text-(--color-text)">
-						{demoContent.onConnection.success}
+						{demoContent.onConnection[connectionStatus]}
 					</p>
 				</div>
 

@@ -3,14 +3,14 @@
  */
 export const settings = {
 	api: {
-		ENV: import.meta.env.VITE_ENV ?? "development",
-		BASE_URL: import.meta.env.VITE_ASK_DOCU_MIND_API_BASE_URL,
-		BASE_VERSION: import.meta.env.VITE_ASK_DOCU_MIND_API_VERSION ?? "1",
-		IS_WEB_SEARCH_ENABLED: Boolean(import.meta.env.VITE_WEB_SEARCH_ENABLED === "true") ?? false,
-		SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN,
+		ENV: process.env.NEXT_PUBLIC_ENV ?? "development",
+		BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL ?? "",
+		BASE_VERSION: process.env.NEXT_PUBLIC_API_VERSION ?? "1",
+		IS_WEB_SEARCH_ENABLED: process.env.NEXT_PUBLIC_WEB_SEARCH_ENABLED === "true",
+		SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
 	},
 
 	documents: {
-		MAX_MB_PER_CHAT: Number(import.meta.env.VITE_MAX_FILES_MB_PER_CHAT) || 1,
+		MAX_MB_PER_CHAT: Number(process.env.NEXT_PUBLIC_MAX_FILES_MB_PER_CHAT) || 1,
 	},
 };
