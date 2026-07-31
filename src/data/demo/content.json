@@ -6,15 +6,7 @@
 	},
 	"configurations": [
 		{
-			"label": "Configuration 1",
-			"checked": false
-		},
-		{
-			"label": "Configuration 2",
-			"checked": true
-		},
-		{
-			"label": "Configuration 3",
+			"label": "Enable Web Search Fallback",
 			"checked": false
 		}
 	],
