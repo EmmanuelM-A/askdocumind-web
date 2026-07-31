@@ -4,7 +4,7 @@ import type { ArchitectureDiagram } from "@/lib/architecture";
 
 export function ArchitectureSection({ id, name, diagram, description }: ArchitectureDiagram) {
 	return (
-		<section id={id} className="flex min-h-[70vh] w-full flex-col justify-center scroll-mt-24">
+		<section id={id} className="w-full scroll-mt-24">
 			<div className="-mt-6 [&_h2]:text-lg">
 				<SectionHeadingWithLines title={name} />
 			</div>

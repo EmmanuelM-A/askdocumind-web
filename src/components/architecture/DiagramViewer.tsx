@@ -30,7 +30,7 @@ export function DiagramViewer({ name, diagram }: DiagramViewerProps) {
 			<button
 				type="button"
 				onClick={() => setIsOpen(true)}
-				className="flex h-72 w-full cursor-zoom-in items-center justify-center rounded-3xl border border-dashed border-(--color-tertiary) bg-(--color-secondary) text-sm text-(--color-text)/40 transition hover:border-(--color-accent) sm:h-104"
+				className="flex h-48 w-full cursor-zoom-in items-center justify-center rounded-3xl border border-dashed border-(--color-tertiary) bg-(--color-secondary) text-sm text-(--color-text)/40 transition hover:border-(--color-accent) sm:h-72 md:h-104"
 			>
 				{diagram ? name : `[ ${name} diagram placeholder ]`}
 			</button>
@@ -66,7 +66,7 @@ export function DiagramViewer({ name, diagram }: DiagramViewerProps) {
 							className="max-h-[85vh] w-auto max-w-[90vw] rounded-2xl object-contain"
 						/>
 					) : (
-						<div className="flex h-72 w-full max-w-2xl items-center justify-center rounded-3xl bg-(--color-secondary) text-sm text-(--color-text)/40 sm:h-104">
+						<div className="flex h-48 w-full max-w-2xl items-center justify-center rounded-3xl bg-(--color-secondary) text-sm text-(--color-text)/40 sm:h-72 md:h-104">
 							{`[ ${name} diagram placeholder ]`}
 						</div>
 					)}
