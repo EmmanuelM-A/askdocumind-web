@@ -1,4 +1,15 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app)
+
+## THINGS TO DO
+
+- ~~Sort out webpage responsiveness~~
+- Connect backend to frontend
+- Implement the feedback page/tabs
+- Tests
+- Cleanup code and remove unnecessary files
+- Last minute checks and fixes
+- Deploy to Vercel
+- Add to social media and promote the website
 
 ## Getting Started
 
