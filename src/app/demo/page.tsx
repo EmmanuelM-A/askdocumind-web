@@ -5,10 +5,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { createAnonymousUserSession } from "@/api/auth-endpoints.ts";
 import { initChatSession } from "@/api/chat-session-endpoints.ts";
+import { uploadDocuments } from "@/api/document-endpoints.ts";
 import { ChatArea } from "@/components/demo/ChatArea";
 import { ConfigPanel } from "@/components/demo/ConfigPanel";
 import { type DocumentChip, DocumentChips } from "@/components/demo/DocumentChips";
 import demoContent from "@/data/demo/content.json";
+import type { UUID } from "@/types/api.ts";
 
 export default function DemoPage() {
 	const [isConfigOpen, setIsConfigOpen] = useState(false);
@@ -18,6 +20,7 @@ export default function DemoPage() {
 	const [connectionStatus, setConnectionStatus] = useState<"default" | "success" | "failure">(
 		"default",
 	);
+	const [chatId, setChatId] = useState<UUID | null>(null);
 
 	const hasPendingDocuments = documents.some((doc) => doc.status === "pending");
 
@@ -32,7 +35,10 @@ export default function DemoPage() {
 				const chatSession = await initChatSession({ title: "Demo Chat" });
 				console.log("Chat session initialized:", chatSession);
 
-				if (!cancelled) setConnectionStatus("success");
+				if (!cancelled) {
+					setChatId(chatSession.chat_id);
+					setConnectionStatus("success");
+				}
 			} catch (error) {
 				console.error("Failed to connect chat session:", error);
 				if (!cancelled) setConnectionStatus("failure");
@@ -45,14 +51,27 @@ export default function DemoPage() {
 	}, []);
 
 	const handleUpload = async () => {
-		if (!hasPendingDocuments || isUploading) return;
+		if (!hasPendingDocuments || isUploading || !chatId) return;
+
+		const pendingDocuments = documents.filter((doc) => doc.status === "pending");
 
 		setIsUploading(true);
-		// Demo only: not wired up to the real API yet.
-		await new Promise((resolve) => setTimeout(resolve, 700));
+		try {
+			const response = await uploadDocuments({
+				chatSessionId: chatId,
+				documents: pendingDocuments.map((doc) => doc.file),
+			});
+			console.log("Documents uploaded:", response);
 
-		setDocuments((prev) => prev.map((doc) => ({ ...doc, status: "uploaded" })));
-		setIsUploading(false);
+			const pendingIds = new Set(pendingDocuments.map((doc) => doc.id));
+			setDocuments((prev) =>
+				prev.map((doc) => (pendingIds.has(doc.id) ? { ...doc, status: "uploaded" } : doc)),
+			);
+		} catch (error) {
+			console.error("Failed to upload documents:", error);
+		} finally {
+			setIsUploading(false);
+		}
 	};
 
 	return (
@@ -100,7 +119,7 @@ export default function DemoPage() {
 				<button
 					type="button"
 					onClick={() => void handleUpload()}
-					disabled={!hasPendingDocuments || isUploading}
+					disabled={!hasPendingDocuments || isUploading || !chatId}
 					aria-label={isUploading ? "Uploading" : "Upload"}
 					className="flex shrink-0 items-center justify-center rounded-xl bg-(--color-accent) px-4 text-white transition hover:opacity-90 disabled:opacity-50"
 				>

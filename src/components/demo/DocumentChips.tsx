@@ -9,6 +9,7 @@ export interface DocumentChip {
 	name: string;
 	sizeLabel: string;
 	status: "pending" | "uploaded";
+	file: File;
 }
 
 interface DocumentChipsProps {
@@ -54,6 +55,7 @@ export function DocumentChips({ documents, onDocumentsChange }: DocumentChipsPro
 				name: file.name,
 				sizeLabel: formatBytes(file.size),
 				status: "pending" as const,
+				file,
 			})),
 		]);
 	};
