@@ -12,6 +12,35 @@ import { type DocumentChip, DocumentChips } from "@/components/demo/DocumentChip
 import demoContent from "@/data/demo/content.json";
 import { formatBytes } from "@/lib/format.ts";
 import type { UUID } from "@/types/api.ts";
+import type { Document } from "@/types/documents.ts";
+
+// Module-level (not component state) so the bootstrap only actually runs once per
+// tab session, even though the effect below re-mounts on every client-side
+// navigation into this page (and twice per mount in dev, per React's StrictMode).
+let bootstrapPromise: Promise<{ chatId: UUID; existingDocuments: Document[] }> | null = null;
+
+function bootstrapChatSession() {
+	if (!bootstrapPromise) {
+		bootstrapPromise = (async () => {
+			const userId = await createAnonymousUserSession();
+			console.log("Anonymous user session created:", userId);
+
+			const chatSession = await initChatSession({ title: "Demo Chat" });
+			console.log("Chat session initialized:", chatSession);
+
+			const existingDocuments = await getUploadedDocuments(chatSession.chat_id);
+			console.log("Existing documents fetched:", existingDocuments);
+
+			return { chatId: chatSession.chat_id, existingDocuments };
+		})().catch((error) => {
+			// Let the next mount retry instead of being stuck on a failed attempt forever.
+			bootstrapPromise = null;
+			throw error;
+		});
+	}
+
+	return bootstrapPromise;
+}
 
 export default function DemoPage() {
 	const [isConfigOpen, setIsConfigOpen] = useState(false);
@@ -28,34 +57,25 @@ export default function DemoPage() {
 	useEffect(() => {
 		let cancelled = false;
 
-		(async () => {
-			try {
-				const userId = await createAnonymousUserSession();
-				console.log("Anonymous user session created:", userId);
+		bootstrapChatSession()
+			.then(({ chatId: bootstrappedChatId, existingDocuments }) => {
+				if (cancelled) return;
 
-				const chatSession = await initChatSession({ title: "Demo Chat" });
-				console.log("Chat session initialized:", chatSession);
-
-				const existingDocuments = await getUploadedDocuments(chatSession.chat_id);
-				console.log("Existing documents fetched:", existingDocuments);
-
-				if (!cancelled) {
-					setChatId(chatSession.chat_id);
-					setDocuments(
-						existingDocuments.map((doc) => ({
-							id: doc.id,
-							name: doc.source,
-							sizeLabel: formatBytes(doc.source_size),
-							status: "uploaded",
-						})),
-					);
-					setConnectionStatus("success");
-				}
-			} catch (error) {
+				setChatId(bootstrappedChatId);
+				setDocuments(
+					existingDocuments.map((doc) => ({
+						id: doc.id,
+						name: doc.source,
+						sizeLabel: formatBytes(doc.source_size),
+						status: "uploaded",
+					})),
+				);
+				setConnectionStatus("success");
+			})
+			.catch((error) => {
 				console.error("Failed to connect chat session:", error);
 				if (!cancelled) setConnectionStatus("failure");
-			}
-		})();
+			});
 
 		return () => {
 			cancelled = true;
