@@ -1,7 +1,7 @@
 {
 	"appName": "AskDocuMind",
 	"version": "v2.0.0",
-	"description": "A Document-aware chatbot built with Python, LangChain and Next.js",
+	"description": "A Document-aware chatbot built with Python, LangChain and pgvector",
 	"copyright": "© 2026 AskDocuMind. All rights reserved.",
 	"links": [
 		{
