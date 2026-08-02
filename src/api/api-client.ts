@@ -291,6 +291,8 @@ export async function sendRequest({
 				}, timeoutMs);
 			}
 
+			logger.debug(`[API-CLIENT] Sending request: ${method.toUpperCase()} ${url}`);
+
 			const response: Response = await fetch(url, optionsFetch);
 
 			const data: unknown = await safeParseJson(response);
@@ -343,7 +345,7 @@ async function safeParseJson(response: Response): Promise<unknown> {
 
 		return JSON.parse(text);
 	} catch (parseError) {
-		logger.warn(`[API-CLIENT] Failed to parse JSON response:`, parseError);
+		logger.warn({ parseError }, "[API-CLIENT] Failed to parse JSON response");
 		return null;
 	}
 }
