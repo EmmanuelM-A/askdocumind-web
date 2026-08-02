@@ -3,42 +3,70 @@
 import { faComments } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { chatWithChatbot } from "@/api/chatbot-endpoints.ts";
 import demoContent from "@/data/demo/content.json";
+import type { UUID } from "@/types/api.ts";
 
-interface ChatBubble {
+export interface ChatBubble {
 	id: string;
 	role: "USER" | "ASSISTANT";
 	content: string;
+	sources?: string[] | null;
 }
 
-export function ChatArea() {
+interface ChatAreaProps {
+	chatId: UUID | null;
+	hasUploadedDocuments: boolean;
+	webSearchEnabled: boolean;
+	messages: ChatBubble[];
+	onMessagesChange: (messages: ChatBubble[]) => void;
+}
+
+export function ChatArea({
+	chatId,
+	hasUploadedDocuments,
+	webSearchEnabled,
+	messages,
+	onMessagesChange,
+}: ChatAreaProps) {
 	const [draft, setDraft] = useState("");
-	const [messages, setMessages] = useState<ChatBubble[]>([]);
 	const [isSending, setIsSending] = useState(false);
+
+	const canSend = Boolean(draft.trim()) && hasUploadedDocuments && Boolean(chatId) && !isSending;
 
 	const handleSendMessage = async () => {
 		const trimmedDraft = draft.trim();
-		if (!trimmedDraft || isSending) return;
+		if (!trimmedDraft || isSending || !hasUploadedDocuments || !chatId) return;
 
 		setDraft("");
-		setMessages((prev) => [
-			...prev,
-			{ id: `${Date.now()}-user`, role: "USER", content: trimmedDraft },
-		]);
+		const userMessage: ChatBubble = {
+			id: `${Date.now()}-user`,
+			role: "USER",
+			content: trimmedDraft,
+		};
+		onMessagesChange([...messages, userMessage]);
 		setIsSending(true);
 
-		// Demo only: not wired up to the real API yet.
-		await new Promise((resolve) => setTimeout(resolve, 700));
+		try {
+			const response = await chatWithChatbot({
+				user_query: trimmedDraft,
+				chat_id: chatId,
+				web_search_enabled: webSearchEnabled,
+			});
+			console.log("Chat response received:", response);
 
-		setMessages((prev) => [
-			...prev,
-			{
+			const assistantMessage: ChatBubble = {
 				id: `${Date.now()}-assistant`,
 				role: "ASSISTANT",
-				content: "This is a demo response. Connect the API to see real, grounded answers.",
-			},
-		]);
-		setIsSending(false);
+				content: response.answer,
+				sources: response.sources,
+			};
+			onMessagesChange([...messages, userMessage, assistantMessage]);
+		} catch (error) {
+			console.error("Failed to send chat message:", error);
+		} finally {
+			setIsSending(false);
+		}
 	};
 
 	return (
@@ -66,6 +94,21 @@ export function ChatArea() {
 								<p className="whitespace-pre-wrap leading-relaxed">
 									{message.content}
 								</p>
+
+								{message.role === "ASSISTANT" &&
+									message.sources &&
+									message.sources.length > 0 && (
+										<div className="mt-2 flex flex-wrap gap-1.5 border-t border-(--color-tertiary)/50 pt-2">
+											{message.sources.map((source) => (
+												<span
+													key={source}
+													className="rounded-full border border-(--color-tertiary) bg-(--color-primary) px-2 py-0.5 text-[11px] text-(--color-text)/60"
+												>
+													{source}
+												</span>
+											))}
+										</div>
+									)}
 							</div>
 						))}
 						{isSending && <p className="text-xs text-(--color-text)/60">Thinking...</p>}
@@ -88,7 +131,7 @@ export function ChatArea() {
 				/>
 				<button
 					type="submit"
-					disabled={isSending || !draft.trim()}
+					disabled={!canSend}
 					className="inline-flex h-11 shrink-0 items-center justify-center rounded-xl bg-(--color-accent) px-5 text-sm font-semibold text-white transition hover:opacity-90 disabled:opacity-50"
 				>
 					{isSending ? "Sending..." : "Send"}

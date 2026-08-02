@@ -4,9 +4,9 @@ import { faGear, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { createAnonymousUserSession } from "@/api/auth-endpoints.ts";
-import { initChatSession } from "@/api/chat-session-endpoints.ts";
+import { getChatSessionMessages, initChatSession } from "@/api/chat-session-endpoints.ts";
 import { getUploadedDocuments, uploadDocuments } from "@/api/document-endpoints.ts";
-import { ChatArea } from "@/components/demo/ChatArea";
+import { ChatArea, type ChatBubble } from "@/components/demo/ChatArea";
 import { ConfigPanel } from "@/components/demo/ConfigPanel";
 import { type DocumentChip, DocumentChips } from "@/components/demo/DocumentChips";
 import demoContent from "@/data/demo/content.json";
@@ -17,7 +17,11 @@ import type { Document } from "@/types/documents.ts";
 // Module-level (not component state) so the bootstrap only actually runs once per
 // tab session, even though the effect below re-mounts on every client-side
 // navigation into this page (and twice per mount in dev, per React's StrictMode).
-let bootstrapPromise: Promise<{ chatId: UUID; existingDocuments: Document[] }> | null = null;
+let bootstrapPromise: Promise<{
+	chatId: UUID;
+	existingDocuments: Document[];
+	existingMessages: ChatBubble[];
+}> | null = null;
 
 function bootstrapChatSession() {
 	if (!bootstrapPromise) {
@@ -31,7 +35,19 @@ function bootstrapChatSession() {
 			const existingDocuments = await getUploadedDocuments(chatSession.chat_id);
 			console.log("Existing documents fetched:", existingDocuments);
 
-			return { chatId: chatSession.chat_id, existingDocuments };
+			const existingChatMessages = await getChatSessionMessages(chatSession.chat_id);
+			console.log("Existing chat messages fetched:", existingChatMessages);
+
+			const existingMessages = existingChatMessages
+				.filter((message) => message.role === "USER" || message.role === "ASSISTANT")
+				.map((message) => ({
+					id: message.id,
+					role: message.role as "USER" | "ASSISTANT",
+					content: message.content,
+					sources: message.sources,
+				}));
+
+			return { chatId: chatSession.chat_id, existingDocuments, existingMessages };
 		})().catch((error) => {
 			// Let the next mount retry instead of being stuck on a failed attempt forever.
 			bootstrapPromise = null;
@@ -51,14 +67,19 @@ export default function DemoPage() {
 		"default",
 	);
 	const [chatId, setChatId] = useState<UUID | null>(null);
+	const [messages, setMessages] = useState<ChatBubble[]>([]);
 
 	const hasPendingDocuments = documents.some((doc) => doc.status === "pending");
+	const hasUploadedDocuments = documents.some((doc) => doc.status === "uploaded");
+	const webSearchEnabled = Boolean(
+		configurations.find((item) => item.label === "Enable Web Search Fallback")?.checked,
+	);
 
 	useEffect(() => {
 		let cancelled = false;
 
 		bootstrapChatSession()
-			.then(({ chatId: bootstrappedChatId, existingDocuments }) => {
+			.then(({ chatId: bootstrappedChatId, existingDocuments, existingMessages }) => {
 				if (cancelled) return;
 
 				setChatId(bootstrappedChatId);
@@ -70,6 +91,7 @@ export default function DemoPage() {
 						status: "uploaded",
 					})),
 				);
+				setMessages(existingMessages);
 				setConnectionStatus("success");
 			})
 			.catch((error) => {
@@ -165,7 +187,13 @@ export default function DemoPage() {
 				</button>
 			</div>
 
-			<ChatArea />
+			<ChatArea
+				chatId={chatId}
+				hasUploadedDocuments={hasUploadedDocuments}
+				webSearchEnabled={webSearchEnabled}
+				messages={messages}
+				onMessagesChange={setMessages}
+			/>
 		</div>
 	);
 }

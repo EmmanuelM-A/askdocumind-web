@@ -2,8 +2,9 @@ import type { UUID } from "@/types/api.ts";
 
 export interface ChatMessage {
 	id: UUID;
-	sessionId: string;
+	session_id: UUID;
 	role: "USER" | "ASSISTANT" | "SYSTEM";
 	content: string;
-	createdAt: string;
+	sources: string[] | null;
+	created_at: string;
 }

@@ -1,7 +1,7 @@
-import { sendRequest } from "@/api/api-client.ts";
-import { extractAPIData } from "@/api/utils.ts";
-import { API_ROUTES } from "@/config/constants.ts";
-import { logger } from "@/lib/logger.ts";
+import { sendRequest } from "@/api/api-client";
+import { extractAPIData } from "@/api/utils";
+import { API_ROUTES } from "@/config/constants";
+import { logger } from "@/lib/logger";
 import type { ChatbotResponse, ChatWithChatbot } from "@/types/chatbot.ts";
 
 export async function chatWithChatbot(data: ChatWithChatbot): Promise<ChatbotResponse> {
@@ -11,7 +11,7 @@ export async function chatWithChatbot(data: ChatWithChatbot): Promise<ChatbotRes
 		body: data,
 	});
 
-	logger.log("[chatbot] raw response:", rawResponse);
+	logger.debug({ rawResponse }, "[chatbot] raw response");
 
-	return extractAPIData<ChatbotResponse>(rawResponse, "Create chat session");
+	return extractAPIData<ChatbotResponse>(rawResponse, "Send chat message");
 }
