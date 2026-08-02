@@ -200,8 +200,11 @@ export function DocumentChips({
 												: "text-(--color-accent)"
 										}`}
 									/>
-									<div className="leading-tight">
-										<p className="text-xs font-medium whitespace-nowrap text-(--color-text)">
+									<div className="min-w-0 leading-tight">
+										<p
+											title={doc.name}
+											className="max-w-40 truncate text-xs font-medium text-(--color-text)"
+										>
 											{doc.name}
 										</p>
 										<p className="text-[11px] whitespace-nowrap text-(--color-text)/60">
@@ -270,7 +273,10 @@ export function DocumentChips({
 											}`}
 										/>
 										<div className="min-w-0 flex-1">
-											<p className="truncate text-sm font-medium text-(--color-text)">
+											<p
+												title={doc.name}
+												className="truncate text-sm font-medium text-(--color-text)"
+											>
 												{doc.name}
 											</p>
 											<p className="text-xs text-(--color-text)/60">

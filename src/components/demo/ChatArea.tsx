@@ -107,7 +107,7 @@ export function ChatArea({
 									{message.role === "ASSISTANT" &&
 										message.sources &&
 										message.sources.length > 0 && (
-											<p className="mt-1 pl-1 text-left text-[11px] text-(--color-text)/50">
+											<p className="mt-1 pl-1 text-left text-[11px] wrap-break-word text-(--color-text)/50">
 												{message.sources.join(", ")}
 											</p>
 										)}

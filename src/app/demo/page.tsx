@@ -152,14 +152,15 @@ export default function DemoPage() {
 				<button
 					type="button"
 					onClick={() => setIsConfigOpen((prev) => !prev)}
-					className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition ${
+					aria-label="Configurations"
+					className={`flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-semibold transition sm:px-4 ${
 						isConfigOpen
 							? "border-(--color-accent) text-(--color-accent)"
 							: "border-(--color-tertiary) text-(--color-text) hover:border-(--color-accent) hover:text-(--color-accent)"
 					}`}
 				>
 					<FontAwesomeIcon icon={faGear} className="h-4! w-4!" />
-					Configuration
+					<span className="hidden sm:inline">Configurations</span>
 				</button>
 			</div>
 

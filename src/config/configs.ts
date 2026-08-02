@@ -6,7 +6,6 @@ export const settings = {
 		ENV: process.env.NEXT_PUBLIC_ENV ?? "development",
 		BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL ?? "",
 		BASE_VERSION: process.env.NEXT_PUBLIC_API_VERSION ?? "1",
-		IS_WEB_SEARCH_ENABLED: process.env.NEXT_PUBLIC_WEB_SEARCH_ENABLED === "true",
 		SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
 	},
 
