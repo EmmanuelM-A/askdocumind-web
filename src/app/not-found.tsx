@@ -1,6 +1,6 @@
 import { faCompass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link";
+import { BackLink } from "@/components/navigation/BackLink";
 
 export default function NotFound() {
 	return (
@@ -17,12 +17,7 @@ export default function NotFound() {
 				The page you're looking for doesn't exist or may have been moved.
 			</p>
 
-			<Link
-				href="/"
-				className="rounded-full bg-(--color-accent) px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90"
-			>
-				Back to Home
-			</Link>
+			<BackLink buttonText="Back to Home" backTo="/" />
 		</div>
 	);
 }
