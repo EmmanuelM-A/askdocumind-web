@@ -1,5 +1,7 @@
 "use client";
 
+import { faComments } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import demoContent from "@/data/demo/content.json";
 
@@ -43,7 +45,11 @@ export function ChatArea() {
 		<div className="flex min-h-0 flex-1 flex-col gap-3">
 			<div className="min-h-0 flex-1 overflow-y-auto rounded-2xl border border-(--color-tertiary) bg-(--color-primary) p-4">
 				{messages.length === 0 ? (
-					<div className="flex h-full items-center justify-center text-center text-sm text-(--color-text)/50">
+					<div className="flex h-full flex-col items-center justify-center gap-3 text-center text-sm text-(--color-text)/50">
+						<FontAwesomeIcon
+							icon={faComments}
+							className="h-8! w-8! text-(--color-accent)"
+						/>
 						{demoContent.chatBoxPlaceholder}
 					</div>
 				) : (
