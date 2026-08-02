@@ -5,6 +5,7 @@ import {
 	faFileLines,
 	faFolderOpen,
 	faPlus,
+	faSpinner,
 	faTrash,
 	faUpload,
 	faXmark,
@@ -42,6 +43,7 @@ export function DocumentChips({
 	const scrollRef = useRef<HTMLDivElement | null>(null);
 	const [isDraggingOver, setIsDraggingOver] = useState(false);
 	const [isViewOpen, setIsViewOpen] = useState(false);
+	const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
 
 	const hasPendingDocuments = documents.some((doc) => doc.status === "pending");
 
@@ -99,15 +101,25 @@ export function DocumentChips({
 	};
 
 	const removeDocument = async (doc: DocumentChip) => {
-		onDocumentsChange(documents.filter((d) => d.id !== doc.id));
+		if (doc.status !== "uploaded" || !chatId) {
+			// Never made it to the server - just drop it locally.
+			onDocumentsChange(documents.filter((d) => d.id !== doc.id));
+			return;
+		}
 
-		if (doc.status !== "uploaded" || !chatId) return;
-
+		setDeletingIds((prev) => new Set(prev).add(doc.id));
 		try {
 			await deleteUploadedDocument(doc.id as UUID, chatId);
 			console.log("Document deleted:", doc.id);
+			onDocumentsChange(documents.filter((d) => d.id !== doc.id));
 		} catch (error) {
 			console.error("Failed to delete document:", error);
+		} finally {
+			setDeletingIds((prev) => {
+				const next = new Set(prev);
+				next.delete(doc.id);
+				return next;
+			});
 		}
 	};
 
@@ -215,10 +227,14 @@ export function DocumentChips({
 									<button
 										type="button"
 										onClick={() => void removeDocument(doc)}
+										disabled={deletingIds.has(doc.id)}
 										aria-label={`Remove ${doc.name}`}
-										className="ml-1 shrink-0 text-(--color-text)/50 transition hover:text-red-500"
+										className="ml-1 shrink-0 text-(--color-text)/50 transition hover:text-red-500 disabled:opacity-50"
 									>
-										<FontAwesomeIcon icon={faXmark} className="h-3.5! w-3.5!" />
+										<FontAwesomeIcon
+											icon={deletingIds.has(doc.id) ? faSpinner : faXmark}
+											className={`h-3.5! w-3.5! ${deletingIds.has(doc.id) ? "animate-spin" : ""}`}
+										/>
 									</button>
 								</div>
 							))}
@@ -287,10 +303,14 @@ export function DocumentChips({
 										<button
 											type="button"
 											onClick={() => void removeDocument(doc)}
+											disabled={deletingIds.has(doc.id)}
 											aria-label={`Delete ${doc.name}`}
-											className="shrink-0 text-(--color-text)/50 transition hover:text-red-500"
+											className="shrink-0 text-(--color-text)/50 transition hover:text-red-500 disabled:opacity-50"
 										>
-											<FontAwesomeIcon icon={faTrash} className="h-4! w-4!" />
+											<FontAwesomeIcon
+												icon={deletingIds.has(doc.id) ? faSpinner : faTrash}
+												className={`h-4! w-4! ${deletingIds.has(doc.id) ? "animate-spin" : ""}`}
+											/>
 										</button>
 									</div>
 								))
