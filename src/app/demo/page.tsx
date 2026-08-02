@@ -120,10 +120,24 @@ export default function DemoPage() {
 			});
 			console.log("Documents uploaded:", response);
 
-			const pendingIds = new Set(pendingDocuments.map((doc) => doc.id));
-			setDocuments((prev) =>
-				prev.map((doc) => (pendingIds.has(doc.id) ? { ...doc, status: "uploaded" } : doc)),
-			);
+			// The upload endpoint never returns per-file IDs (and per the API docs
+			// may silently drop files that exceed the per-chat size cap), so the
+			// server's list is re-fetched as the source of truth for what actually
+			// landed - this also swaps each chip's local synthetic id for the real
+			// server-assigned UUID, which delete/view rely on afterwards.
+			const uploadedIds = new Set(pendingDocuments.map((doc) => doc.id));
+			const refreshedDocuments = await getUploadedDocuments(chatId);
+			console.log("Documents refreshed after upload:", refreshedDocuments);
+
+			setDocuments((prev) => [
+				...prev.filter((doc) => doc.status === "pending" && !uploadedIds.has(doc.id)),
+				...refreshedDocuments.map((doc) => ({
+					id: doc.id,
+					name: doc.source,
+					sizeLabel: formatBytes(doc.source_size),
+					status: "uploaded" as const,
+				})),
+			]);
 		} catch (error) {
 			console.error("Failed to upload documents:", error);
 		} finally {
