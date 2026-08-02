@@ -4,7 +4,12 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 - ~~Sort out webpage responsiveness~~
 - Connect backend to frontend
+  - Fix enable web search fallback
+- Write the text/content for the home page
+- Cleanup and finalize the backend code and docs
+- Get the architecture diagrams sorted
 - Implement the feedback page/tabs
+- Look into good loading states for the demo and feedback pages
 - Tests
 - Cleanup code and remove unnecessary files
 - Last minute checks and fixes
