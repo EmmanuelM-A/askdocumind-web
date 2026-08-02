@@ -71,6 +71,28 @@ body {
 	background-color: var(--color-accent);
 }
 
+.chat-scrollbar {
+	scrollbar-color: var(--color-accent) transparent;
+}
+
+.chat-scrollbar::-webkit-scrollbar {
+	width: 6px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb {
+	border: none;
+	border-radius: 9999px;
+	background-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb:hover {
+	background-color: var(--color-accent);
+}
+
 @keyframes marquee {
 	from {
 		transform: translateX(0);

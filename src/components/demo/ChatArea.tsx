@@ -71,49 +71,54 @@ export function ChatArea({
 
 	return (
 		<div className="flex min-h-0 flex-1 flex-col gap-3">
-			<div className="min-h-0 flex-1 overflow-y-auto rounded-2xl border border-(--color-tertiary) bg-(--color-primary) p-4">
-				{messages.length === 0 ? (
-					<div className="flex h-full flex-col items-center justify-center gap-3 text-center text-sm text-(--color-text)/50">
-						<FontAwesomeIcon
-							icon={faComments}
-							className="h-8! w-8! text-(--color-accent)"
-						/>
-						{demoContent.chatBoxPlaceholder}
-					</div>
-				) : (
-					<div className="space-y-3 text-sm text-(--color-text)/80">
-						{messages.map((message) => (
-							<div
-								key={message.id}
-								className={
-									message.role === "USER"
-										? "ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-(--color-accent) px-4 py-3 text-white"
-										: "mr-auto max-w-[85%] rounded-2xl rounded-bl-md bg-(--color-secondary) px-4 py-3 text-(--color-text) shadow-sm"
-								}
-							>
-								<p className="whitespace-pre-wrap leading-relaxed">
-									{message.content}
-								</p>
+			<div className="min-h-0 flex-1 overflow-hidden rounded-2xl border border-(--color-tertiary) bg-(--color-primary)">
+				<div className="chat-scrollbar h-full overflow-y-auto p-4">
+					{messages.length === 0 ? (
+						<div className="flex h-full flex-col items-center justify-center gap-3 text-center text-sm text-(--color-text)/50">
+							<FontAwesomeIcon
+								icon={faComments}
+								className="h-8! w-8! text-(--color-accent)"
+							/>
+							{demoContent.chatBoxPlaceholder}
+						</div>
+					) : (
+						<div className="space-y-3 text-sm text-(--color-text)/80">
+							{messages.map((message) => (
+								<div
+									key={message.id}
+									className={
+										message.role === "USER"
+											? "ml-auto max-w-[85%]"
+											: "mr-auto max-w-[85%]"
+									}
+								>
+									<div
+										className={
+											message.role === "USER"
+												? "rounded-2xl rounded-br-md bg-(--color-accent) px-4 py-3 text-white"
+												: "rounded-2xl rounded-bl-md bg-(--color-secondary) px-4 py-3 text-(--color-text) shadow-sm"
+										}
+									>
+										<p className="whitespace-pre-wrap leading-relaxed">
+											{message.content}
+										</p>
+									</div>
 
-								{message.role === "ASSISTANT" &&
-									message.sources &&
-									message.sources.length > 0 && (
-										<div className="mt-2 flex flex-wrap gap-1.5 border-t border-(--color-tertiary)/50 pt-2">
-											{message.sources.map((source) => (
-												<span
-													key={source}
-													className="rounded-full border border-(--color-tertiary) bg-(--color-primary) px-2 py-0.5 text-[11px] text-(--color-text)/60"
-												>
-													{source}
-												</span>
-											))}
-										</div>
-									)}
-							</div>
-						))}
-						{isSending && <p className="text-xs text-(--color-text)/60">Thinking...</p>}
-					</div>
-				)}
+									{message.role === "ASSISTANT" &&
+										message.sources &&
+										message.sources.length > 0 && (
+											<p className="mt-1 pl-1 text-left text-[11px] text-(--color-text)/50">
+												{message.sources.join(", ")}
+											</p>
+										)}
+								</div>
+							))}
+							{isSending && (
+								<p className="text-xs text-(--color-text)/60">Thinking...</p>
+							)}
+						</div>
+					)}
+				</div>
 			</div>
 
 			<form
