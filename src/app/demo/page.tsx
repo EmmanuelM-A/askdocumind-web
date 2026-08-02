@@ -171,14 +171,20 @@ export default function DemoPage() {
 			)}
 
 			<div className="flex shrink-0 items-stretch gap-2">
-				<DocumentChips documents={documents} onDocumentsChange={setDocuments} />
+				<DocumentChips
+					chatId={chatId}
+					documents={documents}
+					onDocumentsChange={setDocuments}
+					onUpload={() => void handleUpload()}
+					isUploading={isUploading}
+				/>
 
 				<button
 					type="button"
 					onClick={() => void handleUpload()}
 					disabled={!hasPendingDocuments || isUploading || !chatId}
 					aria-label={isUploading ? "Uploading" : "Upload"}
-					className="flex shrink-0 items-center justify-center rounded-xl bg-(--color-accent) px-4 text-white transition hover:opacity-90 disabled:opacity-50"
+					className="hidden shrink-0 items-center justify-center rounded-xl bg-(--color-accent) px-4 text-white transition hover:opacity-90 disabled:opacity-50 sm:flex"
 				>
 					<FontAwesomeIcon
 						icon={faUpload}
