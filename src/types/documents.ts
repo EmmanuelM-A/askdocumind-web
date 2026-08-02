@@ -3,9 +3,9 @@ import type { UUID } from "@/types/api.ts";
 export interface Document {
 	id: UUID;
 	session_id: UUID;
-	filename: string;
-	file_size: number;
-	vector_id: UUID;
+	source: string;
+	source_size: number;
+	source_type: "UPLOAD" | "WEB_SEARCH";
 	processing_status: "PROCESSING" | "COMPLETED" | "FAILED";
 	created_at: string;
 	updated_at: string;

@@ -3,24 +3,19 @@
 import { faCheck, faFileLines, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type ChangeEvent, type DragEvent, useEffect, useRef, useState } from "react";
+import { formatBytes } from "@/lib/format.ts";
 
 export interface DocumentChip {
 	id: string;
 	name: string;
 	sizeLabel: string;
 	status: "pending" | "uploaded";
-	file: File;
+	file?: File;
 }
 
 interface DocumentChipsProps {
 	documents: DocumentChip[];
 	onDocumentsChange: (documents: DocumentChip[]) => void;
-}
-
-function formatBytes(bytes: number): string {
-	if (bytes < 1024) return `${bytes} B`;
-	if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
-	return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
 export function DocumentChips({ documents, onDocumentsChange }: DocumentChipsProps) {

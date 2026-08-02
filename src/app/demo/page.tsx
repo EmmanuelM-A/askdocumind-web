@@ -5,11 +5,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { createAnonymousUserSession } from "@/api/auth-endpoints.ts";
 import { initChatSession } from "@/api/chat-session-endpoints.ts";
-import { uploadDocuments } from "@/api/document-endpoints.ts";
+import { getUploadedDocuments, uploadDocuments } from "@/api/document-endpoints.ts";
 import { ChatArea } from "@/components/demo/ChatArea";
 import { ConfigPanel } from "@/components/demo/ConfigPanel";
 import { type DocumentChip, DocumentChips } from "@/components/demo/DocumentChips";
 import demoContent from "@/data/demo/content.json";
+import { formatBytes } from "@/lib/format.ts";
 import type { UUID } from "@/types/api.ts";
 
 export default function DemoPage() {
@@ -35,8 +36,19 @@ export default function DemoPage() {
 				const chatSession = await initChatSession({ title: "Demo Chat" });
 				console.log("Chat session initialized:", chatSession);
 
+				const existingDocuments = await getUploadedDocuments(chatSession.chat_id);
+				console.log("Existing documents fetched:", existingDocuments);
+
 				if (!cancelled) {
 					setChatId(chatSession.chat_id);
+					setDocuments(
+						existingDocuments.map((doc) => ({
+							id: doc.id,
+							name: doc.source,
+							sizeLabel: formatBytes(doc.source_size),
+							status: "uploaded",
+						})),
+					);
 					setConnectionStatus("success");
 				}
 			} catch (error) {
@@ -53,7 +65,10 @@ export default function DemoPage() {
 	const handleUpload = async () => {
 		if (!hasPendingDocuments || isUploading || !chatId) return;
 
-		const pendingDocuments = documents.filter((doc) => doc.status === "pending");
+		const pendingDocuments = documents.filter(
+			(doc): doc is DocumentChip & { file: File } =>
+				doc.status === "pending" && Boolean(doc.file),
+		);
 
 		setIsUploading(true);
 		try {
