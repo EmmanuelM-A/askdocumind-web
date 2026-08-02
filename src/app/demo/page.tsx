@@ -1,6 +1,6 @@
 "use client";
 
-import { faGear, faSpinner, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faGear, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { createAnonymousUserSession } from "@/api/auth-endpoints.ts";
@@ -185,48 +185,36 @@ export default function DemoPage() {
 				/>
 			)}
 
-			<div className="relative flex min-h-0 flex-1 flex-col gap-4">
-				{connectionStatus === "default" && (
-					<div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-2xl bg-(--color-primary)/80 backdrop-blur-sm">
-						<FontAwesomeIcon
-							icon={faSpinner}
-							className="h-6! w-6! animate-spin text-(--color-accent)"
-						/>
-						<p className="text-sm text-(--color-text)/70">Setting up your session…</p>
-					</div>
-				)}
-
-				<div className="flex shrink-0 items-stretch gap-2">
-					<DocumentChips
-						chatId={chatId}
-						documents={documents}
-						onDocumentsChange={setDocuments}
-						onUpload={() => void handleUpload()}
-						isUploading={isUploading}
-					/>
-
-					<button
-						type="button"
-						onClick={() => void handleUpload()}
-						disabled={!hasPendingDocuments || isUploading || !chatId}
-						aria-label={isUploading ? "Uploading" : "Upload"}
-						className="hidden shrink-0 items-center justify-center rounded-xl bg-(--color-accent) px-4 text-white transition hover:opacity-90 disabled:opacity-50 sm:flex"
-					>
-						<FontAwesomeIcon
-							icon={faUpload}
-							className={`h-6! w-6! ${isUploading ? "animate-pulse" : ""}`}
-						/>
-					</button>
-				</div>
-
-				<ChatArea
+			<div className="flex shrink-0 items-stretch gap-2">
+				<DocumentChips
 					chatId={chatId}
-					hasUploadedDocuments={hasUploadedDocuments}
-					webSearchEnabled={webSearchEnabled}
-					messages={messages}
-					onMessagesChange={setMessages}
+					documents={documents}
+					onDocumentsChange={setDocuments}
+					onUpload={() => void handleUpload()}
+					isUploading={isUploading}
 				/>
+
+				<button
+					type="button"
+					onClick={() => void handleUpload()}
+					disabled={!hasPendingDocuments || isUploading || !chatId}
+					aria-label={isUploading ? "Uploading" : "Upload"}
+					className="hidden shrink-0 items-center justify-center rounded-xl bg-(--color-accent) px-4 text-white transition hover:opacity-90 disabled:opacity-50 sm:flex"
+				>
+					<FontAwesomeIcon
+						icon={faUpload}
+						className={`h-6! w-6! ${isUploading ? "animate-pulse" : ""}`}
+					/>
+				</button>
 			</div>
+
+			<ChatArea
+				chatId={chatId}
+				hasUploadedDocuments={hasUploadedDocuments}
+				webSearchEnabled={webSearchEnabled}
+				messages={messages}
+				onMessagesChange={setMessages}
+			/>
 		</div>
 	);
 }
