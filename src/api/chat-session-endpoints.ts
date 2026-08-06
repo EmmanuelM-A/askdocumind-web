@@ -1,9 +1,9 @@
-import { sendRequest } from "@/api/api-client.ts";
-import { extractAPIData } from "@/api/utils.ts";
-import { API_ROUTES } from "@/config/constants.ts";
-import type { UUID } from "@/types/api.ts";
-import type { ChatMessage } from "@/types/chat-messages.ts";
-import type { CreateChatSession } from "@/types/chat-sessions.ts";
+import { sendRequest } from "@/api/api-client";
+import { extractAPIData } from "@/api/utils";
+import { API_ROUTES } from "@/config/constants";
+import type { UUID } from "@/types/api";
+import type { ChatMessage } from "@/types/chat-messages";
+import type { CreateChatSession } from "@/types/chat-sessions";
 
 export async function deleteChatSession(chatSessionId: UUID): Promise<UUID> {
 	const rawResponse = await sendRequest({

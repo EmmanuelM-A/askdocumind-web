@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: For testing purposes */
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { sendRequest } from "@/api/api-client.ts";
+import { sendRequest } from "@/api/api-client";
 
 const describeIfDevelopment = process.env.NODE_ENV === "development" ? describe : describe.skip;
 

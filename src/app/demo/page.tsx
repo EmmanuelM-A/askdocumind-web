@@ -3,17 +3,17 @@
 import { faGear, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { createAnonymousUserSession } from "@/api/auth-endpoints.ts";
-import { getChatSessionMessages, initChatSession } from "@/api/chat-session-endpoints.ts";
-import { getUploadedDocuments, uploadDocuments } from "@/api/document-endpoints.ts";
+import { createAnonymousUserSession } from "@/api/auth-endpoints";
+import { getChatSessionMessages, initChatSession } from "@/api/chat-session-endpoints";
+import { getUploadedDocuments, uploadDocuments } from "@/api/document-endpoints";
 import { ChatArea, type ChatBubble } from "@/components/demo/ChatArea";
 import { ConfigPanel } from "@/components/demo/ConfigPanel";
 import { type DocumentChip, DocumentChips } from "@/components/demo/DocumentChips";
 import demoContent from "@/data/demo/content.json";
-import { formatBytes } from "@/lib/format.ts";
-import { logger } from "@/lib/logger.ts";
-import type { UUID } from "@/types/api.ts";
-import type { Document } from "@/types/documents.ts";
+import { formatBytes } from "@/lib/format";
+import { logger } from "@/lib/logger";
+import type { UUID } from "@/types/api";
+import type { Document } from "@/types/documents";
 
 // Module-level (not component state) so the bootstrap only actually runs once per
 // tab session, even though the effect below re-mounts on every client-side

@@ -1,5 +1,5 @@
-import { settings } from "@/config/configs.ts";
-import { logger } from "@/lib/logger.ts";
+import { settings } from "@/config/configs";
+import { logger } from "@/lib/logger";
 
 // Shared in-memory map so duplicate requests can reuse the same promise.
 let activeRequestMap: Map<string, Promise<unknown>> | null = null;

@@ -3,10 +3,10 @@
 import { faComments } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { chatWithChatbot } from "@/api/chatbot-endpoints.ts";
+import { chatWithChatbot } from "@/api/chatbot-endpoints";
 import demoContent from "@/data/demo/content.json";
-import { logger } from "@/lib/logger.ts";
-import type { UUID } from "@/types/api.ts";
+import { logger } from "@/lib/logger";
+import type { UUID } from "@/types/api";
 
 export interface ChatBubble {
 	id: string;

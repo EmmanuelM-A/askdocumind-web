@@ -2,7 +2,7 @@ import { sendRequest } from "@/api/api-client";
 import { extractAPIData } from "@/api/utils";
 import { API_ROUTES } from "@/config/constants";
 import { logger } from "@/lib/logger";
-import type { ChatbotResponse, ChatWithChatbot } from "@/types/chatbot.ts";
+import type { ChatbotResponse, ChatWithChatbot } from "@/types/chatbot";
 
 export async function chatWithChatbot(data: ChatWithChatbot): Promise<ChatbotResponse> {
 	const rawResponse = await sendRequest({

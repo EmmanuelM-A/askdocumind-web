@@ -1,4 +1,4 @@
-import type { APIResponse } from "@/types/api.ts";
+import type { APIResponse } from "@/types/api";
 
 /**
  * Check if the value passed is an object and if it is not null.

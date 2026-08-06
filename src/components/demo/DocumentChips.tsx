@@ -11,10 +11,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type ChangeEvent, type DragEvent, useEffect, useRef, useState } from "react";
-import { deleteUploadedDocument } from "@/api/document-endpoints.ts";
-import { formatBytes } from "@/lib/format.ts";
-import { logger } from "@/lib/logger.ts";
-import type { UUID } from "@/types/api.ts";
+import { deleteUploadedDocument } from "@/api/document-endpoints";
+import { formatBytes } from "@/lib/format";
+import { logger } from "@/lib/logger";
+import type { UUID } from "@/types/api";
 
 export interface DocumentChip {
 	id: string;

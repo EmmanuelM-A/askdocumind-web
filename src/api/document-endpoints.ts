@@ -1,8 +1,8 @@
-import { sendRequest } from "@/api/api-client.ts";
-import { extractAPIData } from "@/api/utils.ts";
-import { API_ROUTES } from "@/config/constants.ts";
-import type { APIResponse, UUID } from "@/types/api.ts";
-import type { Document } from "@/types/documents.ts";
+import { sendRequest } from "@/api/api-client";
+import { extractAPIData } from "@/api/utils";
+import { API_ROUTES } from "@/config/constants";
+import type { APIResponse, UUID } from "@/types/api";
+import type { Document } from "@/types/documents";
 
 interface UploadDocumentsParams {
 	chatSessionId: UUID;
