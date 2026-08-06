@@ -1,8 +1,6 @@
-import { faCode, faFileLines, faGraduationCap } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import homeData from "@/data/home/home.json";
-
-const audienceIcons = [faCode, faGraduationCap, faFileLines];
+import { resolveIcon } from "@/lib/icon-registry";
 
 export function WhoThisIsForSection() {
 	const { heading, audience } = homeData.whoThisIsFor;
@@ -15,18 +13,24 @@ export function WhoThisIsForSection() {
 				</h2>
 
 				<div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-					{audience.map((item, index) => (
-						<div
-							key={item.description}
-							className="flex flex-col items-center gap-4 rounded-2xl border border-(--color-tertiary) bg-(--color-primary) p-8 shadow-sm"
-						>
-							<FontAwesomeIcon
-								icon={audienceIcons[index]}
-								className="h-12! w-12! text-(--color-accent)"
-							/>
-							<p className="text-(--color-text)/80">{item.description}</p>
-						</div>
-					))}
+					{audience.map((item) => {
+						const icon = resolveIcon(item.icon);
+
+						return (
+							<div
+								key={item.description}
+								className="flex flex-col items-center gap-4 rounded-2xl border border-(--color-tertiary) bg-(--color-primary) p-8 shadow-sm"
+							>
+								{icon && (
+									<FontAwesomeIcon
+										icon={icon}
+										className="h-12! w-12! text-(--color-accent)"
+									/>
+								)}
+								<p className="text-(--color-text)/80">{item.description}</p>
+							</div>
+						);
+					})}
 				</div>
 			</div>
 		</section>

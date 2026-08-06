@@ -2,7 +2,7 @@
 	"hero": {
 		"eyebrow": "AskDocuMind API",
 		"headline": "Ask your documents anything",
-		"subheadline": "Upload a file, ask a question, and get an answer grounded in your content - instantly.",
+		"subheadline": "Upload a document, ask a question, and get an answer grounded in its content, with sources cited, not a guess.",
 		"buttons": [
 			{
 				"label": "Try the Demo",
@@ -16,42 +16,42 @@
 		"productPhoto": null
 	},
 	"problem": {
-		"heading": "What is The Problem?",
-		"subtext": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+		"heading": "Buried in documents, searching for one fact?",
+		"subtext": "Long documents hide the one detail you need, and manual searching burns time you don't have.",
 		"cards": [
 			{
-				"icon": null,
-				"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat, enim sed aliquet blandit, leo augue porta sapien, vitae venenatis nulla quam non ex. Donec nec quam urna. Proin pellentesque egestas congue."
+				"icon": "faFileLines",
+				"description": "Reports, papers, and manuals pile up fast, and the answer you need is often buried somewhere in the middle of fifty pages you don't have time to read."
 			},
 			{
-				"icon": null,
-				"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat, enim sed aliquet blandit, leo augue porta sapien, vitae venenatis nulla quam non ex. Donec nec quam urna. Proin pellentesque egestas congue."
+				"icon": "faClockRotateLeft",
+				"description": "Every time a question comes up, you're back in the same document, rereading pages you've already been through just to confirm a detail you half-remember."
 			},
 			{
-				"icon": null,
-				"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat, enim sed aliquet blandit, leo augue porta sapien, vitae venenatis nulla quam non ex. Donec nec quam urna. Proin pellentesque egestas congue."
+				"icon": "faMagnifyingGlass",
+				"description": "Ctrl+F only works if you guess the exact wording used in the document, so you end up scanning page by page hoping to spot the right paragraph."
 			}
 		]
 	},
 	"about": {
 		"heading": "What AskDocuMind does",
-		"body": "AskDocuMind is a document-aware chatbot API. Upload a document, ask a question, and get back an answer that's grounded in your file's actual content — with sources, not guesses.",
+		"body": "AskDocuMind is a document-aware chatbot API built with Python, LangChain, and pgvector. You upload a file, ask a question in plain language, and the system retrieves the relevant passages and answers from them. Every response names the document it pulled from, so you can verify the answer instead of just trusting it.",
 		"image": null
 	},
 	"whoThisIsFor": {
 		"heading": "Who this is for",
 		"audience": [
 			{
-				"icon": null,
-				"description": "Developers evaluating a document QA API"
+				"icon": "faCode",
+				"description": "Developers evaluating a document-QA API before building on it"
 			},
 			{
-				"icon": null,
-				"description": "Students and researchers digging through long papers"
+				"icon": "faGraduationCap",
+				"description": "Students and researchers digging through long research papers"
 			},
 			{
-				"icon": null,
-				"description": "Anyone tired of re-reading a PDF to find one answer"
+				"icon": "faFileLines",
+				"description": "Anyone tired of rereading a document to find one fact"
 			}
 		]
 	},
@@ -77,16 +77,13 @@
 		],
 		"techStackHeading": "Built with",
 		"techStack": [
-			"Tech 1",
-			"Tech 2",
-			"Tech 3",
-			"Tech 4",
-			"Tech 5",
-			"Tech 6",
-			"Tech 7",
-			"Tech 8",
-			"Tech 9",
-			"Tech 10"
+			"Python",
+			"FastAPI",
+			"LangChain",
+			"pgvector",
+			"Next.js",
+			"TypeScript",
+			"Tailwind CSS"
 		],
 		"ctaText": "Curious how it works under the hood?",
 		"cta": { "label": "View the architecture", "href": "/architecture" }
@@ -95,40 +92,40 @@
 		"heading": "Why it matters",
 		"reasons": [
 			{
-				"icon": null,
+				"icon": "faBookOpen",
 				"reason": "Grounded answers",
 				"explanation": "Responses trace back to your document, not a hallucination."
 			},
 			{
-				"icon": null,
+				"icon": "faBolt",
 				"reason": "Fast",
 				"explanation": "Skip the manual searching and skimming."
 			},
 			{
-				"icon": null,
+				"icon": "faShieldHalved",
 				"reason": "Session-based & private",
 				"explanation": "Documents aren't kept around forever."
 			},
 			{
-				"icon": null,
+				"icon": "faCodeBranch",
 				"reason": "Open source",
 				"explanation": "The full implementation is on GitHub."
 			},
 			{
-				"icon": null,
+				"icon": "faFileImport",
 				"reason": "Multi-format support",
-				"explanation": "Upload PDFs, DOCX, TXT, or Markdown files."
+				"explanation": "Upload PDFs, DOCX, TXT, Markdown, HTML, or CSV files."
 			},
 			{
-				"icon": null,
+				"icon": "faPlug",
 				"reason": "Easy integration",
-				"explanation": "A simple API that drops into any application."
+				"explanation": "A simple REST API that drops into any application."
 			}
 		]
 	},
 	"closingCta": {
 		"heading": "Ready to try it?",
-		"description": "See AskDocuMind answer questions about a real document.",
+		"description": "Upload a document and see AskDocuMind answer real questions about it.",
 		"cta": { "label": "Try the Demo", "href": "/demo" }
 	}
 }
