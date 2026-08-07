@@ -13,8 +13,8 @@
 				"href": "https://github.com/EmmanuelM-A/askdocumind-api"
 			}
 		],
-		"photoLight": "/images/home/askdocumind-in-use-light-theme.png",
-		"photoDark": "/images/home/askdocumind-in-use-dark-theme.png"
+		"photoLight": "/images/home/askdocumind-in-use-light-theme-v2.png",
+		"photoDark": "/images/home/askdocumind-in-use-dark-theme-v2.png"
 	},
 	"problem": {
 		"heading": "Buried in documents, searching for one fact?",
