@@ -3,7 +3,7 @@ import Link from "next/link";
 import homeData from "@/data/home/home.json";
 
 export function Hero() {
-	const { eyebrow, headline, subheadline, buttons, productPhoto } = homeData.hero;
+	const { eyebrow, headline, subheadline, buttons, photoLight, photoDark } = homeData.hero;
 
 	return (
 		<section className="mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-5xl flex-col items-center justify-center gap-4 px-4 py-12 text-center sm:gap-6 sm:px-6">
@@ -45,19 +45,22 @@ export function Hero() {
 				})}
 			</div>
 
-			<div className="mt-6 flex h-44 w-full max-w-2xl items-center justify-center overflow-hidden rounded-3xl border border-dashed border-(--color-tertiary) bg-(--color-secondary) text-sm text-(--color-text)/40 sm:mt-8 sm:h-56 md:h-64">
-				{productPhoto ? (
-					<Image
-						src={productPhoto}
-						alt="Image of AskDocuMind in use"
-						width={640}
-						height={360}
-						className="h-full w-full object-cover"
-					/>
-				) : (
-					"Image of AskDocuMind in use"
-				)}
-			</div>
+			<Image
+				src={photoLight}
+				alt="Screenshot of AskDocuMind answering a question about an uploaded document"
+				width={903}
+				height={741}
+				priority
+				className="theme-photo-light mt-6 h-auto w-full max-w-[33.6rem] rounded-3xl sm:mt-8"
+			/>
+			<Image
+				src={photoDark}
+				alt="Screenshot of AskDocuMind answering a question about an uploaded document"
+				width={903}
+				height={741}
+				priority
+				className="theme-photo-dark mt-6 h-auto w-full max-w-[33.6rem] rounded-3xl sm:mt-8"
+			/>
 		</section>
 	);
 }

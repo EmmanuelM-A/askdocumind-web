@@ -93,6 +93,28 @@ body {
 	background-color: var(--color-accent);
 }
 
+/*
+ * Theme-specific screenshots: both are always in the DOM, only one is shown.
+ * Driven by the same [data-theme] attribute the colour palette uses (set on
+ * <html> by an inline script before first paint), so there's no flash of the
+ * wrong image and no client JS/hook needed to pick one.
+ */
+.theme-photo-light {
+	display: block;
+}
+
+.theme-photo-dark {
+	display: none;
+}
+
+[data-theme="dark"] .theme-photo-light {
+	display: none;
+}
+
+[data-theme="dark"] .theme-photo-dark {
+	display: block;
+}
+
 @keyframes marquee {
 	from {
 		transform: translateX(0);
@@ -101,3 +123,4 @@ body {
 		transform: translateX(-50%);
 	}
 }
+
