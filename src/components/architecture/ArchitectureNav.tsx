@@ -50,13 +50,13 @@ export function ArchitectureNav() {
 		const observer = new IntersectionObserver(
 			(entries) => {
 				for (const entry of entries) {
-					if (entry.intersectionRatio <= 0.5) continue;
+					if (entry.intersectionRatio <= 0.7) continue;
 
 					const index = navItems.findIndex((item) => item.id === entry.target.id);
 					if (index !== -1) setActiveIndex(index);
 				}
 			},
-			{ threshold: 0.5 },
+			{ threshold: 0.7 },
 		);
 
 		for (const item of navItems) {
@@ -83,12 +83,16 @@ export function ArchitectureNav() {
 		return () => window.removeEventListener("resize", updatePosition);
 	}, [activeIndex]);
 
-	const handleIntroductionClick = (id: string) => (event: React.MouseEvent) => {
-		if (id !== "introduction") return;
-
+	const handleNavClick = (id: string, index: number) => (event: React.MouseEvent) => {
 		event.preventDefault();
-		setActiveIndex(0);
-		document.getElementById("page-scroll")?.scrollTo({ top: 0, behavior: "smooth" });
+		setActiveIndex(index);
+
+		if (id === "introduction") {
+			document.getElementById("page-scroll")?.scrollTo({ top: 0, behavior: "smooth" });
+			return;
+		}
+
+		document.getElementById(id)?.scrollIntoView({ behavior: "instant", block: "center" });
 	};
 
 	return (
@@ -113,7 +117,7 @@ export function ArchitectureNav() {
 								>
 									<a
 										href={`#${item.id}`}
-										onClick={handleIntroductionClick(item.id)}
+										onClick={handleNavClick(item.id, index)}
 										className={
 											index === activeIndex
 												? "font-semibold whitespace-nowrap text-(--color-text)"
