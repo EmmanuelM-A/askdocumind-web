@@ -4,7 +4,8 @@ export interface ArchitectureDiagram {
 	id: string;
 	number: number;
 	name: string;
-	diagram: string | null;
+	diagramLight: string | null;
+	diagramDark: string | null;
 	description: string;
 }
 
