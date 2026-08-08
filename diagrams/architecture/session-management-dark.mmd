@@ -1,0 +1,37 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'lineColor': '#94A3B8', 'arrowheadColor': '#94A3B8', 'background': 'transparent', 'clusterBkg': '#020617', 'clusterBorder': '#1E293B', 'titleColor': '#E2E8F0' }}}%%
+flowchart LR
+    classDef neutral fill:#0F172A,stroke:#1E293B,color:#E2E8F0
+    classDef core fill:#082F49,stroke:#38BDF8,color:#E2E8F0
+
+    subgraph Creation["Session Creation"]
+        A["User Visits App"]
+        B["POST /auth/anonymous Endpoint"]
+        C[("Create Session Record\nin Database")]
+        D["Return Session Cookie to Client"]
+        E["Client Stores Cookie"]
+        A --> B --> C --> D --> E
+    end
+
+    subgraph Lifecycle["Subsequent Requests"]
+        F["Client Sends Request\nwith Cookie"]
+        G["Validate Session Cookie"]
+        H{"Session Valid?"}
+        I["Process Request"]
+        J["Create New Session"]
+        F --> G --> H
+        H -->|"Yes"| I
+        H -->|"No"| J
+    end
+
+    subgraph Cleanup["Session Cleanup"]
+        K["Scheduled Cleanup Job"]
+        L[("Delete Sessions Older\nthan Retention Period")]
+        K --> L
+    end
+
+    E -->|"on next visit"| F
+
+    class A,E,F neutral
+    class B,D,G,I,J,K core
+    class C,L neutral
+    class H neutral
