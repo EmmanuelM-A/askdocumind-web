@@ -4,6 +4,13 @@ import { useState } from "react";
 import { StarRating } from "@/components/feedback/StarRating";
 import feedbackContent from "@/data/feedback/content.json";
 
+interface Review {
+	id: string;
+	name: string;
+	rating: number;
+	text: string;
+}
+
 function getInitials(name: string): string {
 	return name
 		.split(" ")
@@ -14,7 +21,8 @@ function getInitials(name: string): string {
 }
 
 export function ReviewsSection() {
-	const { average, count, items } = feedbackContent.reviews;
+	const { average, count, items: rawItems } = feedbackContent.reviews;
+	const items = rawItems as Review[];
 	const [isWritingReview, setIsWritingReview] = useState(false);
 	const [draftRating, setDraftRating] = useState(0);
 	const [draftText, setDraftText] = useState("");
