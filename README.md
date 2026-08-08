@@ -1,52 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app)
+# AskDocuMind Web Client
 
-## THINGS TO DO
-
-- ~~Sort out webpage responsiveness~~
-- Connect backend to frontend
-  - Fix enable web search fallback
-- Write the text/content for the home page
-- Cleanup and finalize the backend code and docs
-- Get the architecture diagrams sorted
-- Implement the feedback page/tabs
-- Look into good loading states for the demo and feedback pages
-- Tests
-- Cleanup code and remove unnecessary files
-- Last minute checks and fixes
-- Deploy to Vercel
-- Add to social media and promote the website
-
-## Getting Started
-
-First, run the development server:
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create `.env.local` with the variables listed below.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the dev server at [http://localhost:3000](http://localhost:3000) (piped through `pino-pretty`) |
+| `npm run build` | Production build |
+| `npm run start` | Serve the production build |
+| `npm run lint` | Lint with Biome |
+| `npm run format` | Format with Biome (writes changes) |
+| `npm test` | Run unit/integration tests with Vitest |
+| `npm run generate:architecture-diagrams` | Regenerate architecture diagram images from the `.mmd` files in `diagrams/architecture/` |
 
-## Learn More
+## Environment variables
 
-To learn more about Next.js, take a look at the following resources:
+Set these in `.env.local`:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_ENV` | Environment name (`development`, `production`, etc.) |
+| `NEXT_PUBLIC_API_BASE_URL` | Base URL of the backend API |
+| `NEXT_PUBLIC_API_VERSION` | API version segment used by the client |
+| `NEXT_PUBLIC_MAX_FILES_MB_PER_CHAT` | Max upload size (MB) enforced client-side |
+| `NEXT_PUBLIC_SENTRY_DSN` | Sentry DSN; leave unset to disable error capture |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Notes
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Path alias `@/*` maps to `src/*` (see `tsconfig.json`).
+- Sentry is wired for client, server, and edge runtimes (`src/instrumentation-client.ts`, `sentry.server.config.ts`, `sentry.edge.config.ts`) and only activates when `NEXT_PUBLIC_SENTRY_DSN` is set.
