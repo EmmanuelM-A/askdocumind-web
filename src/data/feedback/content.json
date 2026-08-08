@@ -1,86 +1,12 @@
 {
 	"reviews": {
-		"average": 4.6,
-		"count": 38,
-		"items": [
-			{
-				"id": "1",
-				"name": "Jordan M.",
-				"rating": 5,
-				"text": "Saved me hours going through a 90 page manual for a client project."
-			},
-			{
-				"id": "2",
-				"name": "Amara K.",
-				"rating": 4,
-				"text": "Works well for text PDFs, struggled a bit with a scanned document."
-			},
-			{
-				"id": "3",
-				"name": "Priya S.",
-				"rating": 5,
-				"text": "The citations feature is great for double-checking answers before I use them."
-			},
-			{
-				"id": "4",
-				"name": "Tom R.",
-				"rating": 4,
-				"text": "Fast and accurate for most files. Would like support for larger uploads."
-			},
-			{
-				"id": "5",
-				"name": "Lena F.",
-				"rating": 5,
-				"text": "Exactly what I needed for reviewing research papers quickly."
-			}
-		]
+		"average": 0,
+		"count": 0,
+		"items": []
 	},
 	"featureRequests": {
 		"supportingText": "Vote for ideas or suggest your own. Statuses sync from GitHub issues.",
-		"items": [
-			{
-				"id": "1",
-				"title": "Support scanned image PDFs with OCR",
-				"votes": 42,
-				"suggestedBy": "Suggested by a user",
-				"status": "In progress"
-			},
-			{
-				"id": "2",
-				"title": "Multi document comparison in one chat",
-				"votes": 27,
-				"suggestedBy": "Suggested by a user",
-				"status": "Planned"
-			},
-			{
-				"id": "3",
-				"title": "Slack notifications when an answer is ready",
-				"votes": 14,
-				"suggestedBy": "Suggested by a user",
-				"status": "Under review"
-			},
-			{
-				"id": "4",
-				"title": "Dark mode",
-				"votes": 61,
-				"suggestedBy": "Shipped in v2.0.0",
-				"status": "Done"
-			},
-			{
-				"id": "5",
-				"title": "Export chat transcript as PDF",
-				"votes": 9,
-				"suggestedBy": "Suggested by a user",
-				"status": "Under review"
-			},
-			{
-				"id": "6",
-				"title": "API rate limit dashboard",
-				"votes": 5,
-				"suggestedBy": "Suggested by a user",
-				"status": "Planned"
-			}
-		]
+		"items": []
 	},
 	"reportBug": {
 		"supportingText": "Bugs are posted to GitHub issues so you can follow the fix.",

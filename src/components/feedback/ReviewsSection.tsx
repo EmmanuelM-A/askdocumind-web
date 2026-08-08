@@ -81,27 +81,33 @@ export function ReviewsSection() {
 				</div>
 			)}
 
-			<div className="flex flex-col gap-3">
-				{items.map((review) => (
-					<article
-						key={review.id}
-						className="rounded-2xl border border-(--color-tertiary) bg-(--color-secondary) p-4 shadow-sm"
-					>
-						<div className="flex items-center gap-3">
-							<span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-(--color-accent) text-xs font-semibold text-white">
-								{getInitials(review.name)}
-							</span>
-							<div className="flex min-w-0 flex-1 items-center justify-between gap-2">
-								<p className="truncate text-sm font-semibold text-(--color-text)">
-									{review.name}
-								</p>
-								<StarRating rating={review.rating} size="sm" />
+			{items.length > 0 ? (
+				<div className="flex flex-col gap-3">
+					{items.map((review) => (
+						<article
+							key={review.id}
+							className="rounded-2xl border border-(--color-tertiary) bg-(--color-secondary) p-4 shadow-sm"
+						>
+							<div className="flex items-center gap-3">
+								<span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-(--color-accent) text-xs font-semibold text-white">
+									{getInitials(review.name)}
+								</span>
+								<div className="flex min-w-0 flex-1 items-center justify-between gap-2">
+									<p className="truncate text-sm font-semibold text-(--color-text)">
+										{review.name}
+									</p>
+									<StarRating rating={review.rating} size="sm" />
+								</div>
 							</div>
-						</div>
-						<p className="mt-3 text-sm text-(--color-text)/80">{review.text}</p>
-					</article>
-				))}
-			</div>
+							<p className="mt-3 text-sm text-(--color-text)/80">{review.text}</p>
+						</article>
+					))}
+				</div>
+			) : (
+				<p className="text-center text-sm text-(--color-text)/60">
+					No reviews yet. Be the first to share your experience.
+				</p>
+			)}
 		</div>
 	);
 }

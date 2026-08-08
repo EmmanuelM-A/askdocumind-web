@@ -93,7 +93,7 @@ export default function RootLayout({
 				<ScrollToTop />
 				{/* biome-ignore lint/correctness/useUniqueElementIds: singleton root scroll container, needed as a stable target for programmatic scrolling */}
 				<main id="page-scroll" className="flex flex-1 flex-col overflow-y-auto pt-20">
-					{children}
+					<div className="flex flex-1 flex-col">{children}</div>
 					<FooterBar />
 				</main>
 			</body>

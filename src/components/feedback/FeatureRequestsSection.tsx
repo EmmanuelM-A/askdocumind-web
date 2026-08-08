@@ -93,44 +93,50 @@ export function FeatureRequestsSection() {
 				</div>
 			)}
 
-			<div className="flex flex-col gap-3">
-				{requests.map((request) => (
-					<div
-						key={request.id}
-						className={`flex items-center gap-4 rounded-2xl border border-(--color-tertiary) bg-(--color-secondary) p-4 shadow-sm ${
-							request.status === "Done" ? "opacity-60" : ""
-						}`}
-					>
-						{request.status === "Done" ? (
-							<div className="flex w-10 shrink-0 flex-col items-center gap-0.5 text-emerald-500">
-								<FontAwesomeIcon icon={faCheck} className="h-4! w-4!" />
-							</div>
-						) : (
-							<button
-								type="button"
-								onClick={() => handleUpvote(request.id)}
-								className="flex w-10 shrink-0 flex-col items-center gap-0.5 rounded-xl border border-(--color-tertiary) py-1.5 text-(--color-text)/70 transition hover:border-(--color-accent) hover:text-(--color-accent)"
-							>
-								<FontAwesomeIcon icon={faChevronUp} className="h-3! w-3!" />
-								<span className="text-xs font-semibold">{request.votes}</span>
-							</button>
-						)}
-
-						<div className="min-w-0 flex-1">
-							<p className="truncate text-sm font-semibold text-(--color-text)">
-								{request.title}
-							</p>
-							<p className="text-xs text-(--color-text)/60">{request.suggestedBy}</p>
-						</div>
-
-						<span
-							className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap ${statusStyles[request.status]}`}
+			{requests.length > 0 ? (
+				<div className="flex flex-col gap-3">
+					{requests.map((request) => (
+						<div
+							key={request.id}
+							className={`flex items-center gap-4 rounded-2xl border border-(--color-tertiary) bg-(--color-secondary) p-4 shadow-sm ${
+								request.status === "Done" ? "opacity-60" : ""
+							}`}
 						>
-							{request.status}
-						</span>
-					</div>
-				))}
-			</div>
+							{request.status === "Done" ? (
+								<div className="flex w-10 shrink-0 flex-col items-center gap-0.5 text-emerald-500">
+									<FontAwesomeIcon icon={faCheck} className="h-4! w-4!" />
+								</div>
+							) : (
+								<button
+									type="button"
+									onClick={() => handleUpvote(request.id)}
+									className="flex w-10 shrink-0 flex-col items-center gap-0.5 rounded-xl border border-(--color-tertiary) py-1.5 text-(--color-text)/70 transition hover:border-(--color-accent) hover:text-(--color-accent)"
+								>
+									<FontAwesomeIcon icon={faChevronUp} className="h-3! w-3!" />
+									<span className="text-xs font-semibold">{request.votes}</span>
+								</button>
+							)}
+
+							<div className="min-w-0 flex-1">
+								<p className="truncate text-sm font-semibold text-(--color-text)">
+									{request.title}
+								</p>
+								<p className="text-xs text-(--color-text)/60">{request.suggestedBy}</p>
+							</div>
+
+							<span
+								className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap ${statusStyles[request.status]}`}
+							>
+								{request.status}
+							</span>
+						</div>
+					))}
+				</div>
+			) : (
+				<p className="text-center text-sm text-(--color-text)/60">
+					No feature requests yet. Suggest one to get started.
+				</p>
+			)}
 		</div>
 	);
 }
