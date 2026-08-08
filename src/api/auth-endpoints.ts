@@ -1,7 +1,7 @@
-import { sendRequest } from "@/api/api-client.ts";
-import { extractAPIData } from "@/api/utils.ts";
-import { API_ROUTES } from "@/config/constants.ts";
-import type { UUID } from "@/types/api.ts";
+import { sendRequest } from "@/api/api-client";
+import { extractAPIData } from "@/api/utils";
+import { API_ROUTES } from "@/config/constants";
+import type { UUID } from "@/types/api";
 
 export async function createAnonymousUserSession(): Promise<UUID> {
 	const rawResponse = await sendRequest({

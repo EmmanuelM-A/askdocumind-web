@@ -1,8 +1,8 @@
-import { sendRequest } from "@/api/api-client.ts";
-import { extractAPIData } from "@/api/utils.ts";
-import { API_ROUTES } from "@/config/constants.ts";
-import type { UUID } from "@/types/api.ts";
-import type { Document } from "@/types/documents.ts";
+import { sendRequest } from "@/api/api-client";
+import { extractAPIData } from "@/api/utils";
+import { API_ROUTES } from "@/config/constants";
+import type { APIResponse, UUID } from "@/types/api";
+import type { Document } from "@/types/documents";
 
 interface UploadDocumentsParams {
 	chatSessionId: UUID;
@@ -12,7 +12,7 @@ interface UploadDocumentsParams {
 export async function uploadDocuments({
 	chatSessionId,
 	documents,
-}: UploadDocumentsParams): Promise<void> {
+}: UploadDocumentsParams): Promise<APIResponse> {
 	const multipart = new FormData();
 	multipart.append("chat_id", chatSessionId);
 
@@ -20,11 +20,13 @@ export async function uploadDocuments({
 		multipart.append("documents", file);
 	}
 
-	await sendRequest({
+	// The upload endpoint's `data` is always null, so extractAPIData (which
+	// requires non-null data) can't be used here - return the raw envelope.
+	return (await sendRequest({
 		route: API_ROUTES.DOCUMENTS,
 		method: "POST",
 		body: multipart,
-	});
+	})) as APIResponse;
 }
 
 export async function getUploadedDocuments(chatSessionId: UUID): Promise<Array<Document>> {
