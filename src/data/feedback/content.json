@@ -1,0 +1,15 @@
+{
+	"reviews": {
+		"average": 0,
+		"count": 0,
+		"items": []
+	},
+	"featureRequests": {
+		"supportingText": "Vote for ideas or suggest your own. Statuses sync from GitHub issues.",
+		"items": []
+	},
+	"reportBug": {
+		"supportingText": "Bugs are posted to GitHub issues so you can follow the fix.",
+		"severities": ["Minor", "Moderate", "Blocking"]
+	}
+}

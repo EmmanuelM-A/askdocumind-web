@@ -1,6 +1,6 @@
-import { sendRequest } from "@/api/api-client.ts";
-import { API_ROUTES } from "@/config/constants.ts";
-import type { APIResponse, HealthDataFormat } from "@/types/api.ts";
+import { sendRequest } from "@/api/api-client";
+import { API_ROUTES } from "@/config/constants";
+import type { APIResponse, HealthDataFormat } from "@/types/api";
 
 export async function isApiConnectionHealthy(): Promise<boolean> {
 	const response = (await sendRequest({

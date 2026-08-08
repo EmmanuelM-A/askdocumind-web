@@ -1,5 +1,5 @@
-import { settings } from "@/config/configs.ts";
-import { logger } from "@/lib/logger.ts";
+import { settings } from "@/config/configs";
+import { logger } from "@/lib/logger";
 
 // Shared in-memory map so duplicate requests can reuse the same promise.
 let activeRequestMap: Map<string, Promise<unknown>> | null = null;
@@ -291,6 +291,8 @@ export async function sendRequest({
 				}, timeoutMs);
 			}
 
+			logger.debug(`[API-CLIENT] Sending request: ${method.toUpperCase()} ${url}`);
+
 			const response: Response = await fetch(url, optionsFetch);
 
 			const data: unknown = await safeParseJson(response);
@@ -343,7 +345,7 @@ async function safeParseJson(response: Response): Promise<unknown> {
 
 		return JSON.parse(text);
 	} catch (parseError) {
-		logger.warn(`[API-CLIENT] Failed to parse JSON response:`, parseError);
+		logger.warn({ parseError }, "[API-CLIENT] Failed to parse JSON response");
 		return null;
 	}
 }

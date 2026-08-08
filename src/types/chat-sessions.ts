@@ -1,4 +1,4 @@
-import type { UUID } from "@/types/api.ts";
+import type { UUID } from "@/types/api";
 
 export interface CreateChatSession {
 	title: string;

@@ -1,45 +1,38 @@
-# AskDocuMind — Frontend
+# AskDocuMind Web Client
 
-A document Q&A web app that lets users upload documents and chat with them using AI. This repo contains the frontend client.
-
-**Live demo:** [askdocumind.com](https://askdocumind.com)  
-
-**Backend repo:** [EmmanuelM-A/askdocumind-api](https://github.com/EmmanuelM-A/askdocumind-api)
-
----
-
-## Tech Stack
-
-| Area | Tool |
-| --- | --- |
-| Framework | React 18 |
-| Language | TypeScript |
-| Build tool | Vite |
-| Styling | Tailwind CSS |
-| Routing | React Router v7 |
-| Icons | Font Awesome |
-| Linting / Formatting | Biome |
-| Testing | Vitest |
-| Error monitoring | Sentry |
-| Deployment | Vercel |
-
-## Deployment
-
-The app is deployed on [Vercel](https://vercel.com). Pushes to `main` trigger automatic production deployments.
-
-## Getting Started
+## Setup
 
 ```bash
 npm install
-npm run dev
 ```
 
-Other scripts:
+Create `.env.local` with the variables listed below.
 
-```bash
-npm run build        # production build
-npm run test         # run tests in watch mode
-npm run test:run     # run tests once
-npm run lint:check   # check for lint/format issues
-npm run lint:fix     # auto-fix lint/format issues
-```
+## Commands
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the dev server at [http://localhost:3000](http://localhost:3000) (piped through `pino-pretty`) |
+| `npm run build` | Production build |
+| `npm run start` | Serve the production build |
+| `npm run lint` | Lint with Biome |
+| `npm run format` | Format with Biome (writes changes) |
+| `npm test` | Run unit/integration tests with Vitest |
+| `npm run generate:architecture-diagrams` | Regenerate architecture diagram images from the `.mmd` files in `diagrams/architecture/` |
+
+## Environment variables
+
+Set these in `.env.local`:
+
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_ENV` | Environment name (`development`, `production`, etc.) |
+| `NEXT_PUBLIC_API_BASE_URL` | Base URL of the backend API |
+| `NEXT_PUBLIC_API_VERSION` | API version segment used by the client |
+| `NEXT_PUBLIC_MAX_FILES_MB_PER_CHAT` | Max upload size (MB) enforced client-side |
+| `NEXT_PUBLIC_SENTRY_DSN` | Sentry DSN; leave unset to disable error capture |
+
+## Notes
+
+- Path alias `@/*` maps to `src/*` (see `tsconfig.json`).
+- Sentry is wired for client, server, and edge runtimes (`src/instrumentation-client.ts`, `sentry.server.config.ts`, `sentry.edge.config.ts`) and only activates when `NEXT_PUBLIC_SENTRY_DSN` is set.

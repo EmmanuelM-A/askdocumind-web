@@ -1,0 +1,34 @@
+{
+	"logo": {
+		"src": "/src/assets/icons/logo.svg",
+		"label": "AskDocuMind",
+		"link": "/"
+	},
+	"navItems": [
+		{
+			"label": "Home",
+			"link": "/",
+			"icon": "/icons/home.svg"
+		},
+		{
+			"label": "Architecture",
+			"link": "/architecture",
+			"icon": "/icons/architecture.svg"
+		},
+		{
+			"label": "Demo",
+			"link": "/demo",
+			"icon": "/icons/demo.svg"
+		},
+		{
+			"label": "Feedback",
+			"link": "/feedback",
+			"icon": "/icons/feeback.svg"
+		},
+		{
+			"label": "View Code",
+			"link": "https://github.com/EmmanuelM-A/askdocumind-api",
+			"icon": "/icons/code.svg"
+		}
+	]
+}
