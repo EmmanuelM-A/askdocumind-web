@@ -78,8 +78,14 @@ export function StarRating({
 			// biome-ignore lint/suspicious/noArrayIndexKey: fixed-length star sequence with no other unique identity
 			<span key={index} className="relative inline-block">
 				<FontAwesomeIcon icon={faStar} className={`${iconClass} text-(--color-tertiary)`} />
-				<span className="absolute inset-0 overflow-hidden" style={{ width: `${fillPercent}%` }}>
-					<FontAwesomeIcon icon={faStar} className={`${iconClass} text-(--color-accent)`} />
+				<span
+					className="absolute inset-0 overflow-hidden"
+					style={{ width: `${fillPercent}%` }}
+				>
+					<FontAwesomeIcon
+						icon={faStar}
+						className={`${iconClass} text-(--color-accent)`}
+					/>
 				</span>
 			</span>
 		);

@@ -121,7 +121,9 @@ export function FeatureRequestsSection() {
 								<p className="truncate text-sm font-semibold text-(--color-text)">
 									{request.title}
 								</p>
-								<p className="text-xs text-(--color-text)/60">{request.suggestedBy}</p>
+								<p className="text-xs text-(--color-text)/60">
+									{request.suggestedBy}
+								</p>
 							</div>
 
 							<span
