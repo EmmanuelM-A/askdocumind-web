@@ -13,6 +13,7 @@ export function ArchitectureNav() {
 	const [railTop, setRailTop] = useState("50%");
 	const listRef = useRef<HTMLUListElement | null>(null);
 	const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
+	const suppressObserverRef = useRef(false);
 
 	useEffect(() => {
 		setMounted(true);
@@ -30,10 +31,6 @@ export function ArchitectureNav() {
 			const rect = lastSection.getBoundingClientRect();
 			const viewportCenter = window.innerHeight / 2;
 
-			// Once the last diagram's section has scrolled past the viewport's
-			// vertical center, stop tracking the viewport and instead track the
-			// section itself, so the rail stays beside it instead of drifting
-			// down into the padding/footer below.
 			setRailTop(rect.bottom > viewportCenter ? "50%" : `${rect.top + rect.height / 2}px`);
 		};
 
@@ -49,6 +46,8 @@ export function ArchitectureNav() {
 	useEffect(() => {
 		const observer = new IntersectionObserver(
 			(entries) => {
+				if (suppressObserverRef.current) return;
+
 				for (const entry of entries) {
 					if (entry.intersectionRatio <= 0.7) continue;
 
@@ -88,7 +87,22 @@ export function ArchitectureNav() {
 		setActiveIndex(index);
 
 		if (id === "introduction") {
-			document.getElementById("page-scroll")?.scrollTo({ top: 0, behavior: "smooth" });
+			const scrollEl = document.getElementById("page-scroll");
+			if (!scrollEl) return;
+
+			// The IntersectionObserver would otherwise re-fire for every section
+			// this scrolls past on the way up, dragging the indicator down through
+			// each one before it settles back at the top. Suppress it for the
+			// duration of the scroll so the indicator moves there directly.
+			suppressObserverRef.current = true;
+			const resume = () => {
+				suppressObserverRef.current = false;
+				scrollEl.removeEventListener("scrollend", resume);
+			};
+			scrollEl.addEventListener("scrollend", resume);
+			window.setTimeout(resume, 1000);
+
+			scrollEl.scrollTo({ top: 0, behavior: "smooth" });
 			return;
 		}
 
