@@ -21,11 +21,6 @@
 			"icon": "/icons/demo.svg"
 		},
 		{
-			"label": "Feedback",
-			"link": "/feedback",
-			"icon": "/icons/feeback.svg"
-		},
-		{
 			"label": "View Code",
 			"link": "https://github.com/EmmanuelM-A/askdocumind-api",
 			"icon": "/icons/code.svg"
