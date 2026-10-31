@@ -12,7 +12,7 @@ AskDocuMind is a document question-answering demo. We collect as little data as 
 
 - **Session identifier**: A randomly generated ID stored in a secure, HttpOnly cookie. It contains no personal information and is used only to link your uploads and chats to your session.
 - **Uploaded documents**: The files you upload, and the text extracted from them. The text is split into chunks and turned into numerical vectors so it can be searched.
-- **Chat messages**: Your questions are sent to the API to generate answers. Any questions and answers stored with your chat are deleted along with it.
+- **Chat messages**: Your questions are sent to the API to generate answers. Your conversation is also saved in your browser so it is still there when you come back, and it is replaced when you start a new chat. Any questions and answers stored on our side are deleted along with your chat.
 - **Technical logs**: Server logs may record request paths, HTTP status codes and response times. They don't include the content of your questions or documents.
 
 **We do not collect** your name, email address, IP address (beyond what our hosting providers process briefly to deliver the site), or any other personally identifiable information.
@@ -55,6 +55,8 @@ We use a single cookie (`anonymous_session`) to keep your anonymous session. It 
 - **HttpOnly**: Not accessible to JavaScript
 - **Secure**: Sent over HTTPS only
 - **SameSite=Strict**: Sent only on requests from askdocumind.com to its own API
+
+We also use your browser’s local storage to remember your light or dark theme and your current conversation. This data stays on your device and is not sent to us.
 
 We do not use advertising, analytics or third-party tracking cookies.
 

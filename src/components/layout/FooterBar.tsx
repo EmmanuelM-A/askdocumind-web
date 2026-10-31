@@ -11,15 +11,27 @@ export function FooterBar() {
 				</p>
 
 				<nav aria-label="Footer" className="flex gap-4">
-					{footerData.links.map((link) => (
-						<Link
-							key={link.name}
-							href={link.href}
-							className="transition hover:text-(--color-text)"
-						>
-							{link.name}
-						</Link>
-					))}
+					{footerData.links.map((link) =>
+						link.href.startsWith("http") ? (
+							<a
+								key={link.name}
+								href={link.href}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="transition hover:text-(--color-text)"
+							>
+								{link.name}
+							</a>
+						) : (
+							<Link
+								key={link.name}
+								href={link.href}
+								className="transition hover:text-(--color-text)"
+							>
+								{link.name}
+							</Link>
+						),
+					)}
 				</nav>
 			</div>
 		</footer>

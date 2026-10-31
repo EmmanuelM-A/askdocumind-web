@@ -9,6 +9,10 @@
 		{
 			"name": "Terms of service",
 			"href": "/terms"
+		},
+		{
+			"name": "Frontend code",
+			"href": "https://github.com/EmmanuelM-A/askdocumind-web"
 		}
 	]
 }

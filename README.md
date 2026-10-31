@@ -1,5 +1,12 @@
 # AskDocuMind Web Client
 
+The frontend for [AskDocuMind](https://askdocumind.com), a retrieval-augmented generation (RAG) API. It hosts a live demo where you upload documents or code, ask questions, and see which documents and web pages each answer used, plus an architecture tour of the system.
+
+- Live site: [askdocumind.com](https://askdocumind.com)
+- API: [EmmanuelM-A/askdocumind-api](https://github.com/EmmanuelM-A/askdocumind-api)
+
+Built with Next.js (App Router), React and Tailwind CSS, tested with Vitest and linted with Biome.
+
 ## Setup
 
 ```bash

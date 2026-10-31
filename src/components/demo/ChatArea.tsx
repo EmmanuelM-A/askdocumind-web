@@ -2,7 +2,7 @@
 
 import { faArrowUp, faFileLines, faGlobe, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type FormEvent, useRef, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getErrorMessage, isChatGone } from "@/api/api-client";
@@ -10,15 +10,9 @@ import { askChatbot } from "@/api/chatbot-endpoints";
 import type { AskSettings } from "@/components/demo/ConfigPanel";
 import { DEFAULT_ASK_CONFIGS, MAX_QUERY_LENGTH } from "@/config/constants";
 import demoContent from "@/data/demo/content.json";
+import { type ChatMessage, loadChatHistory, saveChatHistory } from "@/lib/chat-history";
 import type { UUID } from "@/types/api";
 import type { AskConfigs } from "@/types/chatbot";
-
-interface ChatMessage {
-	id: string;
-	role: "user" | "assistant";
-	content: string;
-	sources: string[];
-}
 
 interface ChatAreaProps {
 	chatId: UUID | null;
@@ -58,9 +52,20 @@ export function ChatArea({
 }: ChatAreaProps) {
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	const [messages, setMessages] = useState<ChatMessage[]>([]);
+	const [hasLoadedHistory, setHasLoadedHistory] = useState(false);
 	const [draft, setDraft] = useState("");
 	const [isSending, setIsSending] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+
+	useEffect(() => {
+		if (!chatId) return;
+		setMessages(loadChatHistory(chatId));
+		setHasLoadedHistory(true);
+	}, [chatId]);
+
+	useEffect(() => {
+		if (chatId && hasLoadedHistory) saveChatHistory(chatId, messages);
+	}, [chatId, hasLoadedHistory, messages]);
 
 	const query = draft.trim();
 	const canSend =
