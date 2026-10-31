@@ -79,9 +79,7 @@ export function DemoWorkspace() {
 
 	const { hints } = demoContent.chat;
 	let disabledHint: string | null = null;
-	if (!chatId) {
-		disabledHint = hints.connecting;
-	} else if (documents.readyCount === 0 && !settings.webSearchEnabled) {
+	if (chatId && documents.readyCount === 0 && !settings.webSearchEnabled) {
 		disabledHint =
 			documents.isUploading || documents.isProcessing ? hints.processing : hints.noDocuments;
 	}
@@ -100,96 +98,91 @@ export function DemoWorkspace() {
 		/>
 	);
 
+	const statusDot =
+		connection === "connected"
+			? "bg-emerald-500"
+			: connection === "failed"
+				? "bg-red-500"
+				: "animate-pulse bg-zinc-400";
+
 	return (
-		<div className="flex min-h-0 flex-1 flex-col gap-3">
-			<div className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-2">
-				<div className="flex items-center gap-2 text-sm font-medium text-(--color-text)">
-					<span
-						className={`h-2.5 w-2.5 rounded-full ${
-							connection === "connected"
-								? "bg-emerald-500"
-								: connection === "failed"
-									? "bg-red-500"
-									: "animate-pulse bg-gray-400"
-						}`}
-					/>
-					{demoContent.connection[connection]}
-					{connection === "failed" && (
+		<div className="flex min-h-0 flex-1 gap-4">
+			<section className="card flex min-w-0 flex-1 flex-col overflow-hidden rounded-2xl">
+				<div className="flex h-14 shrink-0 items-center justify-between gap-2 border-b border-(--color-tertiary) px-4">
+					<div className="flex items-center gap-3">
+						<h2 className="font-semibold text-(--color-text)">
+							{demoContent.chat.title}
+						</h2>
+						<span className="flex items-center gap-1.5 rounded-full bg-(--color-primary) px-2.5 py-1 text-xs text-(--color-text)/70">
+							<span className={`h-1.5 w-1.5 rounded-full ${statusDot}`} />
+							{demoContent.connection[connection]}
+							{connection === "failed" && (
+								<button
+									type="button"
+									onClick={connect}
+									className="font-semibold text-(--color-accent) hover:underline"
+								>
+									Retry
+								</button>
+							)}
+						</span>
+					</div>
+
+					<div className="flex gap-2">
 						<button
 							type="button"
-							onClick={connect}
-							className="font-semibold text-(--color-accent) hover:underline"
+							onClick={() => setIsSheetOpen(true)}
+							className="flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium text-(--color-text)/70 transition hover:bg-(--color-primary) hover:text-(--color-text) md:hidden"
 						>
-							Retry
+							<FontAwesomeIcon icon={faFolderOpen} className="h-3.5! w-3.5!" />
+							{documents.acceptedCount}/{UPLOAD_LIMITS.MAX_DOCUMENTS_PER_CHAT}
 						</button>
-					)}
+
+						<button
+							type="button"
+							onClick={() => setIsAdvancedOpen((open) => !open)}
+							aria-expanded={isAdvancedOpen}
+							className={`flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition ${
+								isAdvancedOpen
+									? "bg-(--color-accent)/10 text-(--color-accent)"
+									: "text-(--color-text)/70 hover:bg-(--color-primary) hover:text-(--color-text)"
+							}`}
+						>
+							<FontAwesomeIcon icon={faSliders} className="h-3.5! w-3.5!" />
+							Advanced
+						</button>
+					</div>
 				</div>
 
+				{isAdvancedOpen && <ConfigPanel settings={settings} onChange={setSettings} />}
+
 				{notice && (
-					<p className="flex items-center gap-2 rounded-full bg-(--color-secondary) px-3 py-1 text-xs text-(--color-text)/80">
+					<p className="flex shrink-0 items-center justify-between gap-2 border-b border-(--color-tertiary) bg-(--color-accent)/5 px-4 py-2 text-xs text-(--color-text)/80">
 						{notice}
 						<button type="button" onClick={() => setNotice(null)} aria-label="Dismiss">
 							<FontAwesomeIcon icon={faXmark} className="h-3! w-3!" />
 						</button>
 					</p>
 				)}
-			</div>
 
-			<div className="flex min-h-0 flex-1 gap-4">
-				<aside className="hidden w-80 shrink-0 md:block">{documentsPanel}</aside>
+				<ChatArea
+					key={chatId ?? "connecting"}
+					chatId={chatId}
+					disabledHint={disabledHint}
+					settings={settings}
+					documentNames={documents.rows.map((row) => row.name)}
+					onChatGone={() => startNewChat(demoContent.sessionExpired)}
+				/>
+			</section>
 
-				<section className="flex min-w-0 flex-1 flex-col gap-3">
-					<div className="flex shrink-0 items-center justify-between gap-2">
-						<h2 className="font-semibold text-(--color-text)">
-							{demoContent.chat.title}
-						</h2>
-
-						<div className="flex gap-2">
-							<button
-								type="button"
-								onClick={() => setIsSheetOpen(true)}
-								className="flex items-center gap-2 rounded-full border border-(--color-tertiary) px-3 py-1.5 text-sm font-semibold text-(--color-text) transition hover:border-(--color-accent) hover:text-(--color-accent) md:hidden"
-							>
-								<FontAwesomeIcon icon={faFolderOpen} className="h-4! w-4!" />
-								Documents ({documents.acceptedCount}/
-								{UPLOAD_LIMITS.MAX_DOCUMENTS_PER_CHAT})
-							</button>
-
-							<button
-								type="button"
-								onClick={() => setIsAdvancedOpen((open) => !open)}
-								aria-expanded={isAdvancedOpen}
-								className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-semibold transition ${
-									isAdvancedOpen
-										? "border-(--color-accent) text-(--color-accent)"
-										: "border-(--color-tertiary) text-(--color-text) hover:border-(--color-accent) hover:text-(--color-accent)"
-								}`}
-							>
-								<FontAwesomeIcon icon={faSliders} className="h-4! w-4!" />
-								Advanced
-							</button>
-						</div>
-					</div>
-
-					{isAdvancedOpen && <ConfigPanel settings={settings} onChange={setSettings} />}
-
-					<ChatArea
-						key={chatId ?? "connecting"}
-						chatId={chatId}
-						disabledHint={disabledHint}
-						settings={settings}
-						documentNames={documents.rows.map((row) => row.name)}
-						onChatGone={() => startNewChat(demoContent.sessionExpired)}
-					/>
-				</section>
-			</div>
+			<aside className="hidden w-80 shrink-0 md:block">{documentsPanel}</aside>
 
 			{isSheetOpen && (
 				<div
 					role="dialog"
 					aria-modal="true"
 					aria-label={demoContent.documents.title}
-					className="fixed inset-0 z-50 flex items-end bg-black/60 md:hidden"
+					className="fixed inset-0 z-50 flex items-end bg-black/50 backdrop-blur-sm md:hidden"
 					onClick={(event) => {
 						if (event.target === event.currentTarget) setIsSheetOpen(false);
 					}}

@@ -14,7 +14,7 @@ export function NavBar() {
 
 	return (
 		<header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4">
-			<div className="flex w-full max-w-5xl items-center justify-between gap-3 rounded-full border border-(--color-tertiary) bg-(--color-primary)/85 px-3 py-2 shadow-sm backdrop-blur">
+			<div className="flex w-full max-w-6xl items-center justify-between gap-3 rounded-full border border-(--color-tertiary) bg-(--color-secondary)/70 px-3 py-2 shadow-(--card-shadow) backdrop-blur-xl">
 				<Link
 					href={headerData.logo.link}
 					className="hidden shrink-0 items-center gap-2 pl-1 min-[450px]:flex"
@@ -36,8 +36,8 @@ export function NavBar() {
 						const isActive = !isExternal && pathname === item.link;
 						const linkClassName = `group relative flex items-center whitespace-nowrap rounded-full px-2 py-1 text-sm font-medium transition min-[800px]:px-3 ${
 							isActive
-								? "text-(--color-accent)"
-								: "text-(--color-text)/80 hover:text-(--color-accent)"
+								? "bg-(--color-accent)/10 text-(--color-accent)"
+								: "text-(--color-text)/70 hover:text-(--color-text)"
 						}`;
 						const content = (
 							<>
@@ -107,7 +107,7 @@ export function NavBar() {
 						className={`absolute left-1 h-6 w-6 rounded-full shadow-sm transition-transform ${
 							theme === "dark"
 								? "translate-x-0 bg-white"
-								: "translate-x-8 bg-(--color-accent)"
+								: "bg-(--color-accent-strong) translate-x-8"
 						}`}
 					/>
 				</button>

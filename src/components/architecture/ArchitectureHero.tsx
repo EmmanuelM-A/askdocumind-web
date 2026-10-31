@@ -7,10 +7,10 @@ export function ArchitectureHero() {
 			id="introduction"
 			className="flex min-h-[calc(100vh-5rem)] w-full shrink-0 flex-col items-center justify-center gap-4 px-4 py-16 text-center sm:px-6"
 		>
-			<h1 className="text-3xl font-bold tracking-tight text-balance text-(--color-text) sm:text-4xl md:text-5xl">
+			<h1 className="text-4xl font-semibold tracking-tight text-balance text-(--color-text) sm:text-5xl">
 				{architectureData.title}
 			</h1>
-			<p className="max-w-2xl text-sm text-(--color-text)/70 sm:text-base">
+			<p className="max-w-2xl text-sm leading-relaxed text-(--color-text)/60 sm:text-base">
 				{architectureData.description}
 			</p>
 		</section>

@@ -10,8 +10,11 @@ export function ArchitectureSection({
 	description,
 }: ArchitectureDiagram) {
 	return (
-		<section id={id} className="w-full scroll-mt-24">
-			<div className="-mt-6 [&_h2]:text-lg">
+		<section
+			id={id}
+			className="flex min-h-[calc(100dvh-5rem)] w-full flex-col justify-center py-12"
+		>
+			<div className="[&_h2]:text-lg">
 				<SectionHeadingWithLines title={name} />
 			</div>
 

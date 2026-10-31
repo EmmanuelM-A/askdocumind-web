@@ -1,9 +1,10 @@
 {
 	"intro": {
-		"headline": "Ask your documents anything",
+		"headline": "Ask your documents",
+		"headlineAccent": "anything",
 		"description": "Upload documents or code and ask questions. Answers come from your files, and show which documents and web pages they used.",
 		"links": [
-			{ "label": "Architecture", "href": "/architecture" },
+			{ "label": "How it’s built", "href": "/architecture" },
 			{ "label": "GitHub", "href": "https://github.com/EmmanuelM-A/askdocumind-api" }
 		]
 	},
@@ -42,9 +43,7 @@
 			"Brave Search",
 			"SlowAPI",
 			"Uvicorn"
-		],
-		"ctaText": "Curious how it works under the hood?",
-		"cta": { "label": "View the architecture", "href": "/architecture" }
+		]
 	},
 	"connection": {
 		"connecting": "Connecting…",
@@ -64,12 +63,12 @@
 	},
 	"chat": {
 		"title": "Chat",
-		"emptyState": "Ask a question about your documents.",
+		"emptyTitle": "Ask about your documents",
+		"emptyState": "Add a document, wait until it says Ready, then ask anything about it.",
 		"inputPlaceholder": "Ask a question about your documents",
 		"hints": {
-			"connecting": "Connecting…",
 			"processing": "Waiting for your documents to finish processing…",
-			"noDocuments": "Add a document, or turn on web search under Advanced, to start asking."
+			"noDocuments": "Add a document, or turn on web search, to start asking"
 		}
 	},
 	"advanced": {

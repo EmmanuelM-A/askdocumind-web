@@ -1,47 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import { getArchitectureSections } from "@/lib/architecture";
 
 const navItems = [{ id: "introduction", name: "Introduction" }, ...getArchitectureSections()];
 
+const ACTIVE_VISIBILITY = 0.75;
+
 export function ArchitectureNav() {
 	const [activeIndex, setActiveIndex] = useState(0);
 	const [diamondTop, setDiamondTop] = useState(0);
-	const [mounted, setMounted] = useState(false);
-	const [railTop, setRailTop] = useState("50%");
 	const listRef = useRef<HTMLUListElement | null>(null);
 	const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
 	const suppressObserverRef = useRef(false);
-
-	useEffect(() => {
-		setMounted(true);
-	}, []);
-
-	useEffect(() => {
-		const scrollEl = document.getElementById("page-scroll");
-		const lastId = navItems[navItems.length - 1].id;
-		if (!scrollEl) return;
-
-		const updateRailTop = () => {
-			const lastSection = document.getElementById(lastId);
-			if (!lastSection) return;
-
-			const rect = lastSection.getBoundingClientRect();
-			const viewportCenter = window.innerHeight / 2;
-
-			setRailTop(rect.bottom > viewportCenter ? "50%" : `${rect.top + rect.height / 2}px`);
-		};
-
-		updateRailTop();
-		scrollEl.addEventListener("scroll", updateRailTop, { passive: true });
-		window.addEventListener("resize", updateRailTop);
-		return () => {
-			scrollEl.removeEventListener("scroll", updateRailTop);
-			window.removeEventListener("resize", updateRailTop);
-		};
-	}, []);
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
@@ -49,13 +20,13 @@ export function ArchitectureNav() {
 				if (suppressObserverRef.current) return;
 
 				for (const entry of entries) {
-					if (entry.intersectionRatio <= 0.7) continue;
+					if (entry.intersectionRatio < ACTIVE_VISIBILITY) continue;
 
 					const index = navItems.findIndex((item) => item.id === entry.target.id);
 					if (index !== -1) setActiveIndex(index);
 				}
 			},
-			{ threshold: 0.7 },
+			{ threshold: ACTIVE_VISIBILITY },
 		);
 
 		for (const item of navItems) {
@@ -86,74 +57,62 @@ export function ArchitectureNav() {
 		event.preventDefault();
 		setActiveIndex(index);
 
+		// Otherwise the observer fires for every section scrolled past on the way,
+		// dragging the diamond through each one before it settles.
+		suppressObserverRef.current = true;
+		const scrollEl = document.getElementById("page-scroll");
+		const resume = () => {
+			suppressObserverRef.current = false;
+			scrollEl?.removeEventListener("scrollend", resume);
+		};
+		scrollEl?.addEventListener("scrollend", resume);
+		window.setTimeout(resume, 1000);
+
 		if (id === "introduction") {
-			const scrollEl = document.getElementById("page-scroll");
-			if (!scrollEl) return;
-
-			// The IntersectionObserver would otherwise re-fire for every section
-			// this scrolls past on the way up, dragging the indicator down through
-			// each one before it settles back at the top. Suppress it for the
-			// duration of the scroll so the indicator moves there directly.
-			suppressObserverRef.current = true;
-			const resume = () => {
-				suppressObserverRef.current = false;
-				scrollEl.removeEventListener("scrollend", resume);
-			};
-			scrollEl.addEventListener("scrollend", resume);
-			window.setTimeout(resume, 1000);
-
-			scrollEl.scrollTo({ top: 0, behavior: "smooth" });
+			scrollEl?.scrollTo({ top: 0, behavior: "smooth" });
 			return;
 		}
 
-		document.getElementById(id)?.scrollIntoView({ behavior: "instant", block: "center" });
+		document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "center" });
 	};
 
 	return (
-		<>
-			{mounted &&
-				createPortal(
-					<nav
-						aria-label="Architecture diagrams"
-						className="fixed left-1/2 z-40 hidden items-stretch gap-4 min-[1400px]:flex"
-						style={{
-							top: railTop,
-							transform: "translate(calc(-100% - 2rem - 32rem), -50%)",
-						}}
-					>
-						<ul ref={listRef} className="flex w-48 flex-col gap-4 text-sm">
-							{navItems.map((item, index) => (
-								<li
-									key={item.id}
-									ref={(element) => {
-										itemRefs.current[index] = element;
-									}}
-								>
-									<a
-										href={`#${item.id}`}
-										onClick={handleNavClick(item.id, index)}
-										className={
-											index === activeIndex
-												? "font-semibold whitespace-nowrap text-(--color-text)"
-												: "whitespace-nowrap text-(--color-text)/40 transition hover:text-(--color-text)/70"
-										}
-									>
-										{item.name}
-									</a>
-								</li>
-							))}
-						</ul>
+		<aside className="hidden w-48 shrink-0 lg:block">
+			<nav
+				aria-label="Architecture diagrams"
+				className="sticky top-1/2 flex -translate-y-1/2 items-stretch gap-4"
+			>
+				<ul ref={listRef} className="flex flex-1 flex-col gap-4 text-sm">
+					{navItems.map((item, index) => (
+						<li
+							key={item.id}
+							ref={(element) => {
+								itemRefs.current[index] = element;
+							}}
+						>
+							<a
+								href={`#${item.id}`}
+								onClick={handleNavClick(item.id, index)}
+								className={
+									index === activeIndex
+										? "font-semibold text-(--color-text)"
+										: "text-(--color-text)/40 transition hover:text-(--color-text)/70"
+								}
+							>
+								{item.name}
+							</a>
+						</li>
+					))}
+				</ul>
 
-						<div className="relative w-px self-stretch bg-(--color-tertiary)">
-							<span
-								aria-hidden="true"
-								className="absolute left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-(--color-accent) transition-[top]"
-								style={{ top: `${diamondTop}px` }}
-							/>
-						</div>
-					</nav>,
-					document.body,
-				)}
-		</>
+				<div className="relative w-px self-stretch bg-(--color-tertiary)">
+					<span
+						aria-hidden="true"
+						className="absolute left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-(--color-accent) transition-[top] duration-300"
+						style={{ top: `${diamondTop}px` }}
+					/>
+				</div>
+			</nav>
+		</aside>
 	);
 }

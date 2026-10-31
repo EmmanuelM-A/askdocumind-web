@@ -82,7 +82,7 @@ export default function RootLayout({
 					// biome-ignore lint/security/noDangerouslySetInnerHtml: must run before hydration to set the theme attribute before first paint, avoiding a flash of the wrong theme
 					dangerouslySetInnerHTML={{
 						__html: `try {
-	var theme = localStorage.getItem("askdocumindweb-theme") || "light";
+	var theme = localStorage.getItem("askdocumindweb-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 	document.documentElement.setAttribute("data-theme", theme);
 } catch (e) {}`,
 					}}
