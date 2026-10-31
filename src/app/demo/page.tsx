@@ -3,9 +3,9 @@
 import { faGear, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { createAnonymousUserSession } from "@/api/auth-endpoints";
-import { getChatSessionMessages, initChatSession } from "@/api/chat-session-endpoints";
-import { getUploadedDocuments, uploadDocuments } from "@/api/document-endpoints";
+import { initAnonymousSession } from "@/api/auth-endpoints";
+import { initChatSession } from "@/api/chat-session-endpoints";
+import { listDocuments, uploadDocument } from "@/api/document-endpoints";
 import { ChatArea, type ChatBubble } from "@/components/demo/ChatArea";
 import { ConfigPanel } from "@/components/demo/ConfigPanel";
 import { type DocumentChip, DocumentChips } from "@/components/demo/DocumentChips";
@@ -20,30 +20,16 @@ import type { Document } from "@/types/documents";
 let bootstrapPromise: Promise<{
 	chatId: UUID;
 	existingDocuments: Document[];
-	existingMessages: ChatBubble[];
 }> | null = null;
 
 function bootstrapChatSession() {
 	if (!bootstrapPromise) {
 		bootstrapPromise = (async () => {
-			await createAnonymousUserSession();
-
+			await initAnonymousSession();
 			const chatSession = await initChatSession({ title: "Demo Chat" });
+			const { items: existingDocuments } = await listDocuments(chatSession.id);
 
-			const existingDocuments = await getUploadedDocuments(chatSession.chat_id);
-
-			const existingChatMessages = await getChatSessionMessages(chatSession.chat_id);
-
-			const existingMessages = existingChatMessages
-				.filter((message) => message.role === "USER" || message.role === "ASSISTANT")
-				.map((message) => ({
-					id: message.id,
-					role: message.role as "USER" | "ASSISTANT",
-					content: message.content,
-					sources: message.sources,
-				}));
-
-			return { chatId: chatSession.chat_id, existingDocuments, existingMessages };
+			return { chatId: chatSession.id, existingDocuments };
 		})().catch((error) => {
 			// Let the next mount retry instead of being stuck on a failed attempt forever.
 			bootstrapPromise = null;
@@ -75,19 +61,18 @@ export default function DemoPage() {
 		let cancelled = false;
 
 		bootstrapChatSession()
-			.then(({ chatId: bootstrappedChatId, existingDocuments, existingMessages }) => {
+			.then(({ chatId: bootstrappedChatId, existingDocuments }) => {
 				if (cancelled) return;
 
 				setChatId(bootstrappedChatId);
 				setDocuments(
 					existingDocuments.map((doc) => ({
 						id: doc.id,
-						name: doc.source,
-						sizeLabel: formatBytes(doc.source_size),
+						name: doc.filename,
+						sizeLabel: formatBytes(doc.sizeBytes),
 						status: "uploaded",
 					})),
 				);
-				setMessages(existingMessages);
 				setConnectionStatus("success");
 			})
 			.catch((error) => {
@@ -110,28 +95,23 @@ export default function DemoPage() {
 
 		setIsUploading(true);
 		try {
-			await uploadDocuments({
-				chatSessionId: chatId,
-				documents: pendingDocuments.map((doc) => doc.file),
-			});
-
-			// The upload endpoint never returns per-file IDs (and per the API docs
-			// may silently drop files that exceed the per-chat size cap), so the
-			// server's list is re-fetched as the source of truth for what actually
-			// landed - this also swaps each chip's local synthetic id for the real
-			// server-assigned UUID, which delete/view rely on afterwards.
-			const uploadedIds = new Set(pendingDocuments.map((doc) => doc.id));
-			const refreshedDocuments = await getUploadedDocuments(chatId);
-
-			setDocuments((prev) => [
-				...prev.filter((doc) => doc.status === "pending" && !uploadedIds.has(doc.id)),
-				...refreshedDocuments.map((doc) => ({
-					id: doc.id,
-					name: doc.source,
-					sizeLabel: formatBytes(doc.source_size),
-					status: "uploaded" as const,
-				})),
-			]);
+			// Temporary until phase 3: upload one at a time and swap each local chip
+			// for the server's document.
+			for (const pending of pendingDocuments) {
+				const uploaded = await uploadDocument(chatId, pending.file);
+				setDocuments((prev) =>
+					prev.map((doc) =>
+						doc.id === pending.id
+							? {
+									id: uploaded.id,
+									name: uploaded.filename,
+									sizeLabel: formatBytes(uploaded.sizeBytes),
+									status: "uploaded" as const,
+								}
+							: doc,
+					),
+				);
+			}
 		} catch (error) {
 			console.error("Failed to upload documents", error);
 		} finally {

@@ -11,7 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type ChangeEvent, type DragEvent, useEffect, useRef, useState } from "react";
-import { deleteUploadedDocument } from "@/api/document-endpoints";
+import { deleteDocument } from "@/api/document-endpoints";
 import { formatBytes } from "@/lib/format";
 import type { UUID } from "@/types/api";
 
@@ -55,7 +55,7 @@ export function DocumentChips({
 			if (el.scrollWidth <= el.clientWidth) return;
 
 			event.preventDefault();
-			el.scrollLeft += event.deltaY;
+			el.scrollTop += event.deltaY;
 		};
 
 		el.addEventListener("wheel", handleWheel, { passive: false });
@@ -104,7 +104,7 @@ export function DocumentChips({
 		if (doc.status !== "uploaded" || !chatId) return;
 
 		try {
-			await deleteUploadedDocument(doc.id as UUID, chatId);
+			await deleteDocument(chatId, doc.id as UUID);
 		} catch (error) {
 			console.error("Failed to delete document", error);
 		}

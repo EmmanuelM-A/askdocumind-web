@@ -1,22 +1,21 @@
-export interface ErrorData {
-	code: string;
-	details: string;
-	stackTrace?: string;
-}
+export type UUID = `${string}-${string}-${string}-${string}-${string}`;
 
-export interface APIResponse {
+export interface APIResponse<T = unknown> {
 	success: boolean;
 	message: string;
 	timestamp: string;
-	data?: unknown;
-	error?: ErrorData;
+	data?: T | null;
+	error?: {
+		code: string;
+		details: Record<string, string> | null;
+		stackTrace?: string | null;
+	};
 }
 
-export interface HealthDataFormat {
-	status: string;
+export interface Page<T> {
+	items: T[];
+	total: number;
+	page: number;
+	size: number;
+	pages: number;
 }
-
-/**
- * UUID as defined from node:crypto, but represented as a string for easier use across the codebase.
- */
-export type UUID = `${string}-${string}-${string}-${string}-${string}`;

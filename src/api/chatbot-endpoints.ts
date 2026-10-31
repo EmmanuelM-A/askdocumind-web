@@ -1,14 +1,11 @@
 import { sendRequest } from "@/api/api-client";
-import { extractAPIData } from "@/api/utils";
 import { API_ROUTES } from "@/config/constants";
-import type { ChatbotResponse, ChatWithChatbot } from "@/types/chatbot";
+import type { UUID } from "@/types/api";
+import type { AskRequest, AskResponse } from "@/types/chatbot";
 
-export async function chatWithChatbot(data: ChatWithChatbot): Promise<ChatbotResponse> {
-	const rawResponse = await sendRequest({
-		route: API_ROUTES.CHATBOT,
+export function askChatbot(chatSessionId: UUID, request: AskRequest): Promise<AskResponse> {
+	return sendRequest<AskResponse>(`${API_ROUTES.CHATBOT}/${chatSessionId}/ask`, {
 		method: "POST",
-		body: data,
+		body: request,
 	});
-
-	return extractAPIData<ChatbotResponse>(rawResponse, "Send chat message");
 }

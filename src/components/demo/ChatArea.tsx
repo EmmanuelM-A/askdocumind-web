@@ -3,7 +3,7 @@
 import { faComments } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { chatWithChatbot } from "@/api/chatbot-endpoints";
+import { askChatbot } from "@/api/chatbot-endpoints";
 import demoContent from "@/data/demo/content.json";
 import type { UUID } from "@/types/api";
 
@@ -48,10 +48,9 @@ export function ChatArea({
 		setIsSending(true);
 
 		try {
-			const response = await chatWithChatbot({
-				user_query: trimmedDraft,
-				chat_id: chatId,
-				web_search_enabled: webSearchEnabled,
+			const response = await askChatbot(chatId, {
+				query: trimmedDraft,
+				configs: { webSearchEnabled },
 			});
 
 			const assistantMessage: ChatBubble = {
