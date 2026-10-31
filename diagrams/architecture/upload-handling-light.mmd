@@ -1,0 +1,43 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'background': 'transparent', 'lineColor': '#475569', 'primaryTextColor': '#0f172a', 'edgeLabelBackground': '#f8fafc', 'clusterBkg': '#f8fafc', 'clusterBorder': '#cbd5e1', 'titleColor': '#0f172a' }}}%%
+flowchart LR
+    classDef core fill:#dbeafe,stroke:#2563eb,color:#0f172a
+    classDef neutral fill:#e2e8f0,stroke:#cbd5e1,color:#0f172a
+    classDef ext fill:#f8fafc,stroke:#2563eb,stroke-dasharray:4 3,color:#0f172a
+
+    subgraph request["Upload request"]
+        req(["File<br/>extension, MIME type,<br/>10 docs per chat"])
+        pending["Row PENDING<br/>duplicate name: 409"]
+        save["Read and save<br/>10 MB cap, SHA-256"]
+        uploaded["Row UPLOADED<br/>respond 202"]
+    end
+
+    bucket[("Object storage<br/>chat ID / document ID")]
+
+    subgraph background["Background ingestion"]
+        task["Task, max 5 at once<br/>PROCESSING<br/>extract and chunk"]
+        result{"COMPLETED<br/>or FAILED"}
+    end
+
+    openai["OpenAI<br/>text-embedding-3-small"]
+    db[("pgvector<br/>chunk_embeddings")]
+    sweeper["Sweeper, every 60 s<br/>retries UPLOADED at 2 min<br/>fails stuck rows at 1 h"]
+    reprocess["Reprocess<br/>FAILED to UPLOADED"]
+    delete["Delete document<br/>file, row, chunks"]
+
+    req -->|file and metadata| pending
+    pending -->|file stream| save
+    save -->|file bytes| bucket
+    save -->|size and checksum| uploaded
+    uploaded -->|ingestion job| task
+    bucket -->|file bytes| task
+    task <-->|chunk text and vectors| openai
+    task -->|chunk vectors| db
+    task -->|final status| result
+    sweeper -->|retry jobs| task
+    result -->|failed document| reprocess
+    reprocess -->|ingestion job| task
+    delete -->|object key| bucket
+
+    class req,pending,save,uploaded,task,result,sweeper,reprocess,delete core
+    class bucket,db neutral
+    class openai ext

@@ -1,4 +1,5 @@
 import { DiagramViewer } from "@/components/architecture/DiagramViewer";
+import { SectionHeadingWithLines } from "@/components/layout/SectionHeadings";
 import type { ArchitectureDiagram } from "@/lib/architecture";
 
 export function ArchitectureSection({
@@ -13,9 +14,7 @@ export function ArchitectureSection({
 			id={id}
 			className="flex min-h-[calc(100dvh-4rem)] w-full flex-col justify-center gap-5 py-12"
 		>
-			<h2 className="text-xl font-semibold tracking-tight text-(--color-text) sm:text-2xl">
-				{name}
-			</h2>
+			<SectionHeadingWithLines title={name} />
 
 			<DiagramViewer name={name} diagramLight={diagramLight} diagramDark={diagramDark} />
 

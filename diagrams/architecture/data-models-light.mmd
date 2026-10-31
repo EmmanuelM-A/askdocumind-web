@@ -1,0 +1,44 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'background': 'transparent', 'primaryColor': '#dbeafe', 'primaryBorderColor': '#2563eb', 'primaryTextColor': '#0f172a', 'lineColor': '#475569', 'attributeBackgroundColorOdd': '#f8fafc', 'attributeBackgroundColorEven': '#e2e8f0', 'rowOdd': '#f8fafc', 'rowEven': '#e2e8f0', 'edgeLabelBackground': '#f8fafc', 'tertiaryColor': '#f8fafc' }}}%%
+erDiagram
+    users ||--o{ chat_sessions : "owns, cascade"
+    chat_sessions ||--o{ chat_messages : "has, cascade"
+    chat_sessions ||--o{ documents : "has, cascade"
+    documents ||--o{ chunk_embeddings : "split into, cascade"
+    chat_sessions ||--o{ chunk_embeddings : "scopes search, cascade"
+
+    users {
+        uuid id PK
+        timestamptz last_seen_at "drives expired-user cleanup"
+    }
+    chat_sessions {
+        uuid id PK
+        uuid user_id FK
+        text title
+    }
+    chat_messages {
+        uuid id PK
+        uuid chat_session_id FK
+        enum role "user, assistant, system"
+        text content
+        varchar_array sources
+    }
+    documents {
+        uuid id PK
+        uuid chat_session_id FK
+        varchar original_filename "unique per chat session"
+        varchar object_key UK
+        varchar content_type
+        bigint size_bytes
+        varchar checksum "SHA-256"
+        enum status "PENDING to COMPLETED or FAILED"
+        varchar error_message
+        timestamptz updated_at "sweeper age check"
+    }
+    chunk_embeddings {
+        uuid id PK
+        uuid document_id FK
+        uuid chat_session_id FK
+        int chunk_index "unique per document"
+        text chunk_text
+        vector embedding "1536 dims, HNSW cosine"
+    }

@@ -6,37 +6,25 @@
 			"name": "System overview",
 			"diagramLight": "/images/architecture/system-overview-light-theme.svg",
 			"diagramDark": "/images/architecture/system-overview-dark-theme.svg",
-			"description": "The FastAPI backend runs on Railway behind Cloudflare. A Postgres database on Neon holds both the relational data and the pgvector embeddings, and uploaded files are kept in Railway’s S3-compatible object storage. The API calls OpenAI to embed text and write answers, and Brave Search for web results. The Next.js frontend is hosted on Vercel."
+			"description": "The Next.js client on Vercel reaches the FastAPI API on Railway through Cloudflare. The API uses Postgres with pgvector on Neon, an S3-compatible bucket, OpenAI and Brave Search, and runs ingestion, the upload sweeper and user cleanup as background tasks in the same process."
 		},
 		{
 			"name": "RAG pipeline",
 			"diagramLight": "/images/architecture/rag-pipeline-light-theme.svg",
 			"diagramDark": "/images/architecture/rag-pipeline-dark-theme.svg",
-			"description": "A question is first expanded into a few related queries. Each one is embedded and matched against the chat’s chunks in pgvector, keeping matches above the similarity threshold. A cross-encoder reranks the candidates, and the best chunks are passed to the model. If too little relevant text turns up and web search is on, Brave Search results are added. The answer comes back with the documents and web pages it used."
-		},
-		{
-			"name": "Session management",
-			"diagramLight": "/images/architecture/session-management-light-theme.svg",
-			"diagramDark": "/images/architecture/session-management-dark-theme.svg",
-			"description": "There are no accounts. An anonymous sign-in call issues a signed, HttpOnly cookie that lasts an hour, and calling it again refreshes it. Every other request is checked against that cookie. A scheduled job removes users who have gone inactive, along with their chats, database rows and stored files."
+			"description": "The question is rewritten by gpt-4o-mini, embedded, and matched against this chat’s chunks in pgvector. If fewer than 3 match and web search is on, Brave Search adds up to 5 pages. A cross-encoder reranks the results, and the top 15 go to gpt-4o-mini to write the answer."
 		},
 		{
 			"name": "Upload handling",
 			"diagramLight": "/images/architecture/upload-handling-light-theme.svg",
 			"diagramDark": "/images/architecture/upload-handling-dark-theme.svg",
-			"description": "Each file is checked for type, size, the per-chat limit and duplicate names, saved to object storage, and acknowledged straight away. A background task, with a cap on how many run at once, extracts the text, splits it into chunks (code by function and class), embeds them and stores them in pgvector. The document moves from uploaded to processing to completed or failed. A sweeper retries or fails runs that stall, failed documents can be reprocessed, and deleting a document removes its file and its chunks."
+			"description": "Uploads are validated, saved to object storage and acknowledged with a 202. A background task, up to 5 at once, extracts, chunks and embeds the text, while a sweeper retries or fails stuck uploads every 60 seconds."
 		},
 		{
 			"name": "Data models",
 			"diagramLight": "/images/architecture/data-models-light-theme.svg",
 			"diagramDark": "/images/architecture/data-models-dark-theme.svg",
-			"description": "Five tables keyed by UUID: users, chat sessions, chat messages, documents and chunk embeddings. A user owns their chat sessions, each chat owns its messages and documents, and each document is split into chunks with their embeddings. Foreign keys cascade on delete, so removing a user or a chat removes everything under it."
-		},
-		{
-			"name": "Deployment",
-			"diagramLight": "/images/architecture/deployment-architecture-light-theme.svg",
-			"diagramDark": "/images/architecture/deployment-architecture-dark-theme.svg",
-			"description": "The frontend and backend deploy independently. Pushing to main deploys the Next.js app to Vercel and the API to Railway, where CI runs lint and tests, the Docker image is built, and alembic upgrade head runs before the new version starts. The database is a managed Neon Postgres instance, files live in Railway object storage, and Cloudflare sits in front of both."
+			"description": "Five tables: users, chat sessions, chat messages, documents and chunk embeddings, all with cascading deletes. Each chunk stores a 1536-dimension vector and its chat ID, so searches stay within one chat."
 		}
 	]
 }
