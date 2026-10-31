@@ -50,20 +50,11 @@ export const metadata: Metadata = {
 		siteName: SITE_NAME,
 		title: `${SITE_NAME} | Ask your documents anything`,
 		description,
-		images: [
-			{
-				url: "/images/home/askdocumind-in-use-light-theme-v2.png",
-				width: 1300,
-				height: 976,
-				alt: `${SITE_NAME} in use`,
-			},
-		],
 	},
 	twitter: {
-		card: "summary_large_image",
+		card: "summary",
 		title: `${SITE_NAME} | Ask your documents anything`,
 		description,
-		images: ["/images/home/askdocumind-in-use-light-theme-v2.png"],
 	},
 	icons: {
 		icon: "/icon.svg",
