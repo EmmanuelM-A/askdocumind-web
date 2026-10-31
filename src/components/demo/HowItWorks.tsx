@@ -1,8 +1,8 @@
 import Link from "next/link";
-import homeData from "@/data/home/home.json";
+import demoContent from "@/data/demo/content.json";
 
-export function HowItWorksSection() {
-	const { heading, steps, techStackHeading, techStack, ctaText, cta } = homeData.howItWorks;
+export function HowItWorks() {
+	const { heading, steps, techStackHeading, techStack, ctaText, cta } = demoContent.howItWorks;
 
 	return (
 		<section className="w-full">

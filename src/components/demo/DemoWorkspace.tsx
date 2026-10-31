@@ -34,7 +34,7 @@ function getChatId(): Promise<UUID> {
 	return chatIdPromise;
 }
 
-export default function DemoPage() {
+export function DemoWorkspace() {
 	const [chatId, setChatId] = useState<UUID | null>(null);
 	const [connection, setConnection] = useState<Connection>("connecting");
 	const [notice, setNotice] = useState<string | null>(null);
@@ -101,7 +101,7 @@ export default function DemoPage() {
 	);
 
 	return (
-		<div className="mx-auto flex h-[calc(100dvh-5rem)] w-full max-w-6xl flex-col gap-3 px-4 pt-4 pb-6 sm:px-6">
+		<div className="flex min-h-0 flex-1 flex-col gap-3">
 			<div className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-2">
 				<div className="flex items-center gap-2 text-sm font-medium text-(--color-text)">
 					<span

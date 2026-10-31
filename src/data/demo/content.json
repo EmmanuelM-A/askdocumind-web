@@ -1,4 +1,51 @@
 {
+	"intro": {
+		"headline": "Ask your documents anything",
+		"description": "Upload documents or code and ask questions. Answers come from your files, and show which documents and web pages they used.",
+		"links": [
+			{ "label": "Architecture", "href": "/architecture" },
+			{ "label": "GitHub", "href": "https://github.com/EmmanuelM-A/askdocumind-api" }
+		]
+	},
+	"howItWorks": {
+		"heading": "How it works",
+		"steps": [
+			{
+				"title": "Upload",
+				"description": "Add a PDF, DOCX, TXT, Markdown or HTML file, or source code."
+			},
+			{
+				"title": "Process",
+				"description": "Files are chunked and embedded in the background while the panel shows progress. Code is split by function and class."
+			},
+			{
+				"title": "Ask",
+				"description": "Your question is expanded, matched against your files and reranked, with an optional web search fallback."
+			},
+			{
+				"title": "Answer",
+				"description": "Get an answer grounded in your files that shows which documents and web pages it used."
+			}
+		],
+		"techStackHeading": "Built with",
+		"techStack": [
+			"Python",
+			"FastAPI",
+			"LangChain",
+			"OpenAI",
+			"PostgreSQL",
+			"pgvector",
+			"SQLAlchemy",
+			"Alembic",
+			"S3 (boto3)",
+			"sentence-transformers",
+			"Brave Search",
+			"SlowAPI",
+			"Uvicorn"
+		],
+		"ctaText": "Curious how it works under the hood?",
+		"cta": { "label": "View the architecture", "href": "/architecture" }
+	},
 	"connection": {
 		"connecting": "Connecting…",
 		"connected": "Ready",
