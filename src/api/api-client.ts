@@ -13,6 +13,26 @@ export class ApiError extends Error {
 	}
 }
 
+export const DEFAULT_RETRY_AFTER_SECONDS = 10;
+
+export function getRetryAfterSeconds(error: unknown): number | null {
+	if (!(error instanceof ApiError) || error.status !== 429) return null;
+	return error.retryAfter ?? DEFAULT_RETRY_AFTER_SECONDS;
+}
+
+export function isChatGone(error: unknown): boolean {
+	return error instanceof ApiError && (error.status === 403 || error.status === 404);
+}
+
+export function getErrorMessage(error: unknown): string {
+	if (!(error instanceof ApiError)) return "Couldn't reach the server. Check your connection.";
+
+	const retryAfter = getRetryAfterSeconds(error);
+	if (retryAfter !== null) return `Too many requests. Try again in ${retryAfter}s.`;
+	if (error.status >= 500) return "Something went wrong on our side. Please try again.";
+	return error.message;
+}
+
 type Query = Record<string, string | number | undefined>;
 
 interface RequestOptions {

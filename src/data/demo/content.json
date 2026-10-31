@@ -1,15 +1,42 @@
 {
-	"onConnection": {
-		"default": "Connecting to Chat…",
-		"success": "Chat Is Ready",
-		"failure": "Chat Failed to Connect"
+	"connection": {
+		"connecting": "Connecting…",
+		"connected": "Ready",
+		"failed": "Couldn't connect to the API"
 	},
-	"configurations": [
-		{
-			"label": "Enable Web Search Fallback",
-			"checked": false
+	"sessionExpired": "Your previous session expired, so its documents were cleared.",
+	"documents": {
+		"title": "Documents",
+		"dropPrompt": "Drop files here or",
+		"choosePrompt": "choose files",
+		"dropActive": "Drop files to add them",
+		"limits": "PDF, DOCX, TXT, Markdown, HTML or code (.py, .js, .jsx, .ts, .tsx, .java, .go). Up to 10 MB each.",
+		"empty": "No documents yet.",
+		"confirmClearAll": "Delete every document in this chat?",
+		"confirmStartOver": "Start over? This deletes the chat, its documents and the conversation."
+	},
+	"chat": {
+		"title": "Chat",
+		"emptyState": "Ask a question about your documents.",
+		"inputPlaceholder": "Ask a question about your documents",
+		"hints": {
+			"connecting": "Connecting…",
+			"processing": "Waiting for your documents to finish processing…",
+			"noDocuments": "Add a document, or turn on web search under Advanced, to start asking."
 		}
-	],
-	"chatBoxPlaceholder": "Ask a question about your uploaded documents to start chatting",
-	"chatBoxInputPlaceholder": "Ask a question about your document"
+	},
+	"advanced": {
+		"webSearch": {
+			"label": "Web search fallback",
+			"hint": "Search the web when your documents don't have enough to answer."
+		},
+		"topK": {
+			"label": "Chunks to retrieve",
+			"hint": "How many document chunks are considered for each answer."
+		},
+		"threshold": {
+			"label": "Similarity threshold",
+			"hint": "How closely a chunk must match the question to be used. Higher is stricter."
+		}
+	}
 }

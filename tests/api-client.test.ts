@@ -141,7 +141,9 @@ describe("errors", () => {
 	});
 
 	test("still throws an ApiError when the error body isn't JSON", async () => {
-		fetchMock.mockResolvedValueOnce(new Response("<html lang='en'>Bad gateway</html>", { status: 502 }));
+		fetchMock.mockResolvedValueOnce(
+			new Response("<html lang='en'>Bad gateway</html>", { status: 502 }),
+		);
 
 		const error = await rejectionOf(sendRequest("v1/thing"));
 

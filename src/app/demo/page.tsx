@@ -1,194 +1,214 @@
 "use client";
 
-import { faGear, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faFolderOpen, faSliders, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { initAnonymousSession } from "@/api/auth-endpoints";
-import { initChatSession } from "@/api/chat-session-endpoints";
-import { listDocuments, uploadDocument } from "@/api/document-endpoints";
-import { ChatArea, type ChatBubble } from "@/components/demo/ChatArea";
-import { ConfigPanel } from "@/components/demo/ConfigPanel";
-import { type DocumentChip, DocumentChips } from "@/components/demo/DocumentChips";
+import { deleteChatSession, initChatSession } from "@/api/chat-session-endpoints";
+import { ChatArea } from "@/components/demo/ChatArea";
+import { type AskSettings, ConfigPanel } from "@/components/demo/ConfigPanel";
+import { DocumentsPanel } from "@/components/demo/DocumentsPanel";
+import { DEFAULT_ASK_CONFIGS, UPLOAD_LIMITS } from "@/config/constants";
 import demoContent from "@/data/demo/content.json";
-import { formatBytes } from "@/lib/format";
+import { useDocuments } from "@/hooks/useDocuments";
 import type { UUID } from "@/types/api";
-import type { Document } from "@/types/documents";
 
-// Module-level (not component state) so the bootstrap only actually runs once per
-// tab session, even though the effect below re-mounts on every client-side
-// navigation into this page (and twice per mount in dev, per React's StrictMode).
-let bootstrapPromise: Promise<{
-	chatId: UUID;
-	existingDocuments: Document[];
-}> | null = null;
+type Connection = "connecting" | "connected" | "failed";
 
-function bootstrapChatSession() {
-	if (!bootstrapPromise) {
-		bootstrapPromise = (async () => {
+// Kept outside the component so the session is only set up once, even though
+// React runs effects twice in development and the page remounts on navigation.
+let chatIdPromise: Promise<UUID> | null = null;
+
+function getChatId(): Promise<UUID> {
+	if (!chatIdPromise) {
+		chatIdPromise = (async () => {
 			await initAnonymousSession();
-			const chatSession = await initChatSession({ title: "Demo Chat" });
-			const { items: existingDocuments } = await listDocuments(chatSession.id);
-
-			return { chatId: chatSession.id, existingDocuments };
+			const chat = await initChatSession({ title: "Demo Chat" });
+			return chat.id;
 		})().catch((error) => {
-			// Let the next mount retry instead of being stuck on a failed attempt forever.
-			bootstrapPromise = null;
+			chatIdPromise = null;
 			throw error;
 		});
 	}
 
-	return bootstrapPromise;
+	return chatIdPromise;
 }
 
 export default function DemoPage() {
-	const [isConfigOpen, setIsConfigOpen] = useState(false);
-	const [configurations, setConfigurations] = useState(demoContent.configurations);
-	const [documents, setDocuments] = useState<DocumentChip[]>([]);
-	const [isUploading, setIsUploading] = useState(false);
-	const [connectionStatus, setConnectionStatus] = useState<"default" | "success" | "failure">(
-		"default",
-	);
 	const [chatId, setChatId] = useState<UUID | null>(null);
-	const [messages, setMessages] = useState<ChatBubble[]>([]);
+	const [connection, setConnection] = useState<Connection>("connecting");
+	const [notice, setNotice] = useState<string | null>(null);
+	const [settings, setSettings] = useState<AskSettings>({ ...DEFAULT_ASK_CONFIGS });
+	const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
+	const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-	const hasPendingDocuments = documents.some((doc) => doc.status === "pending");
-	const hasUploadedDocuments = documents.some((doc) => doc.status === "uploaded");
-	const webSearchEnabled = Boolean(
-		configurations.find((item) => item.label === "Enable Web Search Fallback")?.checked,
-	);
-
-	useEffect(() => {
-		let cancelled = false;
-
-		bootstrapChatSession()
-			.then(({ chatId: bootstrappedChatId, existingDocuments }) => {
-				if (cancelled) return;
-
-				setChatId(bootstrappedChatId);
-				setDocuments(
-					existingDocuments.map((doc) => ({
-						id: doc.id,
-						name: doc.filename,
-						sizeLabel: formatBytes(doc.sizeBytes),
-						status: "uploaded",
-					})),
-				);
-				setConnectionStatus("success");
+	const connect = useCallback(() => {
+		setConnection("connecting");
+		getChatId()
+			.then((id) => {
+				setChatId(id);
+				setConnection("connected");
 			})
 			.catch((error) => {
-				console.error("Failed to connect chat session", error);
-				if (!cancelled) setConnectionStatus("failure");
+				console.error("Failed to connect to the API", error);
+				setConnection("failed");
 			});
-
-		return () => {
-			cancelled = true;
-		};
 	}, []);
 
-	const handleUpload = async () => {
-		if (!hasPendingDocuments || isUploading || !chatId) return;
+	useEffect(() => {
+		connect();
+	}, [connect]);
 
-		const pendingDocuments = documents.filter(
-			(doc): doc is DocumentChip & { file: File } =>
-				doc.status === "pending" && Boolean(doc.file),
-		);
+	function startNewChat(message: string | null) {
+		chatIdPromise = null;
+		setChatId(null);
+		setNotice(message);
+		connect();
+	}
 
-		setIsUploading(true);
-		try {
-			// Temporary until phase 3: upload one at a time and swap each local chip
-			// for the server's document.
-			for (const pending of pendingDocuments) {
-				const uploaded = await uploadDocument(chatId, pending.file);
-				setDocuments((prev) =>
-					prev.map((doc) =>
-						doc.id === pending.id
-							? {
-									id: uploaded.id,
-									name: uploaded.filename,
-									sizeLabel: formatBytes(uploaded.sizeBytes),
-									status: "uploaded" as const,
-								}
-							: doc,
-					),
-				);
-			}
-		} catch (error) {
-			console.error("Failed to upload documents", error);
-		} finally {
-			setIsUploading(false);
+	async function handleStartOver() {
+		if (chatId) {
+			await deleteChatSession(chatId).catch((error) =>
+				console.error("Failed to delete chat", error),
+			);
 		}
-	};
+		startNewChat(null);
+	}
+
+	const documents = useDocuments(chatId, () => startNewChat(demoContent.sessionExpired));
+
+	const { hints } = demoContent.chat;
+	let disabledHint: string | null = null;
+	if (!chatId) {
+		disabledHint = hints.connecting;
+	} else if (documents.readyCount === 0 && !settings.webSearchEnabled) {
+		disabledHint =
+			documents.isUploading || documents.isProcessing ? hints.processing : hints.noDocuments;
+	}
+
+	const documentsPanel = (
+		<DocumentsPanel
+			rows={documents.rows}
+			acceptedCount={documents.acceptedCount}
+			isUploading={documents.isUploading}
+			disabled={!chatId}
+			onAddFiles={documents.addFiles}
+			onRemove={documents.removeRow}
+			onRetry={(row) => void documents.retryRow(row)}
+			onClearAll={() => void documents.clearAll()}
+			onStartOver={() => void handleStartOver()}
+		/>
+	);
 
 	return (
-		<div className="mx-auto flex h-full w-full max-w-4xl shrink-0 flex-col gap-4 overflow-hidden px-4 py-16 sm:px-6">
-			<div className="flex shrink-0 items-center justify-between">
-				<div className="flex items-center gap-2">
+		<div className="mx-auto flex h-[calc(100dvh-5rem)] w-full max-w-6xl flex-col gap-3 px-4 pt-4 pb-6 sm:px-6">
+			<div className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-2">
+				<div className="flex items-center gap-2 text-sm font-medium text-(--color-text)">
 					<span
 						className={`h-2.5 w-2.5 rounded-full ${
-							connectionStatus === "success"
+							connection === "connected"
 								? "bg-emerald-500"
-								: connectionStatus === "failure"
+								: connection === "failed"
 									? "bg-red-500"
-									: "bg-gray-400"
+									: "animate-pulse bg-gray-400"
 						}`}
 					/>
-					<p className="text-sm font-medium text-(--color-text)">
-						{demoContent.onConnection[connectionStatus]}
-					</p>
+					{demoContent.connection[connection]}
+					{connection === "failed" && (
+						<button
+							type="button"
+							onClick={connect}
+							className="font-semibold text-(--color-accent) hover:underline"
+						>
+							Retry
+						</button>
+					)}
 				</div>
 
-				<button
-					type="button"
-					onClick={() => setIsConfigOpen((prev) => !prev)}
-					aria-label="Configurations"
-					className={`flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-semibold transition sm:px-4 ${
-						isConfigOpen
-							? "border-(--color-accent) text-(--color-accent)"
-							: "border-(--color-tertiary) text-(--color-text) hover:border-(--color-accent) hover:text-(--color-accent)"
-					}`}
-				>
-					<FontAwesomeIcon icon={faGear} className="h-4! w-4!" />
-					<span className="hidden sm:inline">Configurations</span>
-				</button>
+				{notice && (
+					<p className="flex items-center gap-2 rounded-full bg-(--color-secondary) px-3 py-1 text-xs text-(--color-text)/80">
+						{notice}
+						<button type="button" onClick={() => setNotice(null)} aria-label="Dismiss">
+							<FontAwesomeIcon icon={faXmark} className="h-3! w-3!" />
+						</button>
+					</p>
+				)}
 			</div>
 
-			{isConfigOpen && (
-				<ConfigPanel
-					configurations={configurations}
-					onConfigurationsChange={setConfigurations}
-				/>
-			)}
+			<div className="flex min-h-0 flex-1 gap-4">
+				<aside className="hidden w-80 shrink-0 md:block">{documentsPanel}</aside>
 
-			<div className="flex shrink-0 items-stretch gap-2">
-				<DocumentChips
-					chatId={chatId}
-					documents={documents}
-					onDocumentsChange={setDocuments}
-					onUpload={() => void handleUpload()}
-					isUploading={isUploading}
-				/>
+				<section className="flex min-w-0 flex-1 flex-col gap-3">
+					<div className="flex shrink-0 items-center justify-between gap-2">
+						<h2 className="font-semibold text-(--color-text)">
+							{demoContent.chat.title}
+						</h2>
 
-				<button
-					type="button"
-					onClick={() => void handleUpload()}
-					disabled={!hasPendingDocuments || isUploading || !chatId}
-					aria-label={isUploading ? "Uploading" : "Upload"}
-					className="hidden shrink-0 items-center justify-center rounded-xl bg-(--color-accent) px-4 text-white transition hover:opacity-90 disabled:opacity-50 sm:flex"
-				>
-					<FontAwesomeIcon
-						icon={faUpload}
-						className={`h-6! w-6! ${isUploading ? "animate-pulse" : ""}`}
+						<div className="flex gap-2">
+							<button
+								type="button"
+								onClick={() => setIsSheetOpen(true)}
+								className="flex items-center gap-2 rounded-full border border-(--color-tertiary) px-3 py-1.5 text-sm font-semibold text-(--color-text) transition hover:border-(--color-accent) hover:text-(--color-accent) md:hidden"
+							>
+								<FontAwesomeIcon icon={faFolderOpen} className="h-4! w-4!" />
+								Documents ({documents.acceptedCount}/
+								{UPLOAD_LIMITS.MAX_DOCUMENTS_PER_CHAT})
+							</button>
+
+							<button
+								type="button"
+								onClick={() => setIsAdvancedOpen((open) => !open)}
+								aria-expanded={isAdvancedOpen}
+								className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-semibold transition ${
+									isAdvancedOpen
+										? "border-(--color-accent) text-(--color-accent)"
+										: "border-(--color-tertiary) text-(--color-text) hover:border-(--color-accent) hover:text-(--color-accent)"
+								}`}
+							>
+								<FontAwesomeIcon icon={faSliders} className="h-4! w-4!" />
+								Advanced
+							</button>
+						</div>
+					</div>
+
+					{isAdvancedOpen && <ConfigPanel settings={settings} onChange={setSettings} />}
+
+					<ChatArea
+						key={chatId ?? "connecting"}
+						chatId={chatId}
+						disabledHint={disabledHint}
+						settings={settings}
+						documentNames={documents.rows.map((row) => row.name)}
+						onChatGone={() => startNewChat(demoContent.sessionExpired)}
 					/>
-				</button>
+				</section>
 			</div>
 
-			<ChatArea
-				chatId={chatId}
-				hasUploadedDocuments={hasUploadedDocuments}
-				webSearchEnabled={webSearchEnabled}
-				messages={messages}
-				onMessagesChange={setMessages}
-			/>
+			{isSheetOpen && (
+				<div
+					role="dialog"
+					aria-modal="true"
+					aria-label={demoContent.documents.title}
+					className="fixed inset-0 z-50 flex items-end bg-black/60 md:hidden"
+					onClick={(event) => {
+						if (event.target === event.currentTarget) setIsSheetOpen(false);
+					}}
+					onKeyDown={(event) => {
+						if (event.key === "Escape") setIsSheetOpen(false);
+					}}
+				>
+					<div className="flex h-[80dvh] w-full flex-col gap-1 rounded-t-3xl bg-(--color-primary) p-2">
+						<button
+							type="button"
+							onClick={() => setIsSheetOpen(false)}
+							className="self-end px-3 py-1 text-sm font-semibold text-(--color-accent)"
+						>
+							Done
+						</button>
+						<div className="min-h-0 flex-1">{documentsPanel}</div>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }
