@@ -48,3 +48,7 @@ next-env.d.ts
 docs/
 diagrams/
 
+
+# Local-only tooling and diagram sources
+/scripts/
+/diagrams/
