@@ -1,33 +1,40 @@
 %%{init: {'theme': 'base', 'themeVariables': { 'background': 'transparent', 'lineColor': '#a1a1aa', 'primaryTextColor': '#fafafa', 'edgeLabelBackground': '#131316', 'clusterBkg': '#09090b', 'clusterBorder': '#27272a', 'titleColor': '#fafafa' }}}%%
-flowchart LR
+flowchart TB
     classDef core fill:#0c2340,stroke:#38bdf8,color:#fafafa
     classDef neutral fill:#131316,stroke:#27272a,color:#fafafa
     classDef ext fill:#09090b,stroke:#38bdf8,stroke-dasharray:4 3,color:#fafafa
 
-    req(["Question<br/>topK 15, threshold 0.35"])
-    expand["Expand query<br/>gpt-4o-mini, 1 query"]
-    embed["Embed query<br/>text-embedding-3-small"]
-    search[("pgvector search<br/>this chat only<br/>up to 50 candidates")]
-    web{"Under 3 candidates<br/>and webSearchEnabled?"}
-    brave["Brave Search<br/>top 5 pages"]
-    rerank["Rerank if 2 or more<br/>ms-marco-MiniLM-L-6-v2"]
-    ctx{"Context<br/>top 15 chunks<br/>then web pages"}
-    noinfo["Fixed reply<br/>no relevant information"]
-    gen["Generate answer<br/>gpt-4o-mini"]
-    resp(["answer and<br/>deduplicated sources"])
+    subgraph retrieve["Retrieve"]
+        direction LR
+        req(["Question<br/>topK 15, threshold 0.35"])
+        expand["Expand query<br/>gpt-4o-mini, 1 query"]
+        embed["Embed query<br/>text-embedding-3-small"]
+        search[("pgvector search<br/>this chat only<br/>up to 50 candidates")]
+        req -->|question| expand
+        expand -->|expanded query| embed
+        embed -->|query vector| search
+    end
 
-    req -->|question| expand
-    expand -->|expanded query| embed
-    embed -->|query vector| search
-    search -->|candidate chunks| web
-    web -->|expanded query, if yes| brave
-    web -->|candidate chunks| rerank
-    brave -->|page text| ctx
-    rerank -->|ranked chunks| ctx
-    ctx -->|nothing usable| noinfo
-    ctx -->|sources and question| gen
-    noinfo -->|fixed answer| resp
-    gen -->|answer text| resp
+    subgraph answer["Answer"]
+        direction LR
+        web{"Under 3 candidates<br/>and webSearchEnabled?"}
+        brave["Brave Search<br/>top 5 pages"]
+        rerank["Rerank if 2 or more<br/>ms-marco-MiniLM-L-6-v2"]
+        ctx{"Context<br/>top 15 chunks<br/>then web pages"}
+        noinfo["Fixed reply<br/>no relevant information"]
+        gen["Generate answer<br/>gpt-4o-mini"]
+        resp(["answer and<br/>deduplicated sources"])
+        web -->|expanded query, if yes| brave
+        web -->|candidate chunks| rerank
+        brave -->|page text| ctx
+        rerank -->|ranked chunks| ctx
+        ctx -->|nothing usable| noinfo
+        ctx -->|sources and question| gen
+        noinfo -->|fixed answer| resp
+        gen -->|answer text| resp
+    end
+
+    retrieve -->|candidate chunks| answer
 
     class req,expand,embed,web,rerank,ctx,noinfo,gen,resp core
     class search neutral
