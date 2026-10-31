@@ -28,6 +28,10 @@ Set these in `.env.local`:
 | --- | --- |
 | `NEXT_PUBLIC_API_BASE_URL` | API base URL including `/api`, e.g. `https://api.askdocumind.com/api` |
 
+## Local development
+
+Run the [API](https://github.com/EmmanuelM-A/askdocumind-api) locally and point `NEXT_PUBLIC_API_BASE_URL` at it, e.g. `http://localhost:8000/api`. The deployed API won’t work from `localhost`: its session cookie is `Secure` and `SameSite=Strict`, so the browser only sends it on requests from `askdocumind.com`, and every request after sign-in would return 401.
+
 ## Notes
 
 - Path alias `@/*` maps to `src/*` (see `tsconfig.json`).

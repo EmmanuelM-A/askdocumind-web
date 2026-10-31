@@ -22,7 +22,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 const description =
-	"AskDocuMind is a document-aware chatbot API. Upload a PDF, DOCX, TXT, or Markdown file, ask a question in plain language, and get an answer grounded in its content, with sources cited.";
+	"A retrieval-augmented generation (RAG) demo. Upload documents or code, ask questions, and get answers drawn from your files, along with the documents and web pages each answer used.";
 
 export const metadata: Metadata = {
 	metadataBase: new URL(SITE_URL),
@@ -36,10 +36,12 @@ export const metadata: Metadata = {
 		"document QA",
 		"RAG",
 		"retrieval augmented generation",
-		"chat with PDF",
+		"chat with documents",
 		"document chatbot API",
+		"FastAPI",
 		"LangChain",
 		"pgvector",
+		"reranking",
 	],
 	authors: [{ name: SITE_NAME }],
 	openGraph: {
