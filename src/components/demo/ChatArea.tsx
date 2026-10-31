@@ -2,7 +2,7 @@
 
 import { faArrowUp, faFileLines, faGlobe, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useRef, useState } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getErrorMessage, isChatGone } from "@/api/api-client";
@@ -26,6 +26,8 @@ interface ChatAreaProps {
 	settings: AskSettings;
 	documentNames: string[];
 	onChatGone: () => void;
+	suggestedQuestions: { text: string; webSearch?: boolean }[];
+	onEnableWebSearch: () => void;
 }
 
 const markdownComponents: Components = {
@@ -51,7 +53,10 @@ export function ChatArea({
 	settings,
 	documentNames,
 	onChatGone,
+	suggestedQuestions,
+	onEnableWebSearch,
 }: ChatAreaProps) {
+	const inputRef = useRef<HTMLInputElement | null>(null);
 	const [messages, setMessages] = useState<ChatMessage[]>([]);
 	const [draft, setDraft] = useState("");
 	const [isSending, setIsSending] = useState(false);
@@ -111,13 +116,45 @@ export function ChatArea({
 			{/* flex-col-reverse keeps the scroll pinned to the newest message without any JS. */}
 			<div className="chat-scrollbar flex min-h-0 flex-1 flex-col-reverse overflow-y-auto px-4 py-6 sm:px-6">
 				{messages.length === 0 && !isSending ? (
-					<div className="m-auto max-w-sm text-center">
+					<div className="m-auto max-w-md text-center">
 						<p className="font-medium text-(--color-text)">
 							{demoContent.chat.emptyTitle}
 						</p>
 						<p className="mt-1 text-sm text-(--color-text)/55">
 							{demoContent.chat.emptyState}
 						</p>
+
+						{suggestedQuestions.length > 0 && (
+							<div className="mt-6 text-left">
+								<p className="mb-2 text-sm font-medium text-(--color-text)">
+									{demoContent.samples.questionsTitle}
+								</p>
+								<ul className="space-y-1.5">
+									{suggestedQuestions.map((question) => (
+										<li key={question.text}>
+											<button
+												type="button"
+												onClick={() => {
+													if (question.webSearch) onEnableWebSearch();
+													setDraft(question.text);
+													inputRef.current?.focus();
+												}}
+												className="flex w-full items-center gap-2 rounded-md border border-(--color-tertiary) bg-(--color-primary) px-3 py-2 text-left text-sm text-(--color-text)/80 transition hover:border-(--color-accent)/60 hover:text-(--color-text)"
+											>
+												{question.webSearch && (
+													<FontAwesomeIcon
+														icon={faGlobe}
+														className="h-3! w-3! shrink-0 text-(--color-accent)"
+														title="Turns on web search"
+													/>
+												)}
+												{question.text}
+											</button>
+										</li>
+									))}
+								</ul>
+							</div>
+						)}
 					</div>
 				) : (
 					<div className="space-y-6 text-sm">
@@ -209,6 +246,7 @@ export function ChatArea({
 			>
 				<div className="flex items-center gap-2 rounded-lg border border-(--color-tertiary) bg-(--color-primary) py-1.5 pr-1.5 pl-4 transition focus-within:border-(--color-accent)/60 focus-within:ring-4 focus-within:ring-(--color-accent)/10">
 					<input
+						ref={inputRef}
 						value={draft}
 						onChange={(event) => setDraft(event.target.value)}
 						maxLength={MAX_QUERY_LENGTH}

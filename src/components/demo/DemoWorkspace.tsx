@@ -41,6 +41,7 @@ export function DemoWorkspace() {
 	const [settings, setSettings] = useState<AskSettings>({ ...DEFAULT_ASK_CONFIGS });
 	const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
 	const [isSheetOpen, setIsSheetOpen] = useState(false);
+	const [isAddingSamples, setIsAddingSamples] = useState(false);
 
 	const connect = useCallback(() => {
 		setConnection("connecting");
@@ -77,6 +78,31 @@ export function DemoWorkspace() {
 
 	const documents = useDocuments(chatId, () => startNewChat(demoContent.sessionExpired));
 
+	const { samples } = demoContent;
+	const documentNames = documents.rows
+		.filter((row) => row.status !== "REJECTED")
+		.map((row) => row.name);
+	const missingSamples = samples.files.filter((name) => !documentNames.includes(name));
+	const hasSamples = missingSamples.length < samples.files.length;
+
+	async function handleTrySamples() {
+		setIsAddingSamples(true);
+		try {
+			const files = await Promise.all(
+				missingSamples.map(async (name) => {
+					const response = await fetch(`/samples/${name}`);
+					if (!response.ok) throw new Error(`Couldn't load ${name}`);
+					return new File([await response.blob()], name);
+				}),
+			);
+			documents.addFiles(files);
+		} catch (error) {
+			console.error("Failed to load the sample documents", error);
+		} finally {
+			setIsAddingSamples(false);
+		}
+	}
+
 	const { hints } = demoContent.chat;
 	let disabledHint: string | null = null;
 	if (chatId && documents.readyCount === 0 && !settings.webSearchEnabled) {
@@ -95,6 +121,8 @@ export function DemoWorkspace() {
 			onRetry={(row) => void documents.retryRow(row)}
 			onClearAll={() => void documents.clearAll()}
 			onStartOver={() => void handleStartOver()}
+			onTrySamples={missingSamples.length > 0 ? () => void handleTrySamples() : undefined}
+			isAddingSamples={isAddingSamples}
 		/>
 	);
 
@@ -170,7 +198,11 @@ export function DemoWorkspace() {
 					chatId={chatId}
 					disabledHint={disabledHint}
 					settings={settings}
-					documentNames={documents.rows.map((row) => row.name)}
+					documentNames={documentNames}
+					suggestedQuestions={hasSamples ? samples.questions : []}
+					onEnableWebSearch={() =>
+						setSettings((prev) => ({ ...prev, webSearchEnabled: true }))
+					}
 					onChatGone={() => startNewChat(demoContent.sessionExpired)}
 				/>
 			</section>

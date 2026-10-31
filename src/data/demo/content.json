@@ -78,5 +78,32 @@
 			"label": "Similarity threshold",
 			"hint": "How closely a chunk must match the question to be used. Higher is stricter."
 		}
+	},
+	"samples": {
+		"buttonLabel": "Try sample documents",
+		"loadingLabel": "Adding samples…",
+		"files": ["northwind-handbook.pdf", "project-aurora-notes.md", "rate_limiter.py"],
+		"questionsTitle": "Try asking",
+		"questions": [
+			{
+				"text": "How many days of annual leave do new starters get?"
+			},
+			{
+				"text": "Who owns the Aurora launch checklist, and when is it due?"
+			},
+			{
+				"text": "Why was the Aurora beta moved?"
+			},
+			{
+				"text": "How does the token bucket in rate_limiter.py refill?"
+			},
+			{
+				"text": "Does the Lisbon trip for Aurora follow the handbook’s travel policy?"
+			},
+			{
+				"text": "What is the UK’s statutory minimum holiday entitlement?",
+				"webSearch": true
+			}
+		]
 	}
 }

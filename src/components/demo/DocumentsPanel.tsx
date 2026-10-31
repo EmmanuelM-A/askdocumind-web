@@ -3,6 +3,7 @@
 import {
 	faCloudArrowUp,
 	faFileCode,
+	faFileImport,
 	faFileLines,
 	faFilePdf,
 	faFileWord,
@@ -28,9 +29,11 @@ interface DocumentsPanelProps {
 	onRetry: (row: DocumentRow) => void;
 	onClearAll: () => void;
 	onStartOver: () => void;
+	onTrySamples?: () => void;
+	isAddingSamples: boolean;
 }
 
-const { documents: content } = demoContent;
+const { documents: content, samples } = demoContent;
 
 function getFileIcon(name: string) {
 	const lower = name.toLowerCase();
@@ -78,6 +81,8 @@ export function DocumentsPanel({
 	onRetry,
 	onClearAll,
 	onStartOver,
+	onTrySamples,
+	isAddingSamples,
 }: DocumentsPanelProps) {
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const [isDraggingOver, setIsDraggingOver] = useState(false);
@@ -156,6 +161,18 @@ export function DocumentsPanel({
 						</span>
 					</span>
 				</button>
+
+				{onTrySamples && (
+					<button
+						type="button"
+						onClick={onTrySamples}
+						disabled={disabled || isAddingSamples}
+						className="flex items-center justify-center gap-2 rounded-lg border border-(--color-tertiary) px-3 py-2 text-sm font-medium text-(--color-text)/80 transition hover:border-(--color-accent)/60 hover:text-(--color-text) disabled:pointer-events-none disabled:opacity-50"
+					>
+						<FontAwesomeIcon icon={faFileImport} className="h-3.5! w-3.5!" />
+						{isAddingSamples ? samples.loadingLabel : samples.buttonLabel}
+					</button>
+				)}
 
 				<ul className="chat-scrollbar -mx-1 min-h-0 flex-1 space-y-1 overflow-y-auto px-1">
 					{rows.length === 0 && (
