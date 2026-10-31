@@ -1,26 +1,16 @@
 import type { UUID } from "@/types/api";
 
+export type DocumentStatus = "PENDING" | "UPLOADED" | "PROCESSING" | "COMPLETED" | "FAILED";
+
 export interface Document {
 	id: UUID;
-	session_id: UUID;
-	source: string;
-	source_size: number;
-	source_type: "UPLOAD" | "WEB_SEARCH";
-	processing_status: "PROCESSING" | "COMPLETED" | "FAILED";
-	created_at: string;
-	updated_at: string;
+	chatSessionId: UUID;
+	filename: string;
+	contentType: string;
+	sizeBytes: number;
+	checksum: string;
+	status: DocumentStatus;
+	errorMessage: string | null;
+	createdAt: string;
+	updatedAt: string;
 }
-
-export type ProcessingStatus = Document["processing_status"];
-
-export interface StatusColours {
-	textColour: string;
-	backgroundColour: string;
-}
-
-export interface StatusThemeColours {
-	light: StatusColours;
-	dark: StatusColours;
-}
-
-export type ProcessingStatusColoursMap = Record<ProcessingStatus, StatusThemeColours>;

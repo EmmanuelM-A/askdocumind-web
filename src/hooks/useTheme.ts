@@ -6,8 +6,9 @@ export function useTheme() {
 	const [theme, setTheme] = useState<Theme>("light");
 
 	useEffect(() => {
-		const stored = (localStorage.getItem("askdocumindweb-theme") as Theme) ?? "light";
-		setTheme(stored);
+		const stored = localStorage.getItem("askdocumindweb-theme");
+		const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+		setTheme(stored === "dark" || stored === "light" ? stored : prefersDark ? "dark" : "light");
 	}, []);
 
 	useEffect(() => {

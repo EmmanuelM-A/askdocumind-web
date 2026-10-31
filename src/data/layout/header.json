@@ -6,19 +6,14 @@
 	},
 	"navItems": [
 		{
-			"label": "Home",
+			"label": "Demo",
 			"link": "/",
-			"icon": "/icons/home.svg"
+			"icon": "/icons/demo.svg"
 		},
 		{
 			"label": "Architecture",
 			"link": "/architecture",
 			"icon": "/icons/architecture.svg"
-		},
-		{
-			"label": "Demo",
-			"link": "/demo",
-			"icon": "/icons/demo.svg"
 		},
 		{
 			"label": "View Code",

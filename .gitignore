@@ -1,4 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+.idea/
 
 # dependencies
 /node_modules
@@ -45,4 +46,9 @@ next-env.d.ts
 
 # Documents
 docs/
+diagrams/
 
+
+# Local-only tooling and diagram sources
+/scripts/
+/diagrams/

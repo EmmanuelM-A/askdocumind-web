@@ -1,10 +1,15 @@
-export interface ChatWithChatbot {
-	user_query: string;
-	chat_id: string;
-	web_search_enabled: boolean;
+export interface AskConfigs {
+	topK?: number;
+	threshold?: number;
+	webSearchEnabled?: boolean;
 }
 
-export interface ChatbotResponse {
+export interface AskRequest {
+	query: string;
+	configs?: AskConfigs;
+}
+
+export interface AskResponse {
 	answer: string;
 	sources: string[];
 }

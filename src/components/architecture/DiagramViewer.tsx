@@ -33,7 +33,7 @@ export function DiagramViewer({ name, diagramLight, diagramDark }: DiagramViewer
 				type="button"
 				onClick={() => setIsOpen(true)}
 				disabled={!hasDiagram}
-				className="flex h-48 w-full cursor-zoom-in items-center justify-center overflow-hidden rounded-3xl border border-dashed border-(--color-tertiary) bg-(--color-secondary) p-4 text-sm text-(--color-text)/40 transition hover:border-(--color-accent) disabled:cursor-default sm:h-72 md:h-104"
+				className="flex h-48 w-full cursor-zoom-in items-center justify-center overflow-hidden rounded-xl border border-dashed border-(--color-tertiary) bg-(--color-secondary) p-4 text-sm text-(--color-text)/40 transition hover:border-(--color-accent) disabled:cursor-default sm:h-72 md:h-[min(55dvh,40rem)]"
 			>
 				{hasDiagram ? (
 					<>

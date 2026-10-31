@@ -1,15 +1,109 @@
 {
-	"onConnection": {
-		"default": "Connecting to Chat…",
-		"success": "Chat Is Ready",
-		"failure": "Chat Failed to Connect"
+	"intro": {
+		"headline": "Ask your documents anything",
+		"description": "Upload documents or code and ask questions. Answers come from your files, and show which documents and web pages they used."
 	},
-	"configurations": [
-		{
-			"label": "Enable Web Search Fallback",
-			"checked": false
+	"howItWorks": {
+		"heading": "From upload to answer",
+		"steps": [
+			{
+				"title": "Upload",
+				"description": "PDFs, Word documents, text, Markdown, HTML and source code are stored in S3 object storage."
+			},
+			{
+				"title": "Index",
+				"description": "In the background, text is extracted and split into chunks, with code split by function and class. Each chunk is embedded and stored in pgvector."
+			},
+			{
+				"title": "Retrieve",
+				"description": "Your question is expanded into related queries, matched against the chunks and reranked by a cross-encoder. If web search is on, Brave Search fills the gaps."
+			},
+			{
+				"title": "Answer",
+				"description": "OpenAI writes the answer from the best chunks, and the demo lists the documents and web pages it used."
+			}
+		],
+		"techStackHeading": "Built with",
+		"techStack": [
+			{
+				"label": "API",
+				"items": ["Python", "FastAPI", "SQLAlchemy", "Alembic", "SlowAPI", "Uvicorn"]
+			},
+			{
+				"label": "Retrieval",
+				"items": ["LangChain", "pgvector", "sentence-transformers", "Brave Search"]
+			},
+			{
+				"label": "Models and storage",
+				"items": ["OpenAI", "PostgreSQL (Neon)", "S3 (Railway)"]
+			}
+		]
+	},
+	"connection": {
+		"connecting": "Connecting…",
+		"connected": "Ready",
+		"failed": "Couldn't connect to the API"
+	},
+	"sessionExpired": "Your previous session expired, so its documents were cleared.",
+	"documents": {
+		"title": "Documents",
+		"dropPrompt": "Drop files here or",
+		"choosePrompt": "choose files",
+		"dropActive": "Drop files to add them",
+		"limits": "PDF, DOCX, TXT, Markdown, HTML or code (.py, .js, .jsx, .ts, .tsx, .java, .go). Up to 10 MB each.",
+		"empty": "No documents yet.",
+		"confirmClearAll": "Delete every document in this chat?",
+		"confirmStartOver": "Start over? This deletes the chat, its documents and the conversation."
+	},
+	"chat": {
+		"title": "Chat",
+		"emptyTitle": "No questions yet",
+		"emptyState": "Add a document, wait until it’s ready, then ask about it here.",
+		"inputPlaceholder": "Ask a question about your documents",
+		"hints": {
+			"processing": "Waiting for your documents to finish processing…",
+			"noDocuments": "Add a document, or turn on web search, to start asking"
 		}
-	],
-	"chatBoxPlaceholder": "Ask a question about your uploaded documents to start chatting",
-	"chatBoxInputPlaceholder": "Ask a question about your document"
+	},
+	"advanced": {
+		"webSearch": {
+			"label": "Web search fallback",
+			"hint": "Search the web when your documents don't have enough to answer."
+		},
+		"topK": {
+			"label": "Chunks to retrieve",
+			"hint": "How many document chunks are considered for each answer."
+		},
+		"threshold": {
+			"label": "Similarity threshold",
+			"hint": "How closely a chunk must match the question to be used. Higher is stricter."
+		}
+	},
+	"samples": {
+		"buttonLabel": "Try sample documents",
+		"loadingLabel": "Adding samples…",
+		"files": ["northwind-handbook.pdf", "project-aurora-notes.md", "rate_limiter.py"],
+		"questionsTitle": "Try asking",
+		"questions": [
+			{
+				"text": "How many days of annual leave do new starters get?"
+			},
+			{
+				"text": "Who owns the Aurora launch checklist, and when is it due?"
+			},
+			{
+				"text": "Why was the Aurora beta moved?"
+			},
+			{
+				"text": "How does the token bucket in rate_limiter.py refill?"
+			},
+			{
+				"text": "Does the Lisbon trip for Aurora follow the handbook’s travel policy?"
+			},
+			{
+				"text": "What is the UK’s statutory minimum holiday entitlement?",
+				"webSearch": true
+			}
+		]
+	}
 }

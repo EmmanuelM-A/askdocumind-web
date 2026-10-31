@@ -10,14 +10,15 @@ export function ArchitectureSection({
 	description,
 }: ArchitectureDiagram) {
 	return (
-		<section id={id} className="w-full scroll-mt-24">
-			<div className="-mt-6 [&_h2]:text-lg">
-				<SectionHeadingWithLines title={name} />
-			</div>
+		<section
+			id={id}
+			className="flex min-h-[calc(100dvh-4rem)] w-full flex-col justify-center gap-5 py-12"
+		>
+			<SectionHeadingWithLines title={name} />
 
 			<DiagramViewer name={name} diagramLight={diagramLight} diagramDark={diagramDark} />
 
-			<p className="mt-3 text-justify text-sm text-(--color-text)/70">{description}</p>
+			<p className="text-sm leading-relaxed text-(--color-text)/70">{description}</p>
 		</section>
 	);
 }

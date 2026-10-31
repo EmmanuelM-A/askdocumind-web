@@ -15,9 +15,9 @@ export function NumberedSectionHeading({ number, title }: { number: number; titl
  */
 export function SectionHeadingWithLines({ title }: { title: string }) {
 	return (
-		<div className="my-10 flex items-center gap-4">
+		<div className="flex items-center gap-4">
 			<span className="h-px flex-1 bg-(--color-tertiary)" />
-			<h2 className="shrink-0 text-sm font-semibold tracking-widest text-(--color-accent) uppercase">
+			<h2 className="shrink-0 text-lg font-semibold tracking-widest text-(--color-accent) uppercase">
 				{title}
 			</h2>
 			<span className="h-px flex-1 bg-(--color-tertiary)" />

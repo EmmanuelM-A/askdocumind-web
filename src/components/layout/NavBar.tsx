@@ -13,17 +13,17 @@ export function NavBar() {
 	const { theme, toggleTheme } = useTheme();
 
 	return (
-		<header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4">
-			<div className="flex w-full max-w-5xl items-center justify-between gap-3 rounded-full border border-(--color-tertiary) bg-(--color-primary)/85 px-3 py-2 shadow-sm backdrop-blur">
+		<header className="fixed inset-x-0 top-0 z-50 border-b border-(--color-tertiary) bg-(--color-primary)">
+			<div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
 				<Link
 					href={headerData.logo.link}
-					className="hidden shrink-0 items-center gap-2 pl-1 min-[450px]:flex"
+					className="hidden shrink-0 items-center gap-2 min-[450px]:flex"
 				>
 					<Image
 						src="/assets/logo.svg"
 						alt={headerData.logo.label}
-						width={40}
-						height={40}
+						width={32}
+						height={32}
 					/>
 					<span className="hidden text-base font-semibold tracking-tight text-(--color-text) min-[800px]:inline">
 						{headerData.logo.label}
@@ -34,10 +34,10 @@ export function NavBar() {
 					{headerData.navItems.map((item) => {
 						const isExternal = item.link.startsWith("http");
 						const isActive = !isExternal && pathname === item.link;
-						const linkClassName = `group relative flex items-center whitespace-nowrap rounded-full px-2 py-1 text-sm font-medium transition min-[800px]:px-3 ${
+						const linkClassName = `group relative flex items-center whitespace-nowrap px-2 py-1 text-sm font-medium transition min-[800px]:px-3 ${
 							isActive
 								? "text-(--color-accent)"
-								: "text-(--color-text)/80 hover:text-(--color-accent)"
+								: "text-(--color-text)/70 hover:text-(--color-text)"
 						}`;
 						const content = (
 							<>
@@ -83,33 +83,10 @@ export function NavBar() {
 				<button
 					type="button"
 					onClick={toggleTheme}
-					aria-label="Toggle theme"
-					aria-pressed={theme === "dark"}
-					className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-(--color-tertiary) bg-(--color-secondary) text-(--color-text) transition-colors min-[450px]:hidden"
+					aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+					className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-(--color-text)/70 transition hover:bg-(--color-secondary) hover:text-(--color-text)"
 				>
 					<FontAwesomeIcon icon={theme === "dark" ? faSun : faMoon} className="h-4 w-4" />
-				</button>
-
-				<button
-					type="button"
-					onClick={toggleTheme}
-					aria-label="Toggle theme"
-					aria-pressed={theme === "dark"}
-					className="relative hidden h-8 w-16 shrink-0 items-center rounded-full border border-(--color-tertiary) bg-(--color-secondary) transition-colors min-[450px]:flex"
-				>
-					<span className="absolute left-2 flex items-center text-(--color-text)/50">
-						<FontAwesomeIcon icon={faSun} className="h-3.5 w-3.5" />
-					</span>
-					<span className="absolute right-2 flex items-center text-(--color-text)/50">
-						<FontAwesomeIcon icon={faMoon} className="h-3.5 w-3.5" />
-					</span>
-					<span
-						className={`absolute left-1 h-6 w-6 rounded-full shadow-sm transition-transform ${
-							theme === "dark"
-								? "translate-x-0 bg-white"
-								: "translate-x-8 bg-(--color-accent)"
-						}`}
-					/>
 				</button>
 			</div>
 		</header>
