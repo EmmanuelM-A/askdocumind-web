@@ -6,7 +6,7 @@
 			"name": "System Overview",
 			"diagramLight": "/images/architecture/system-overview-light-theme.svg",
 			"diagramDark": "/images/architecture/system-overview-dark-theme.svg",
-			"description": "AskDocuMind is a backend API sitting behind Cloudflare for DNS and CDN. It talks to a single PostgreSQL database that also serves as the vector store, calls OpenAI for generation, uses Brave Search as an optional fallback, and reports errors directly to Sentry."
+			"description": "AskDocuMind is a backend API sitting behind Cloudflare for DNS and CDN. It talks to a single PostgreSQL database that also serves as the vector store, calls OpenAI for generation, and uses Brave Search as an optional fallback."
 		},
 		{
 			"name": "RAG Pipeline",

@@ -14,7 +14,6 @@ AskDocuMind is a document question-answering service. We are committed to handli
 - **Uploaded documents**: The files you upload are stored temporarily for processing and answer generation. Their text content is extracted and converted into numerical vectors for search.
 - **Chat messages**: Your questions and the AI-generated answers are stored within your session to maintain conversation context.
 - **Technical logs**: Server logs may record request paths, HTTP status codes, and response times. These do not include the content of your queries or documents.
-- **Error reports**: If an error occurs, a report may be sent to Sentry (our error tracking service) including the error type and stack trace. Query content and document content are not included in error reports.
 
 **We do not collect** your name, email address, IP address (beyond what is processed transiently by our hosting infrastructure), or any other personally identifiable information.
 
@@ -35,7 +34,6 @@ AskDocuMind is a document question-answering service. We are committed to handli
 | Document vectors (embeddings)  | Deleted when session expires  |
 | Chat messages                  | Deleted when session expires  |
 | Server logs                    | Up to 30 days                 |
-| Error reports (Sentry)         | Up to 90 days                 |
 
 Sessions inactive for more than 1 hour are purged automatically by a background cleanup process.
 
@@ -47,7 +45,6 @@ Sessions inactive for more than 1 hour are purged automatically by a background 
 | Brave Search  | Optional web search fallback                   | [brave.com/privacy-policy](https://api-dashboard.search.brave.com/privacy-policy) |
 | Railway       | Backend hosting and database                   | [railway.app/legal/privacy](https://railway.app/legal/privacy)                    |
 | Cloudflare    | CDN, DNS, and DDoS protection                  | [cloudflare.com/privacypolicy](https://www.cloudflare.com/)                       |
-| Sentry        | Error tracking                                 | [sentry.io/privacy](https://sentry.io/privacy)                                    |
 | Vercel        | Frontend hosting                               | [vercel.com/legal/privacy-policy](https://vercel.com/legal/privacy-policy)        |
 
 ## 6. Cookies

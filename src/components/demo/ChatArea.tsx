@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { chatWithChatbot } from "@/api/chatbot-endpoints";
 import demoContent from "@/data/demo/content.json";
-import { logger } from "@/lib/logger";
 import type { UUID } from "@/types/api";
 
 export interface ChatBubble {
@@ -54,7 +53,6 @@ export function ChatArea({
 				chat_id: chatId,
 				web_search_enabled: webSearchEnabled,
 			});
-			logger.info({ response }, "Chat response received");
 
 			const assistantMessage: ChatBubble = {
 				id: `${Date.now()}-assistant`,
@@ -64,7 +62,7 @@ export function ChatArea({
 			};
 			onMessagesChange([...messages, userMessage, assistantMessage]);
 		} catch (error) {
-			logger.error({ error }, "Failed to send chat message");
+			console.error("Failed to send chat message", error);
 		} finally {
 			setIsSending(false);
 		}

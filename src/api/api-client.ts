@@ -1,5 +1,4 @@
 import { settings } from "@/config/configs";
-import { logger } from "@/lib/logger";
 
 // Shared in-memory map so duplicate requests can reuse the same promise.
 let activeRequestMap: Map<string, Promise<unknown>> | null = null;
@@ -247,7 +246,6 @@ export async function sendRequest({
 	// Check for existing in-flight request
 	const existingRequest = preventDuplicate ? activeRequests.get(requestKey) : undefined;
 	if (existingRequest) {
-		logger.debug(`[API-CLIENT] Returning existing in-flight request for key: ${requestKey}`);
 		return existingRequest;
 	}
 
@@ -286,12 +284,9 @@ export async function sendRequest({
 			// Setup timeout abort
 			if (timeoutMs > 0 && internalController) {
 				timeoutId = setTimeout(() => {
-					logger.debug(`[API-CLIENT] Request timeout: ${method.toUpperCase()} ${url}`);
 					internalController.abort();
 				}, timeoutMs);
 			}
-
-			logger.debug(`[API-CLIENT] Sending request: ${method.toUpperCase()} ${url}`);
 
 			const response: Response = await fetch(url, optionsFetch);
 
@@ -320,9 +315,6 @@ export async function sendRequest({
 				abortErr.name = "AbortError";
 				throw abortErr;
 			}
-			logger.error(
-				`[API-CLIENT] Request failed: ${method.toUpperCase()} ${url} - ${error.message}`,
-			);
 			return Promise.reject(err);
 		} finally {
 			if (timeoutId) clearTimeout(timeoutId);
@@ -345,7 +337,7 @@ async function safeParseJson(response: Response): Promise<unknown> {
 
 		return JSON.parse(text);
 	} catch (parseError) {
-		logger.warn({ parseError }, "[API-CLIENT] Failed to parse JSON response");
+		console.warn("[API-CLIENT] Failed to parse JSON response", parseError);
 		return null;
 	}
 }

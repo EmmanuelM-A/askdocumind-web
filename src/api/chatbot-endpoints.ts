@@ -1,7 +1,6 @@
 import { sendRequest } from "@/api/api-client";
 import { extractAPIData } from "@/api/utils";
 import { API_ROUTES } from "@/config/constants";
-import { logger } from "@/lib/logger";
 import type { ChatbotResponse, ChatWithChatbot } from "@/types/chatbot";
 
 export async function chatWithChatbot(data: ChatWithChatbot): Promise<ChatbotResponse> {
@@ -10,8 +9,6 @@ export async function chatWithChatbot(data: ChatWithChatbot): Promise<ChatbotRes
 		method: "POST",
 		body: data,
 	});
-
-	logger.debug({ rawResponse }, "[chatbot] raw response");
 
 	return extractAPIData<ChatbotResponse>(rawResponse, "Send chat message");
 }

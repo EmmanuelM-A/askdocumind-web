@@ -87,7 +87,6 @@
 			"SQLAlchemy",
 			"Alembic",
 			"Docling",
-			"Sentry",
 			"SlowAPI",
 			"Uvicorn"
 		],

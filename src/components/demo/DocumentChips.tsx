@@ -13,7 +13,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type ChangeEvent, type DragEvent, useEffect, useRef, useState } from "react";
 import { deleteUploadedDocument } from "@/api/document-endpoints";
 import { formatBytes } from "@/lib/format";
-import { logger } from "@/lib/logger";
 import type { UUID } from "@/types/api";
 
 export interface DocumentChip {
@@ -106,9 +105,8 @@ export function DocumentChips({
 
 		try {
 			await deleteUploadedDocument(doc.id as UUID, chatId);
-			logger.info({ documentId: doc.id }, "Document deleted");
 		} catch (error) {
-			logger.error({ error }, "Failed to delete document");
+			console.error("Failed to delete document", error);
 		}
 	};
 

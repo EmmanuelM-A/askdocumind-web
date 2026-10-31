@@ -21,16 +21,13 @@ flowchart LR
         APIs["External APIs\n(OpenAI, Brave Search)"]
     end
 
-    Sentry["Sentry (Monitoring)"]
-
     Client --> CF
     CF --> Backend
     Backend --> DB
     Backend --> APIs
-    Backend --> Sentry
 
     class Client neutral
     class CF neutral
     class Backend core
     class DB neutral
-    class APIs,Sentry ext
+    class APIs ext

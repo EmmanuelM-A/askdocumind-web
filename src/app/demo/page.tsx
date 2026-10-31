@@ -11,7 +11,6 @@ import { ConfigPanel } from "@/components/demo/ConfigPanel";
 import { type DocumentChip, DocumentChips } from "@/components/demo/DocumentChips";
 import demoContent from "@/data/demo/content.json";
 import { formatBytes } from "@/lib/format";
-import { logger } from "@/lib/logger";
 import type { UUID } from "@/types/api";
 import type { Document } from "@/types/documents";
 
@@ -27,17 +26,13 @@ let bootstrapPromise: Promise<{
 function bootstrapChatSession() {
 	if (!bootstrapPromise) {
 		bootstrapPromise = (async () => {
-			const userId = await createAnonymousUserSession();
-			logger.info({ userId }, "Anonymous user session created");
+			await createAnonymousUserSession();
 
 			const chatSession = await initChatSession({ title: "Demo Chat" });
-			logger.info({ chatSession }, "Chat session initialized");
 
 			const existingDocuments = await getUploadedDocuments(chatSession.chat_id);
-			logger.info({ existingDocuments }, "Existing documents fetched");
 
 			const existingChatMessages = await getChatSessionMessages(chatSession.chat_id);
-			logger.info({ existingChatMessages }, "Existing chat messages fetched");
 
 			const existingMessages = existingChatMessages
 				.filter((message) => message.role === "USER" || message.role === "ASSISTANT")
@@ -96,7 +91,7 @@ export default function DemoPage() {
 				setConnectionStatus("success");
 			})
 			.catch((error) => {
-				logger.error({ error }, "Failed to connect chat session");
+				console.error("Failed to connect chat session", error);
 				if (!cancelled) setConnectionStatus("failure");
 			});
 
@@ -115,11 +110,10 @@ export default function DemoPage() {
 
 		setIsUploading(true);
 		try {
-			const response = await uploadDocuments({
+			await uploadDocuments({
 				chatSessionId: chatId,
 				documents: pendingDocuments.map((doc) => doc.file),
 			});
-			logger.info({ response }, "Documents uploaded");
 
 			// The upload endpoint never returns per-file IDs (and per the API docs
 			// may silently drop files that exceed the per-chat size cap), so the
@@ -128,7 +122,6 @@ export default function DemoPage() {
 			// server-assigned UUID, which delete/view rely on afterwards.
 			const uploadedIds = new Set(pendingDocuments.map((doc) => doc.id));
 			const refreshedDocuments = await getUploadedDocuments(chatId);
-			logger.info({ refreshedDocuments }, "Documents refreshed after upload");
 
 			setDocuments((prev) => [
 				...prev.filter((doc) => doc.status === "pending" && !uploadedIds.has(doc.id)),
@@ -140,7 +133,7 @@ export default function DemoPage() {
 				})),
 			]);
 		} catch (error) {
-			logger.error({ error }, "Failed to upload documents");
+			console.error("Failed to upload documents", error);
 		} finally {
 			setIsUploading(false);
 		}
