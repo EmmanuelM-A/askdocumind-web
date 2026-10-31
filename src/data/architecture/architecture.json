@@ -1,39 +1,39 @@
 {
 	"title": "Architecture",
-	"description": "This page breaks down the technical systems behind AskDocuMind. Each diagram shows how documents are processed into embeddings, how user sessions manage queries, and how the system generates cited answers grounded in source material. Together, they reveal the real architecture you're building on.",
+	"description": "How AskDocuMind is put together: where a request goes, how a document becomes searchable, and how an answer is built. Each diagram covers one part of the system.",
 	"sections": [
 		{
-			"name": "System Overview",
+			"name": "System overview",
 			"diagramLight": "/images/architecture/system-overview-light-theme.svg",
 			"diagramDark": "/images/architecture/system-overview-dark-theme.svg",
 			"description": "AskDocuMind is a backend API sitting behind Cloudflare for DNS and CDN. It talks to a single PostgreSQL database that also serves as the vector store, calls OpenAI for generation, and uses Brave Search as an optional fallback."
 		},
 		{
-			"name": "RAG Pipeline",
+			"name": "RAG pipeline",
 			"diagramLight": "/images/architecture/rag-pipeline-light-theme.svg",
 			"diagramDark": "/images/architecture/rag-pipeline-dark-theme.svg",
 			"description": "A question is embedded and matched against a document's stored embeddings in pgvector to find the most relevant chunks. Those chunks are passed to the LLM, which drafts an answer, cites its sources, and returns a grounded response to the user."
 		},
 		{
-			"name": "Session Management",
+			"name": "Session management",
 			"diagramLight": "/images/architecture/session-management-light-theme.svg",
 			"diagramDark": "/images/architecture/session-management-dark-theme.svg",
 			"description": "AskDocuMind has no accounts or passwords. A signed, anonymous cookie is issued on first visit and refreshed on every request, so active users stay logged in. Each request is validated before it's processed, and a background job removes sessions that have gone quiet for too long."
 		},
 		{
-			"name": "Upload Handling",
+			"name": "Upload handling",
 			"diagramLight": "/images/architecture/upload-handling-light-theme.svg",
 			"diagramDark": "/images/architecture/upload-handling-dark-theme.svg",
 			"description": "An uploaded file is validated for format, size, and duplicates, then chunked, embedded, and stored in the vector database in one pass, no background processing stage. The original file bytes are never kept. Documents are deleted automatically once their session expires."
 		},
 		{
-			"name": "Data Models",
+			"name": "Data models",
 			"diagramLight": "/images/architecture/data-models-light-theme.svg",
 			"diagramDark": "/images/architecture/data-models-dark-theme.svg",
 			"description": "Five tables, all keyed by UUID, rooted at the user. A session belongs to a user and owns its own messages and documents. Documents split into chunks, each carrying its own embedding for retrieval. Every foreign key cascades on delete, so nothing is left orphaned."
 		},
 		{
-			"name": "Deployment Architecture",
+			"name": "Deployment",
 			"diagramLight": "/images/architecture/deployment-architecture-light-theme.svg",
 			"diagramDark": "/images/architecture/deployment-architecture-dark-theme.svg",
 			"description": "The frontend and backend deploy independently: pushing to main triggers Vercel for the Next.js app and Railway for the FastAPI container. CI runs lint and tests before Railway builds the Docker image alongside its managed Postgres add on. Cloudflare fronts both surfaces."

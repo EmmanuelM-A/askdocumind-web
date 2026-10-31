@@ -1,48 +1,42 @@
 {
 	"intro": {
-		"headline": "Ask your documents",
-		"headlineAccent": "anything",
-		"description": "Upload documents or code and ask questions. Answers come from your files, and show which documents and web pages they used.",
-		"links": [
-			{ "label": "How it’s built", "href": "/architecture" },
-			{ "label": "GitHub", "href": "https://github.com/EmmanuelM-A/askdocumind-api" }
-		]
+		"headline": "Ask your documents anything",
+		"description": "Upload documents or code and ask questions. Answers come from your files, and show which documents and web pages they used."
 	},
 	"howItWorks": {
-		"heading": "How it works",
+		"heading": "From upload to answer",
 		"steps": [
 			{
 				"title": "Upload",
-				"description": "Add a PDF, DOCX, TXT, Markdown or HTML file, or source code."
+				"description": "PDFs, Word documents, text, Markdown, HTML and source code are stored in S3 object storage."
 			},
 			{
-				"title": "Process",
-				"description": "Files are chunked and embedded in the background while the panel shows progress. Code is split by function and class."
+				"title": "Index",
+				"description": "In the background, text is extracted and split into chunks, with code split by function and class. Each chunk is embedded and stored in pgvector."
 			},
 			{
-				"title": "Ask",
-				"description": "Your question is expanded, matched against your files and reranked, with an optional web search fallback."
+				"title": "Retrieve",
+				"description": "Your question is expanded into related queries, matched against the chunks and reranked by a cross-encoder. If web search is on, Brave Search fills the gaps."
 			},
 			{
 				"title": "Answer",
-				"description": "Get an answer grounded in your files that shows which documents and web pages it used."
+				"description": "OpenAI writes the answer from the best chunks, and the demo lists the documents and web pages it used."
 			}
 		],
 		"techStackHeading": "Built with",
 		"techStack": [
-			"Python",
-			"FastAPI",
-			"LangChain",
-			"OpenAI",
-			"PostgreSQL",
-			"pgvector",
-			"SQLAlchemy",
-			"Alembic",
-			"S3 (boto3)",
-			"sentence-transformers",
-			"Brave Search",
-			"SlowAPI",
-			"Uvicorn"
+			{
+				"label": "API",
+				"items": ["Python", "FastAPI", "SQLAlchemy", "Alembic", "SlowAPI", "Uvicorn"]
+			},
+			{
+				"label": "Retrieval",
+				"items": ["LangChain", "pgvector", "sentence-transformers", "Brave Search"]
+			},
+			{
+				"label": "Models and storage",
+				"items": ["OpenAI", "PostgreSQL (Neon)", "S3 (Railway)"]
+			}
 		]
 	},
 	"connection": {
@@ -63,8 +57,8 @@
 	},
 	"chat": {
 		"title": "Chat",
-		"emptyTitle": "Ask about your documents",
-		"emptyState": "Add a document, wait until it says Ready, then ask anything about it.",
+		"emptyTitle": "No questions yet",
+		"emptyState": "Add a document, wait until it’s ready, then ask about it here.",
 		"inputPlaceholder": "Ask a question about your documents",
 		"hints": {
 			"processing": "Waiting for your documents to finish processing…",

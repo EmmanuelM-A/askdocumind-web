@@ -1,23 +1,17 @@
-import { faCompass } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { BackLink } from "@/components/navigation/BackLink";
+import Link from "next/link";
 
 export default function NotFound() {
 	return (
-		<div className="flex w-full flex-1 flex-col items-center justify-center gap-6 px-4 py-16 text-center">
-			<FontAwesomeIcon
-				icon={faCompass}
-				className="h-16! w-16! text-(--color-accent) sm:h-24! sm:w-24! md:h-[8.4rem]! md:w-[8.4rem]!"
-			/>
-
-			<h1 className="text-balance text-[clamp(1.5rem,7vw,4.5rem)] font-bold text-(--color-text)">
-				404 - Page Not Found
+		<div className="mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center px-4 py-24 sm:px-6">
+			<h1 className="text-2xl font-semibold tracking-tight text-(--color-text)">
+				This page doesn’t exist
 			</h1>
-			<p className="max-w-md text-sm text-(--color-text)/70">
-				The page you're looking for doesn't exist or may have been moved.
+			<p className="mt-2 text-sm text-(--color-text)/60">
+				It may have moved, or the link is mistyped.{" "}
+				<Link href="/" className="font-medium text-(--color-accent) hover:underline">
+					Go to the demo
+				</Link>
 			</p>
-
-			<BackLink buttonText="Back to Home" backTo="/" />
 		</div>
 	);
 }

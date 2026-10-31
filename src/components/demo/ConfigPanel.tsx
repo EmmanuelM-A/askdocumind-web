@@ -43,7 +43,7 @@ export function ConfigPanel({ settings, onChange }: ConfigPanelProps) {
 				<label className="flex flex-col gap-1.5">
 					<span className="flex justify-between font-medium text-(--color-text)">
 						{advanced.topK.label}
-						<span className="font-mono text-xs text-(--color-accent)">
+						<span className="text-xs text-(--color-accent) tabular-nums">
 							{settings.topK}
 						</span>
 					</span>
@@ -64,7 +64,7 @@ export function ConfigPanel({ settings, onChange }: ConfigPanelProps) {
 				<label className="flex flex-col gap-1.5">
 					<span className="flex justify-between font-medium text-(--color-text)">
 						{advanced.threshold.label}
-						<span className="font-mono text-xs text-(--color-accent)">
+						<span className="text-xs text-(--color-accent) tabular-nums">
 							{settings.threshold.toFixed(2)}
 						</span>
 					</span>

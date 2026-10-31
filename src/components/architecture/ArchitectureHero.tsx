@@ -5,7 +5,7 @@ export function ArchitectureHero() {
 		// biome-ignore lint/correctness/useUniqueElementIds: anchor-link target for a singleton section, needs a stable id
 		<section
 			id="introduction"
-			className="flex min-h-[calc(100vh-5rem)] w-full shrink-0 flex-col items-center justify-center gap-4 px-4 py-16 text-center sm:px-6"
+			className="flex min-h-[calc(100dvh-4rem)] w-full shrink-0 flex-col items-center justify-center gap-4 px-4 py-16 text-center sm:px-6"
 		>
 			<h1 className="text-4xl font-semibold tracking-tight text-balance text-(--color-text) sm:text-5xl">
 				{architectureData.title}

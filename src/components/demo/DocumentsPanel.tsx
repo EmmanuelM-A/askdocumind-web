@@ -41,13 +41,13 @@ function getFileIcon(name: string) {
 }
 
 function getBadge(row: DocumentRow): { label: string; className: string } {
-	const busy = "bg-(--color-accent)/10 text-(--color-accent)";
+	const busy = "text-(--color-accent)";
 
 	switch (row.status) {
 		case "QUEUED":
 			return {
 				label: "Queued",
-				className: "bg-(--color-tertiary)/60 text-(--color-text)/60",
+				className: "text-(--color-text)/60",
 			};
 		case "UPLOADING":
 			return { label: "Uploading", className: busy };
@@ -59,12 +59,12 @@ function getBadge(row: DocumentRow): { label: string; className: string } {
 		case "COMPLETED":
 			return {
 				label: "Ready",
-				className: "bg-(--color-success)/10 text-(--color-success)",
+				className: "text-(--color-success)",
 			};
 		case "FAILED":
-			return { label: "Failed", className: "bg-(--color-danger)/10 text-(--color-danger)" };
+			return { label: "Failed", className: "text-(--color-danger)" };
 		case "REJECTED":
-			return { label: "Rejected", className: "bg-(--color-danger)/10 text-(--color-danger)" };
+			return { label: "Rejected", className: "text-(--color-danger)" };
 	}
 }
 
@@ -102,7 +102,7 @@ export function DocumentsPanel({
 					setIsDraggingOver(false);
 			}}
 			onDrop={handleDrop}
-			className="card flex h-full min-h-0 flex-col overflow-hidden rounded-2xl"
+			className="card flex h-full min-h-0 flex-col overflow-hidden rounded-xl"
 		>
 			<div className="flex h-14 shrink-0 items-center justify-between border-b border-(--color-tertiary) px-4">
 				<h2 className="font-semibold text-(--color-text)">{content.title}</h2>
@@ -128,16 +128,17 @@ export function DocumentsPanel({
 					type="button"
 					onClick={() => fileInputRef.current?.click()}
 					disabled={disabled}
-					className={`group flex items-center gap-3 rounded-xl border border-dashed p-3 text-left transition disabled:opacity-50 ${
+					className={`flex items-center gap-3 rounded-lg border border-dashed p-3 text-left transition disabled:opacity-50 ${
 						isDraggingOver
 							? "border-(--color-accent) bg-(--color-accent)/10"
 							: "border-(--color-tertiary) bg-(--color-primary) hover:border-(--color-accent)/60"
 					}`}
 				>
-					<span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-(--color-accent)/10 text-(--color-accent) transition group-hover:scale-105">
-						<FontAwesomeIcon icon={faCloudArrowUp} className="h-4! w-4!" />
-					</span>
-					<span className="min-w-0">
+					<FontAwesomeIcon
+						icon={faCloudArrowUp}
+						className="h-4! w-4! shrink-0 text-(--color-text)/40"
+					/>
+					<span className="block min-w-0">
 						<span className="block text-sm text-(--color-text)/80">
 							{isDraggingOver ? (
 								content.dropActive
@@ -175,7 +176,7 @@ export function DocumentsPanel({
 						return (
 							<li
 								key={row.key}
-								className="group rounded-xl px-2 py-2 transition hover:bg-(--color-primary)"
+								className="rounded-lg px-2 py-2 transition hover:bg-(--color-primary)"
 							>
 								<div className="flex items-center gap-3">
 									<span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-(--color-tertiary) bg-(--color-primary) text-(--color-text)/60">
@@ -195,7 +196,7 @@ export function DocumentsPanel({
 										<p className="mt-1 flex items-center gap-2 text-xs text-(--color-text)/50">
 											{formatBytes(row.sizeBytes)}
 											<span
-												className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ${badge.className}`}
+												className={`flex items-center gap-1 text-xs font-medium ${badge.className}`}
 											>
 												{isBusy && (
 													<FontAwesomeIcon
@@ -262,7 +263,7 @@ export function DocumentsPanel({
 						if (window.confirm(content.confirmClearAll)) onClearAll();
 					}}
 					disabled={disabled || isUploading || !hasUploadedDocuments}
-					className="h-[3.125rem] flex-1 rounded-xl border border-(--color-tertiary) text-sm font-medium text-(--color-text)/70 transition hover:border-red-500/50 hover:text-red-500 disabled:pointer-events-none disabled:opacity-40"
+					className="h-[3.125rem] flex-1 rounded-lg border border-(--color-tertiary) text-sm font-medium text-(--color-text)/70 transition hover:border-red-500/50 hover:text-red-500 disabled:pointer-events-none disabled:opacity-40"
 				>
 					Clear all
 				</button>
@@ -272,7 +273,7 @@ export function DocumentsPanel({
 						if (window.confirm(content.confirmStartOver)) onStartOver();
 					}}
 					disabled={disabled || isUploading}
-					className="h-[3.125rem] flex-1 rounded-xl border border-(--color-tertiary) text-sm font-medium text-(--color-text)/70 transition hover:border-(--color-accent)/60 hover:text-(--color-text) disabled:pointer-events-none disabled:opacity-40"
+					className="h-[3.125rem] flex-1 rounded-lg border border-(--color-tertiary) text-sm font-medium text-(--color-text)/70 transition hover:border-(--color-accent)/60 hover:text-(--color-text) disabled:pointer-events-none disabled:opacity-40"
 				>
 					Start over
 				</button>

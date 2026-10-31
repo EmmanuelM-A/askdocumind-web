@@ -6,41 +6,44 @@ export function HowItWorks() {
 	return (
 		<section className="w-full">
 			<div className="mx-auto w-full max-w-6xl px-4 py-32 sm:px-6 sm:py-56">
-				<h2 className="text-center text-2xl font-semibold tracking-tight text-(--color-text) sm:text-3xl">
+				<h2 className="text-2xl font-semibold tracking-tight text-(--color-text) sm:text-3xl">
 					{heading}
 				</h2>
 
-				<ol className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+				<ol className="mt-12 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
 					{steps.map((step, index) => (
-						<li key={step.title} className="card flex flex-col gap-3 rounded-2xl p-6">
-							<span className="flex h-8 w-8 items-center justify-center rounded-lg bg-(--color-accent-strong) font-mono text-sm font-semibold text-white">
-								{index + 1}
-							</span>
-							<p className="font-semibold text-(--color-text)">{step.title}</p>
-							<p className="text-sm leading-relaxed text-(--color-text)/60">
+						<li key={step.title} className="border-t border-(--color-tertiary) pt-5">
+							<p className="flex items-baseline gap-3 font-semibold text-(--color-text)">
+								<span className="text-(--color-accent) tabular-nums">
+									{index + 1}
+								</span>
+								{step.title}
+							</p>
+							<p className="mt-2 text-sm leading-relaxed text-(--color-text)/65">
 								{step.description}
 							</p>
 						</li>
 					))}
 				</ol>
 
-				<p className="mt-40 text-center text-xs font-medium tracking-widest text-(--color-text)/45 uppercase sm:mt-52">
+				<h2 className="mt-40 text-2xl font-semibold tracking-tight text-(--color-text) sm:mt-52 sm:text-3xl">
 					{techStackHeading}
-				</p>
+				</h2>
 
-				<div className="relative mt-8 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
-					<div className="flex w-max animate-[marquee_40s_linear_infinite] gap-12">
-						{[...techStack, ...techStack].map((tech, index) => (
-							<span
-								// biome-ignore lint/suspicious/noArrayIndexKey: marquee is a decorative repeating list, values are duplicated
-								key={index}
-								className="text-base whitespace-nowrap text-(--color-text)/70"
-							>
-								{tech}
-							</span>
-						))}
-					</div>
-				</div>
+				<dl className="mt-12 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-3">
+					{techStack.map((group) => (
+						<div key={group.label} className="border-t border-(--color-tertiary) pt-5">
+							<dt className="font-semibold text-(--color-text)">{group.label}</dt>
+							<dd className="mt-2 text-sm leading-relaxed text-(--color-text)/65">
+								<ul className="space-y-1">
+									{group.items.map((item) => (
+										<li key={item}>{item}</li>
+									))}
+								</ul>
+							</dd>
+						</div>
+					))}
+				</dl>
 			</div>
 		</section>
 	);

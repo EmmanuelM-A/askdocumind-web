@@ -1,6 +1,6 @@
 import { config } from "@fortawesome/fontawesome-svg-core";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import { FooterBar } from "@/components/layout/FooterBar";
 import { NavBar } from "@/components/layout/NavBar";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
@@ -9,14 +9,16 @@ import "./globals.css";
 
 config.autoAddCss = false;
 
-const geistSans = Geist({
-	variable: "--font-geist-sans",
+const plexSans = IBM_Plex_Sans({
+	variable: "--font-plex-sans",
 	subsets: ["latin"],
+	weight: ["400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
+const plexMono = IBM_Plex_Mono({
+	variable: "--font-plex-mono",
 	subsets: ["latin"],
+	weight: ["400", "500"],
 });
 
 const description =
@@ -74,7 +76,7 @@ export default function RootLayout({
 	return (
 		<html
 			lang="en"
-			className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+			className={`${plexSans.variable} ${plexMono.variable} h-full antialiased`}
 			suppressHydrationWarning
 		>
 			<head>
@@ -92,7 +94,7 @@ export default function RootLayout({
 				<NavBar />
 				<ScrollToTop />
 				{/* biome-ignore lint/correctness/useUniqueElementIds: singleton root scroll container, needed as a stable target for programmatic scrolling */}
-				<main id="page-scroll" className="flex flex-1 flex-col overflow-y-auto pt-20">
+				<main id="page-scroll" className="flex flex-1 flex-col overflow-y-auto pt-16">
 					<div className="flex flex-1 flex-col">{children}</div>
 					<FooterBar />
 				</main>

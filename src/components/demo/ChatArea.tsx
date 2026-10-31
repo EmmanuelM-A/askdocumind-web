@@ -1,12 +1,6 @@
 "use client";
 
-import {
-	faArrowUp,
-	faFileLines,
-	faGlobe,
-	faSpinner,
-	faWandMagicSparkles,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowUp, faFileLines, faGlobe, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type FormEvent, useState } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
@@ -117,12 +111,11 @@ export function ChatArea({
 			{/* flex-col-reverse keeps the scroll pinned to the newest message without any JS. */}
 			<div className="chat-scrollbar flex min-h-0 flex-1 flex-col-reverse overflow-y-auto px-4 py-6 sm:px-6">
 				{messages.length === 0 && !isSending ? (
-					<div className="m-auto flex max-w-sm flex-col items-center gap-3 text-center">
-						<Avatar size="lg" />
-						<p className="font-semibold text-(--color-text)">
+					<div className="m-auto max-w-sm text-center">
+						<p className="font-medium text-(--color-text)">
 							{demoContent.chat.emptyTitle}
 						</p>
-						<p className="text-sm text-(--color-text)/55">
+						<p className="mt-1 text-sm text-(--color-text)/55">
 							{demoContent.chat.emptyState}
 						</p>
 					</div>
@@ -132,14 +125,13 @@ export function ChatArea({
 							message.role === "user" ? (
 								<div
 									key={message.id}
-									className="bg-(--color-accent-strong) ml-auto w-fit max-w-[80%] rounded-2xl rounded-br-md px-4 py-2.5 whitespace-pre-wrap text-white shadow-sm"
+									className="bg-(--color-accent-strong) ml-auto w-fit max-w-[80%] rounded-xl rounded-br-sm px-4 py-2.5 whitespace-pre-wrap text-white shadow-sm"
 								>
 									{message.content}
 								</div>
 							) : (
-								<div key={message.id} className="flex max-w-[90%] gap-3">
-									<Avatar />
-									<div className="min-w-0 flex-1 pt-0.5">
+								<div key={message.id} className="max-w-[90%]">
+									<div>
 										<div className="chat-markdown text-(--color-text)/90">
 											<ReactMarkdown
 												remarkPlugins={[remarkGfm]}
@@ -151,14 +143,14 @@ export function ChatArea({
 
 										{message.sources.length > 0 && (
 											<div className="mt-3">
-												<p className="mb-1.5 text-[11px] font-medium tracking-wide text-(--color-text)/45 uppercase">
-													Sources
-												</p>
-												<ul className="flex flex-wrap gap-1.5">
+												<ul
+													className="flex flex-wrap gap-1.5"
+													aria-label="Sources"
+												>
 													{message.sources.map((source) => (
 														<li
 															key={source}
-															className="flex items-center gap-1.5 rounded-full border border-(--color-tertiary) bg-(--color-primary) px-2.5 py-1 text-xs text-(--color-text)/75"
+															className="flex items-center gap-1.5 rounded-md border border-(--color-tertiary) bg-(--color-primary) px-2 py-1 text-xs text-(--color-text)/75"
 														>
 															<FontAwesomeIcon
 																icon={
@@ -180,8 +172,7 @@ export function ChatArea({
 						)}
 
 						{isSending && (
-							<div className="flex items-center gap-3">
-								<Avatar />
+							<div className="flex items-center">
 								<output className="flex gap-1" aria-label="Thinking">
 									{[0, 150, 300].map((delay) => (
 										<span
@@ -195,7 +186,7 @@ export function ChatArea({
 						)}
 
 						{error && (
-							<div className="flex items-center gap-3 rounded-xl border border-red-500/30 bg-red-500/5 px-4 py-3 text-red-500">
+							<div className="flex items-center gap-3 rounded-lg border border-red-500/30 bg-red-500/5 px-4 py-3 text-red-500">
 								<span>{error}</span>
 								{lastMessage?.role === "user" && (
 									<button
@@ -216,7 +207,7 @@ export function ChatArea({
 				className="shrink-0 border-t border-(--color-tertiary) px-4 py-3"
 				onSubmit={handleSubmit}
 			>
-				<div className="flex items-center gap-2 rounded-xl border border-(--color-tertiary) bg-(--color-primary) py-1.5 pr-1.5 pl-4 transition focus-within:border-(--color-accent)/60 focus-within:ring-4 focus-within:ring-(--color-accent)/10">
+				<div className="flex items-center gap-2 rounded-lg border border-(--color-tertiary) bg-(--color-primary) py-1.5 pr-1.5 pl-4 transition focus-within:border-(--color-accent)/60 focus-within:ring-4 focus-within:ring-(--color-accent)/10">
 					<input
 						value={draft}
 						onChange={(event) => setDraft(event.target.value)}
@@ -229,7 +220,7 @@ export function ChatArea({
 						type="submit"
 						disabled={!canSend}
 						aria-label={isSending ? "Sending" : "Send"}
-						className="bg-(--color-accent-strong) flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-white shadow-sm transition hover:opacity-90 disabled:opacity-35"
+						className="bg-(--color-accent-strong) flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-white shadow-sm transition hover:opacity-90 disabled:opacity-35"
 					>
 						<FontAwesomeIcon
 							icon={isSending ? faSpinner : faArrowUp}
@@ -240,20 +231,5 @@ export function ChatArea({
 				</div>
 			</form>
 		</div>
-	);
-}
-
-function Avatar({ size = "sm" }: { size?: "sm" | "lg" }) {
-	return (
-		<span
-			className={`bg-(--color-accent-strong) flex shrink-0 items-center justify-center text-white shadow-sm ${
-				size === "lg" ? "h-12 w-12 rounded-2xl" : "h-7 w-7 rounded-full"
-			}`}
-		>
-			<FontAwesomeIcon
-				icon={faWandMagicSparkles}
-				className={size === "lg" ? "h-5! w-5!" : "h-3! w-3!"}
-			/>
-		</span>
 	);
 }

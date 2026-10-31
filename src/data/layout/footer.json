@@ -1,15 +1,13 @@
 {
-	"appName": "AskDocuMind",
+	"copyright": "© 2026 AskDocuMind",
 	"version": "v2.0.0",
-	"description": "A Document-aware chatbot built with Python, LangChain and pgvector",
-	"copyright": "© 2026 AskDocuMind. All rights reserved.",
 	"links": [
 		{
-			"name": "Privacy Policy",
+			"name": "Privacy policy",
 			"href": "/privacy"
 		},
 		{
-			"name": "Terms of Service",
+			"name": "Terms of service",
 			"href": "/terms"
 		}
 	]

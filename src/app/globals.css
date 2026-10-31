@@ -4,7 +4,7 @@
 
 :root {
 	/* Font */
-	font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+	font-family: var(--font-plex-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
 
 	/* Colour Palette */
 	--color-primary: #f8fafc;
@@ -143,15 +143,6 @@ body {
 	display: block;
 }
 
-@keyframes marquee {
-	from {
-		transform: translateX(0);
-	}
-	to {
-		transform: translateX(-50%);
-	}
-}
-
 .chat-markdown {
 	line-height: 1.6;
 }
@@ -186,7 +177,7 @@ body {
 	border-radius: 0.25rem;
 	background: var(--color-primary);
 	padding: 0.1em 0.3em;
-	font-family: var(--font-geist-mono), monospace;
+	font-family: var(--font-plex-mono), monospace;
 	font-size: 0.9em;
 }
 

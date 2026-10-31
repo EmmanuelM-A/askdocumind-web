@@ -8,7 +8,7 @@ import { deleteChatSession, initChatSession } from "@/api/chat-session-endpoints
 import { ChatArea } from "@/components/demo/ChatArea";
 import { type AskSettings, ConfigPanel } from "@/components/demo/ConfigPanel";
 import { DocumentsPanel } from "@/components/demo/DocumentsPanel";
-import { DEFAULT_ASK_CONFIGS, UPLOAD_LIMITS } from "@/config/constants";
+import { DEFAULT_ASK_CONFIGS } from "@/config/constants";
 import demoContent from "@/data/demo/content.json";
 import { useDocuments } from "@/hooks/useDocuments";
 import type { UUID } from "@/types/api";
@@ -107,13 +107,13 @@ export function DemoWorkspace() {
 
 	return (
 		<div className="flex min-h-0 flex-1 gap-4">
-			<section className="card flex min-w-0 flex-1 flex-col overflow-hidden rounded-2xl">
+			<section className="card flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl">
 				<div className="flex h-14 shrink-0 items-center justify-between gap-2 border-b border-(--color-tertiary) px-4">
 					<div className="flex items-center gap-3">
 						<h2 className="font-semibold text-(--color-text)">
 							{demoContent.chat.title}
 						</h2>
-						<span className="flex items-center gap-1.5 rounded-full bg-(--color-primary) px-2.5 py-1 text-xs text-(--color-text)/70">
+						<span className="flex items-center gap-1.5 text-xs text-(--color-text)/60">
 							<span className={`h-1.5 w-1.5 rounded-full ${statusDot}`} />
 							{demoContent.connection[connection]}
 							{connection === "failed" && (
@@ -132,17 +132,17 @@ export function DemoWorkspace() {
 						<button
 							type="button"
 							onClick={() => setIsSheetOpen(true)}
-							className="flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium text-(--color-text)/70 transition hover:bg-(--color-primary) hover:text-(--color-text) md:hidden"
+							className="flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium text-(--color-text)/70 transition hover:bg-(--color-primary) hover:text-(--color-text) md:hidden"
 						>
 							<FontAwesomeIcon icon={faFolderOpen} className="h-3.5! w-3.5!" />
-							{documents.acceptedCount}/{UPLOAD_LIMITS.MAX_DOCUMENTS_PER_CHAT}
+							Documents ({documents.acceptedCount})
 						</button>
 
 						<button
 							type="button"
 							onClick={() => setIsAdvancedOpen((open) => !open)}
 							aria-expanded={isAdvancedOpen}
-							className={`flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition ${
+							className={`flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition ${
 								isAdvancedOpen
 									? "bg-(--color-accent)/10 text-(--color-accent)"
 									: "text-(--color-text)/70 hover:bg-(--color-primary) hover:text-(--color-text)"
@@ -190,7 +190,7 @@ export function DemoWorkspace() {
 						if (event.key === "Escape") setIsSheetOpen(false);
 					}}
 				>
-					<div className="flex h-[80dvh] w-full flex-col gap-1 rounded-t-3xl bg-(--color-primary) p-2">
+					<div className="flex h-[80dvh] w-full flex-col gap-1 rounded-t-xl bg-(--color-primary) p-2">
 						<button
 							type="button"
 							onClick={() => setIsSheetOpen(false)}
