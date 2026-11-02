@@ -1,6 +1,6 @@
 "use client";
 
-import { faFolderOpen, faSliders, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faSliders, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCallback, useEffect, useState } from "react";
 import { initAnonymousSession } from "@/api/auth-endpoints";
@@ -131,7 +131,7 @@ export function DemoWorkspace() {
 			? "bg-emerald-500"
 			: connection === "failed"
 				? "bg-red-500"
-				: "animate-pulse bg-zinc-400";
+				: "animate-pulse bg-amber-400";
 
 	return (
 		<div className="flex min-h-0 flex-1 gap-4">
@@ -141,9 +141,16 @@ export function DemoWorkspace() {
 						<h2 className="font-semibold text-(--color-text)">
 							{demoContent.chat.title}
 						</h2>
-						<span className="flex items-center gap-1.5 text-xs text-(--color-text)/60">
-							<span className={`h-1.5 w-1.5 rounded-full ${statusDot}`} />
-							{demoContent.connection[connection]}
+						<span
+							title={demoContent.connection[connection]}
+							className="flex items-center gap-1.5 text-xs text-(--color-text)/60"
+						>
+							<span
+								className={`h-2 w-2 rounded-full sm:h-1.5 sm:w-1.5 ${statusDot}`}
+							/>
+							<span className="sr-only sm:not-sr-only">
+								{demoContent.connection[connection]}
+							</span>
 							{connection === "failed" && (
 								<button
 									type="button"
@@ -162,7 +169,6 @@ export function DemoWorkspace() {
 							onClick={() => setIsSheetOpen(true)}
 							className="flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium text-(--color-text)/70 transition hover:bg-(--color-primary) hover:text-(--color-text) md:hidden"
 						>
-							<FontAwesomeIcon icon={faFolderOpen} className="h-3.5! w-3.5!" />
 							Documents ({documents.acceptedCount})
 						</button>
 
@@ -170,6 +176,7 @@ export function DemoWorkspace() {
 							type="button"
 							onClick={() => setIsAdvancedOpen((open) => !open)}
 							aria-expanded={isAdvancedOpen}
+							aria-label="Advanced"
 							className={`flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition ${
 								isAdvancedOpen
 									? "bg-(--color-accent)/10 text-(--color-accent)"
@@ -177,7 +184,7 @@ export function DemoWorkspace() {
 							}`}
 						>
 							<FontAwesomeIcon icon={faSliders} className="h-3.5! w-3.5!" />
-							Advanced
+							<span className="hidden sm:inline">Advanced</span>
 						</button>
 					</div>
 				</div>
